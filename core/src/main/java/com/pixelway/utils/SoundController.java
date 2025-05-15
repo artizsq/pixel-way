@@ -13,13 +13,11 @@ public class SoundController {
 
     public SoundController(String defaultSoundPath) {
         assets = new AssetManager();
-        // Загружаем нужные звуки
         assets.load("sounds/grass.mp3", Sound.class);
         assets.load("sounds/wooden.mp3", Sound.class);
 //        assets.load("sounds/stone.mp3", Sound.class);
         assets.finishLoading();
 
-        // Ставим звук по умолчанию
         if (assets.isLoaded(defaultSoundPath, Sound.class)) {
             currentWalkSound = assets.get(defaultSoundPath, Sound.class);
             currentSoundPath = defaultSoundPath;
@@ -28,7 +26,7 @@ public class SoundController {
         }
     }
 
-    /** Проиграть звук шагов */
+
     public void playWalk() {
         float volume = DatabaseHelper.loadPlayerData().soundVolume;
         if (currentWalkSound != null) {
@@ -36,15 +34,9 @@ public class SoundController {
         }
     }
 
-    /**
-     * Сменить звук ходьбы.
-     * Перед сменой сохраняет текущий звук как предыдущий.
-     *
-     * @param newSoundPath путь к новому звуку ("sounds/stone.mp3" и т.д.)
-     */
+
     public void setWalkSound(String newSoundPath) {
         if (newSoundPath == null || newSoundPath.isEmpty()) {
-            Gdx.app.error("SoundController", "Invalid sound path");
             return;
         }
 
@@ -52,15 +44,11 @@ public class SoundController {
             previousWalkSound = currentWalkSound; // Сохраняем текущий звук перед заменой
             currentWalkSound = assets.get(newSoundPath, Sound.class);
             currentSoundPath = newSoundPath;
-            Gdx.app.log("SoundController", "Звук шагов изменён на: " + newSoundPath);
         } else {
             Gdx.app.error("SoundController", "Sound not loaded: " + newSoundPath);
         }
     }
 
-    /**
-     * Вернуть предыдущий звук шагов, если он был сохранён.
-     */
     public void revertToPrevious() {
         if (previousWalkSound != null) {
             Sound temp = currentWalkSound;
