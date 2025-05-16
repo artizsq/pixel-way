@@ -60,43 +60,14 @@ public class WorldContactListener implements ContactListener {
     }
 
     private void handleZone(ImportantZone zone) {
+        player.setInZone(true);
+        player.setZone(zone.getZoneType());
         switch (zone.getZoneType()) {
-            case TRADE1_WINDOW:
-                player.setInZone(true);
-                player.setZone(zone.getZoneType());
-                break;
-            case TRADE2_WINDOW:
-                player.setInZone(true);
-                player.setZone(zone.getZoneType());
-                break;
-            case TELEPORT_WINDOW:
-                player.setInZone(true);
-                player.setZone(zone.getZoneType());
-                break;
             case TELEPORT:
                 handleTransition(zone.getNextZone(), zone.getPlayerData());
                 break;
             case SOUND:
                 handleSoundChange(zone);
-                break;
-            case DIALOGUE:
-                player.setInZone(true);
-                player.setZone(zone.getZoneType());
-                break;
-            case SHOP:
-                player.setInZone(true);
-                player.setZone(zone.getZoneType());
-
-                break;
-            case SAVE:
-                player.setInZone(true);
-                player.setZone(zone.getZoneType());
-                break;
-            case GAME:
-            case CHEST:
-                player.setInZone(true);
-                player.setZone(zone.getZoneType());
-
                 break;
 
             case SUPER_DIALOGUE:
@@ -121,20 +92,31 @@ public class WorldContactListener implements ContactListener {
     }
 
     private void handleZoneExit(ImportantZone zone){
-        switch (zone.getZoneType()){
-            case DIALOGUE:
-            case SAVE:
-                player.setInZone(false);
-                break;
-            case GAME:
-            case SHOP:
-                player.setInZone(false);
-                break;
-            case CHEST:
-                player.setInZone(false);
-                break;
-
-        }
+        player.setInZone(false);
+//        switch (zone.getZoneType()){
+//            case DIALOGUE:
+//                player.setInZone(false);
+//                break;
+//            case SAVE:
+//                player.setInZone(false);
+//                break;
+//            case GAME:
+//            case SHOP:
+//                player.setInZone(false);
+//                break;
+//            case CHEST:
+//                player.setInZone(false);
+//                break;
+//            case TELEPORT_WINDOW:
+//                player.setInZone(false);
+//                break;
+//            case TRADE1_WINDOW:
+//                player.setInZone(false);
+//                break;
+//            case TRADE2_WINDOW:
+//                player.setInZone(false);
+//                break;
+//        }
     }
 
     private void handleSoundChange(ImportantZone zone) {

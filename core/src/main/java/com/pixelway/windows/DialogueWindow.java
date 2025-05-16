@@ -89,6 +89,11 @@ public class DialogueWindow extends Window {
         optionButton1.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
+                if(currentDialogData.dialogAction != null){
+                    currentDialogData.dialogAction.execute();
+                }
+
+
                 if (currentDialogData.newDialogData != null) {
                     currentDialogData = currentDialogData.newDialogData;
                     updateDialog();

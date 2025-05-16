@@ -127,15 +127,13 @@ public class TradeLocationScreen implements Screen {
                 if(player.getInZone()){
                     switch (player.getZoneType()){
                         case SAVE:
-                            try {
-                                playerData.x = player.getPosition().x;
-                                playerData.y = player.getPosition().y;
-                                playerData.currentMap = "trade";
-                                game.saveData();
-                                new AlertWindow(uiStage, "Успешно сохранил данные!");
-                            } catch (Exception e){
-                                new AlertWindow(uiStage, "" + e);
-                            }
+                            playerData.x = player.getPosition().x;
+                            playerData.y = player.getPosition().y;
+                            playerData.currentMap = "trade";
+                            game.saveData();
+
+                            new AlertWindow(uiStage, "Успешно сохранил данные!");
+
                             break;
                         case TELEPORT_WINDOW:
                             new TeleportWindow(uiStage, "trade", game, player);
@@ -147,8 +145,8 @@ public class TradeLocationScreen implements Screen {
 
 
         new ImportantZone(worldManager.getWorld(), new Vector2(97, 755), 64, 20 , ImportantZone.ZoneType.TELEPORT_WINDOW);
-        new ImportantZone(worldManager.getWorld(), new Vector2(545, 835), 50, 20 , ImportantZone.ZoneType.SAVE);
-        new ImportantZone(worldManager.getWorld(), new Vector2(575, 870), 20, 50 , ImportantZone.ZoneType.SAVE);
+        new ImportantZone(worldManager.getWorld(), new Vector2(545, 835), 50, 10 , ImportantZone.ZoneType.SAVE);
+        new ImportantZone(worldManager.getWorld(), new Vector2(575, 870), 10, 50 , ImportantZone.ZoneType.SAVE);
 
 
     }

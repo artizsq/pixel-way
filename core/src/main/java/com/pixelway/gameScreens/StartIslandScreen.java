@@ -17,7 +17,6 @@ import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
-
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
@@ -29,7 +28,9 @@ import com.pixelway.map.TiledObjectsConverter;
 import com.pixelway.map.WorldContactListener;
 import com.pixelway.map.WorldManager;
 import com.pixelway.models.DialogData;
+import com.pixelway.models.GameDialogs;
 import com.pixelway.models.Player;
+import com.pixelway.utils.DialogAction;
 import com.pixelway.utils.ImportantZone;
 import com.pixelway.windows.AlertWindow;
 import com.pixelway.windows.ChestWindow;
@@ -46,16 +47,17 @@ public class StartIslandScreen implements Screen {
     private TiledMap tiledMap;
     private OrthogonalTiledMapRenderer renderer;
     private Player player;
-    private WorldManager worldManager;
+    private final WorldManager worldManager;
     private Array<Fixture> fixtures;
 
     private Box2DDebugRenderer debugRenderer;
     private SpriteBatch batch;
     private ImageButton mainButton;
     private Texture buttonTexture;
-    private PlayerData playerData;
+    private final PlayerData playerData;
     private Stage gameStage;
     private Stage uiStage;
+    private GameDialogs gameDialogs;
 
     private boolean isteleport;
     private BaseUIManager baseUIManager;
@@ -82,6 +84,8 @@ public class StartIslandScreen implements Screen {
         renderer = new OrthogonalTiledMapRenderer(tiledMap);
         batch = new SpriteBatch();
 
+        gameDialogs = new GameDialogs(game);
+
         // Initialize game camera and stage
         gameCamera = new OrthographicCamera();
         float screenWidth = Gdx.graphics.getWidth();
@@ -106,7 +110,6 @@ public class StartIslandScreen implements Screen {
         Gdx.input.setInputProcessor(multiplexer);
 
 
-
         if (isteleport) {
             player = new Player(new Vector2(1880, player.getPosition().y + 50), 52f, 100f, worldManager.getWorld());
         } else {
@@ -115,7 +118,7 @@ public class StartIslandScreen implements Screen {
 
 
         worldManager.getWorld().setContactListener(new WorldContactListener(game, player));
-        fixtures = TiledObjectsConverter.importObjects(tiledMap, worldManager, 1 / 1f);
+        fixtures = TiledObjectsConverter.importObjects(tiledMap, worldManager, 1);
         debugRenderer = new Box2DDebugRenderer();
 
         new ImportantZone(worldManager.getWorld(), new Vector2(1060, 563), 100, 20, ImportantZone.ZoneType.SHOP);
@@ -133,8 +136,6 @@ public class StartIslandScreen implements Screen {
         buttonTexture = new Texture(Gdx.files.internal("btns/mainBtn.png"));
         TextureRegionDrawable buttonDrawable = new TextureRegionDrawable(new TextureRegion(buttonTexture));
         mainButton = new ImageButton(buttonDrawable);
-
-
 
 
         float buttonWidth = 240 * 2f;
@@ -158,7 +159,7 @@ public class StartIslandScreen implements Screen {
                                 playerData.currentMap = "start";
                                 game.saveData();
                                 new AlertWindow(uiStage, "Успешно сохранил данные!");
-                            } catch (Exception e){
+                            } catch (Exception e) {
                                 new AlertWindow(uiStage, "" + e);
                             }
                             break;
@@ -170,45 +171,13 @@ public class StartIslandScreen implements Screen {
 
 
                         case DIALOGUE:
-                            DialogData forthNode = new DialogData();
-                            forthNode.name = "Старик";
-                            forthNode.text = "Клан Тонель разрушил ВСЁ! Мы сумели сохранить лишь главный дом, зайди туда как-нибудь.";
-                            forthNode.imagePath = "starik.png";
-                            forthNode.option1 = "Хорошо";
-
-
-                            DialogData thirdNode = new DialogData();
-                            thirdNode.name = "Старик";
-                            thirdNode.text = "Ты находишься в деревне Лолокек! Правда, сейчас оно почти разрушено...";
-                            thirdNode.imagePath = "starik.png";
-                            thirdNode.option1 = "Что случилось?";
-                            thirdNode.option2 = "Ладно";
-                            thirdNode.newDialogData = forthNode;
-
-                            DialogData secondNode = new DialogData();
-                            secondNode.name = "Старик";
-                            secondNode.text = playerData.playerName + "? Интересное имя, очень необычное в наших краях.";
-                            secondNode.imagePath = "starik.png";
-                            secondNode.option1 = "Что за края?";
-                            secondNode.option2 = "Спс...";
-                            secondNode.newDialogData = thirdNode;
-
-                            DialogData firstNode = new DialogData();
-                            firstNode.name = "Старик";
-                            firstNode.text = "Здравствуй, юноша. Хм, я раньше тебя не видел, кто ты?";
-                            firstNode.imagePath = "starik.png";
-                            firstNode.option1 = "Меня зовут...";
-                            firstNode.option2 = "Неважно.";
-                            firstNode.newDialogData = secondNode;
-
-                            new DialogueWindow(uiStage, game, firstNode);
+                            new DialogueWindow(uiStage, game, gameDialogs.starikDialog());
                             break;
-
 
 
                         case CHEST:
                             List<PlayerData.InventorySlot> chestItems = new ArrayList<>();
-                            if(!playerData.chestItems.contains("Медаль Рыцаря")) {
+                            if (!playerData.chestItems.contains("Медаль Рыцаря")) {
                                 chestItems.add(new PlayerData.InventorySlot("Медаль Рыцаря", PlayerData.ItemType.POWER,
                                     2, 1,
                                     "Медаль XVI века, судя по всему\nиспользовалась рыцарями.", "imgs/items/strmedal.png"));

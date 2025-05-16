@@ -1,11 +1,12 @@
 {
-playerName: timur
+playerName: artiz
 musicVolume: 0
-x: 887.31525
-y: 567.98474
+x: 564.68225
+y: 862.6357
 strength: 5
+shield: 1
 activeMissions: []
-currentMap: start
+currentMap: trade
 dialogIDS: []
 chestItems: []
 reqTP_items: []

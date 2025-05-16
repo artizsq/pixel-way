@@ -19,6 +19,8 @@ public class Player extends Actor {
     private Body body;
     private int playerSpeed = 2000000;
     private float width, height;
+    private Vector2 lastDirection = new Vector2(0, -1);
+
 
     private Vector2 direction = new Vector2();
 
@@ -94,17 +96,20 @@ public class Player extends Actor {
 
     public void update(float delta, Vector2 dir) {
         this.direction.set(dir);
-        if (direction.len() > 0) direction.nor();
+        if (direction.len() > 0) {
+            direction.nor();
+            lastDirection.set(direction); // запоминаем последнее направление
+        }
 
         Vector2 vel = new Vector2(direction).scl(playerSpeed);
         body.setLinearVelocity(vel);
+
         position.set(body.getPosition().x - width / 2,
             body.getPosition().y - height / 2);
 
         stateTime += delta;
 
         System.out.println("x: " + body.getPosition().x + " y: " + body.getPosition().y);
-
 
         if (dir.len() > 0) {
             walkSoundTimer += delta;
@@ -117,6 +122,7 @@ public class Player extends Actor {
         }
     }
 
+
     public void render(SpriteBatch batch) {
         TextureRegion frame = getCurrentFrame();
         batch.draw(frame,
@@ -126,18 +132,31 @@ public class Player extends Actor {
     }
 
     private TextureRegion getCurrentFrame() {
-        if (direction.x > 0 && Math.abs(direction.x) >= Math.abs(direction.y)) {
-            return walkRightAnimation.getKeyFrame(stateTime, true);
-        } else if (direction.x < 0 && Math.abs(direction.x) >= Math.abs(direction.y)) {
-            return walkLeftAnimation.getKeyFrame(stateTime, true);
-        } else if (direction.y < 0) {
-            return walkDownAnimation.getKeyFrame(stateTime, true);
-        } else if (direction.y > 0) {
-            return walkUpAnimation.getKeyFrame(stateTime, true);
+        if (direction.len() > 0) {
+            if (direction.x > 0 && Math.abs(direction.x) >= Math.abs(direction.y)) {
+                return walkRightAnimation.getKeyFrame(stateTime, true);
+            } else if (direction.x < 0 && Math.abs(direction.x) >= Math.abs(direction.y)) {
+                return walkLeftAnimation.getKeyFrame(stateTime, true);
+            } else if (direction.y < 0) {
+                return walkDownAnimation.getKeyFrame(stateTime, true);
+            } else if (direction.y > 0) {
+                return walkUpAnimation.getKeyFrame(stateTime, true);
+            }
         } else {
-            return new TextureRegion(idleTexture);
+            if (lastDirection.x > 0 && Math.abs(lastDirection.x) >= Math.abs(lastDirection.y)) {
+                return walkRightAnimation.getKeyFrame(0);
+            } else if (lastDirection.x < 0 && Math.abs(lastDirection.x) >= Math.abs(lastDirection.y)) {
+                return walkLeftAnimation.getKeyFrame(0);
+            } else if (lastDirection.y < 0) {
+                return walkDownAnimation.getKeyFrame(0);
+            } else if (lastDirection.y > 0) {
+                return walkUpAnimation.getKeyFrame(0);
+            }
         }
+
+        return new TextureRegion(idleTexture);
     }
+
 
     public Vector2 getPosition() { return position; }
     public float getWidth()    { return width; }
