@@ -2,6 +2,7 @@ package com.pixelway.gameScreens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -24,6 +25,7 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.pixelway.MainClass;
 import com.pixelway.database.PlayerData;
+import com.pixelway.gameScreens.minigames.FishCatchGame;
 import com.pixelway.map.TiledObjectsConverter;
 import com.pixelway.map.WorldContactListener;
 import com.pixelway.map.WorldManager;
@@ -61,6 +63,7 @@ public class StartIslandScreen implements Screen {
 
     private boolean isteleport;
     private BaseUIManager baseUIManager;
+    private boolean isGame;
 
     public StartIslandScreen(MainClass game) {
         this.game = game;
@@ -97,6 +100,8 @@ public class StartIslandScreen implements Screen {
         gameCamera.update();
         gameStage = new Stage(new ExtendViewport(640, 360, gameCamera));
 
+        System.out.println(game.getPlayerData().fishCount);
+
         // Initialize UI camera and stage
         uiCamera = new OrthographicCamera();
         uiCamera.setToOrtho(false, screenWidth, screenHeight);
@@ -124,10 +129,14 @@ public class StartIslandScreen implements Screen {
         new ImportantZone(worldManager.getWorld(), new Vector2(1060, 563), 100, 20, ImportantZone.ZoneType.SHOP);
         new ImportantZone(worldManager.getWorld(), new Vector2(1915, 555), 10, 300, ImportantZone.ZoneType.TELEPORT).setNextZone("shipMap", playerData);
         new ImportantZone((worldManager.getWorld()), new Vector2(1465, 565), 115, 20, ImportantZone.ZoneType.DIALOGUE);
-//        new ImportantZone(worldManager.getWorld(), new Vector2(527, 540), 40, 400, ImportantZone.ZoneType.SUPER_DIALOGUE).setStageAndDialog(uiStage, 0);
-//        new ImportantZone(worldManager.getWorld(), new Vector2(1100, 300), 40, 600, ImportantZone.ZoneType.SUPER_DIALOGUE).setStageAndDialog(uiStage, 1);
+        new ImportantZone(worldManager.getWorld(), new Vector2(527, 540), 40, 400, ImportantZone.ZoneType.SUPER_DIALOGUE).setStageAndDialog(uiStage, 0);
+        new ImportantZone(worldManager.getWorld(), new Vector2(1100, 300), 40, 600, ImportantZone.ZoneType.SUPER_DIALOGUE).setStageAndDialog(uiStage, 1);
         new ImportantZone(worldManager.getWorld(), new Vector2(1237, 566), 40, 20, ImportantZone.ZoneType.CHEST);
         new ImportantZone(worldManager.getWorld(), new Vector2(924, 580), 50, 20, ImportantZone.ZoneType.SAVE);
+        new ImportantZone(worldManager.getWorld(), new Vector2(940, 110), 48, 48, ImportantZone.ZoneType.FISH_GAME);
+
+
+        new ImportantZone(worldManager.getWorld(), new Vector2(1237, 140), 70, 70, ImportantZone.ZoneType.FISHMAN_DIALOG);
 
         baseUIManager = new BaseUIManager(uiStage, playerData, game); // Pass uiStage
         baseUIManager.init();
@@ -149,19 +158,14 @@ public class StartIslandScreen implements Screen {
         mainButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                Gdx.app.log("BUTTON", "Clicked!");
                 if (player.getInZone()) {
                     switch (player.getZoneType()) {
                         case SAVE:
-                            try {
-                                playerData.x = player.getPosition().x;
-                                playerData.y = player.getPosition().y;
-                                playerData.currentMap = "start";
-                                game.saveData();
-                                new AlertWindow(uiStage, "Успешно сохранил данные!");
-                            } catch (Exception e) {
-                                new AlertWindow(uiStage, "" + e);
-                            }
+                            playerData.x = player.getPosition().x;
+                            playerData.y = player.getPosition().y;
+                            playerData.currentMap = "start";
+                            game.saveData();
+                            new AlertWindow(uiStage, "Успешно сохранил данные!");
                             break;
 
 
@@ -183,6 +187,31 @@ public class StartIslandScreen implements Screen {
                                     "Медаль XVI века, судя по всему\nиспользовалась рыцарями.", "imgs/items/strmedal.png"));
                             }
                             new ChestWindow(uiStage, game, chestItems);
+                            break;
+
+
+                        case FISH_GAME:
+
+                            if (playerData.activeMissions.contains("fishing")){
+                                playerData.x = player.getPosition().x + 26;
+                                playerData.y = player.getPosition().y;
+                                game.setScreen(new FishCatchGame(game, player));
+                            }
+                            break;
+
+                        case FISHMAN_DIALOG:
+                            if(playerData.activeMissions.contains("fishing")){
+                                if(playerData.fishCount > 0){
+                                    new DialogueWindow(uiStage, game, gameDialogs.successFishmanDialog());
+                                } else {
+                                    new DialogueWindow(uiStage, game, gameDialogs.failFishmanDialog());
+                                }
+
+
+
+                            } else {
+                                new DialogueWindow(uiStage, game, gameDialogs.fishmanDialog());
+                            }
                             break;
                     }
                 }
