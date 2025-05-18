@@ -33,7 +33,7 @@ public class DatabaseHelper {
         data.inventory = new ArrayList<>();
         data.hp = 10;
         data.money = 50;
-        data.activeMissions = new String[]{};
+        data.activeMissions = new ArrayList<>();
         data.strength = 5;
         data.dialogIDS = new ArrayList<>();
         data.currentMap = "start";
