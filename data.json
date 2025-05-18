@@ -1,12 +1,11 @@
 {
 playerName: artiz
 musicVolume: 0
-x: 564.68225
-y: 862.6357
+soundVolume: 0.26
 strength: 5
 shield: 1
 activeMissions: []
-currentMap: trade
+currentMap: start
 dialogIDS: []
 chestItems: []
 reqTP_items: []
