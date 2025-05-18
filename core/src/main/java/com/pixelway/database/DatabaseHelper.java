@@ -4,11 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
 import com.pixelway.MainClass;
-import com.pixelway.database.PlayerData;
-import com.pixelway.models.Player;
+
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class DatabaseHelper {
     private static final String USER_FILE_PATH = "data.json";
@@ -20,7 +18,6 @@ public class DatabaseHelper {
             Json json = new Json();
             return json.fromJson(PlayerData.class, file);
         } else {
-            // Возвращаем пустой профиль, если файла нет
             PlayerData data = new PlayerData();
             return data;
         }
@@ -55,7 +52,6 @@ public class DatabaseHelper {
         Json json = new Json();
         PlayerData data = json.fromJson(PlayerData.class, file);
 
-        // Проверяем, были ли изменены ключевые данные
         boolean hasGameplayData = data.x != 527 || data.y != 540 || data.hp < 10 || !data.inventory.isEmpty();
 
         return hasGameplayData;

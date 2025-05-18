@@ -205,6 +205,7 @@ public class DialogueWindow extends Window {
 
     private void closeDialog() {
         this.remove();
+        VirtualJoystick.inputBlocked = false;
         npcImage.remove();
         overlay.remove();
     }

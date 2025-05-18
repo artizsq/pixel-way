@@ -17,7 +17,7 @@ import java.util.HashMap;
 public class Player extends Actor {
     private Vector2 position;
     private Body body;
-    private int playerSpeed = 2000000;
+    private int playerSpeed = 20000000;
     private float width, height;
     private Vector2 lastDirection = new Vector2(0, -1);
 

@@ -53,7 +53,7 @@ public class SettingsScreen implements Screen {
         stage = new Stage(viewport);
         Gdx.input.setInputProcessor(stage);
 
-        createButton(1425, 350, 370, 170, () -> {
+        createButton(Gdx.graphics.getWidth() - 580, 350, 370, 170, () -> {
             try {
                 if (playerData.playerName != null && playerData.playerName.length() > 10) {
                     new AlertWindow(stage, "Имя не может быть длиннее 10 символов!");
@@ -68,14 +68,14 @@ public class SettingsScreen implements Screen {
             }
 
         }, "Сохранить");
-        createButton(1425, 100, 370, 170, () -> {
+        createButton(Gdx.graphics.getWidth() - 580, 100, 370, 170, () -> {
             SettingsScreen.this.dispose();
             game.setScreen(new MainMenuScreen(game));
         }, "Назад");
 
-        createTextTexture(1350, 680, 500, 200);
-        createLabel(1360, 900, 460, 60, "ИМЯ ИГРОКА");
-        nameTextField = createTextField(1380, 700, 440, 150, playerData.playerName); // Сохраняем ссылку на TextField
+        createTextTexture(Gdx.graphics.getWidth() - 650, 680, 500, 200);
+        createLabel(Gdx.graphics.getWidth() - 620, 900, 460, 60, "ИМЯ ИГРОКА");
+        nameTextField = createTextField(Gdx.graphics.getWidth() - 632, 700, 440, 150, playerData.playerName); // Сохраняем ссылку на TextField
 
 
         createLabel(70, 900, 640, 60, "ГРОМКОСТЬ МУЗЫКИ");
