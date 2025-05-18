@@ -26,11 +26,14 @@ public class GameDialogs {
 
         DialogData forthNode = new DialogData();
         forthNode.name = "Старик";
-        forthNode.text = "Клан Тонель разрушил ВСЁ! Мы сумели сохранить лишь главный дом, зайди туда как-нибудь.";
+        forthNode.text = "Клан Тонель разрушил ВСЁ! Мы сумели сохранить лишь наш главный дом, зайди туда как-нибудь.";
         forthNode.imagePath = "starik.png";
         forthNode.option1 = "Хорошо";
         forthNode.option2 = "Не";
-        forthNode.newDialogData = fifthNode;
+        if(!playerData.dialogIDS.contains("starik")){
+            forthNode.newDialogData = fifthNode;
+            playerData.dialogIDS.add("starik");
+        }
 
 
         DialogData thirdNode = new DialogData();
@@ -58,5 +61,70 @@ public class GameDialogs {
         firstNode.newDialogData = secondNode;
         return firstNode;
     }
+
+    public DialogData fishmanDialog(){
+        DialogData dialog3 = new DialogData();
+        dialog3.name = "Рыбак";
+        dialog3.imagePath = "fishmap.png";
+        dialog3.option1 = "Хорошо";
+        dialog3.text = "Удочка стоит напротив меня, пристумай к делу.";
+        dialog3.dialogAction = new DialogAction() {
+            @Override
+            public void execute() {
+                playerData.activeMissions.add("fishing");
+            }
+        };
+
+
+        DialogData dialog2 = new DialogData();
+        dialog2.name = "Рыбак";
+        dialog2.imagePath = "fishmap.png";
+        dialog2.option1 = "Я согласен.";
+        dialog2.option2 = "Не согласен";
+        dialog2.text = "Я скуплю у тебя рыбу. Каждая рыба будет стоит 2 монеты, идет?";
+        dialog2.newDialogData = dialog3;
+
+
+
+        DialogData dialog1 = new DialogData();
+        dialog1.name = "Рыбак";
+        dialog1.imagePath = "fishman.png";
+        dialog1.option1 = "Давай";
+        dialog1.option2 = "Нет.";
+        dialog1.text = "Приветствую, хочешь заработать денег?";
+        dialog1.newDialogData = dialog2;
+
+        return dialog1;
+    }
+
+    public DialogData failFishmanDialog(){
+        DialogData dialog1 = new DialogData();
+        dialog1.name = "Рыбак";
+        dialog1.imagePath = "fishman.png";
+        dialog1.text = "Ну что? Я жду.";
+        dialog1.option1 = "Продолжить";
+        return dialog1;
+    }
+
+    public DialogData successFishmanDialog(){
+        DialogData dialog1 = new DialogData();
+        dialog1.name = "Рыбак";
+        dialog1.imagePath = "fishman.png";
+        dialog1.text = "Отличный улов! Я дам тебе " + playerData.fishCount * 2 + " монеты за всю партию, согласен?";
+        dialog1.option1 = "Да";
+        dialog1.option2 = "Нет";
+        dialog1.dialogAction = new DialogAction() {
+            @Override
+            public void execute() {
+                playerData.addMoney(playerData.fishCount * 2);
+                playerData.activeMissions.remove("fishing");
+                playerData.fishCount = 0;
+            }
+        };
+
+
+        return dialog1;
+    }
+
 
 }
