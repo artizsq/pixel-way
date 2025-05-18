@@ -15,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.pixelway.MainClass;
 import com.pixelway.models.DialogData;
+import com.pixelway.utils.VirtualJoystick;
 
 
 import net.dermetfan.gdx.physics.box2d.PositionController;
@@ -31,7 +32,7 @@ public class DialogueWindow extends Window {
     private final MainClass game;
 
     private final TextButton optionButton1;
-    private final TextButton optionButton2;
+    private TextButton optionButton2;
 
     private BitmapFont defaultFont;
     private BitmapFont smallerFont;
@@ -51,6 +52,7 @@ public class DialogueWindow extends Window {
         this.stage = stage;
         this.game = game;
         this.currentDialogData = dialogData;
+        VirtualJoystick.inputBlocked = true;
 
         setDebug(false);
 
@@ -84,7 +86,15 @@ public class DialogueWindow extends Window {
         buttonStyle.up = new TextureRegionDrawable(new Texture(Gdx.files.internal("btns/dial_btn.png")));
 
         optionButton1 = new TextButton(dialogData.option1, buttonStyle);
-        optionButton2 = new TextButton(dialogData.option2, buttonStyle);
+        if (!(dialogData.option2 == null)){
+            optionButton2 = new TextButton(dialogData.option2, buttonStyle);
+            optionButton2.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    closeDialog();
+                }
+            });
+        }
 
         optionButton1.addListener(new ClickListener() {
             @Override
@@ -103,12 +113,7 @@ public class DialogueWindow extends Window {
             }
         });
 
-        optionButton2.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                closeDialog();
-            }
-        });
+
 
         optionsTable = new Table();
         layoutButtons();
@@ -189,10 +194,10 @@ public class DialogueWindow extends Window {
         }
         textLabel.setText(currentDialogData.text);
         optionButton1.setText(currentDialogData.option1);
-        if (!(currentDialogData.option2 == null)){
-            optionButton2.setText(currentDialogData.option2);
-        } else {
+        if (currentDialogData.option2 == null){
             optionButton2.remove();
+        } else {
+            optionButton2.setText(currentDialogData.option2);
         }
 
     }
