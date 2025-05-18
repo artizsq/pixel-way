@@ -34,6 +34,7 @@ public class ImportantZone {
         TRADE1_WINDOW,
         TRADE2_WINDOW,
         FISH_GAME,
+        FISHMAN_DIALOG,
         SAVE,
         BOSS_GAME,
         SOUND,
