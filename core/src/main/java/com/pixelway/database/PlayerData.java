@@ -14,11 +14,11 @@ public class PlayerData {
 
     public ArrayList<InventorySlot> inventory = new ArrayList<>(6);  // максимум 6 слотов
     public int strength = 2;
+    public int fishCount = 0;
     public int hp = 10;
     public int shield = 0;
     public int money = 50;
-    public boolean isSaved = false;
-    public String[] activeMissions;
+    public ArrayList<String> activeMissions;
     public String currentMap = "startMap";
     public ArrayList<String> dialogIDS;
     public ArrayList<String> chestItems;
