@@ -132,7 +132,7 @@ public class DialogueWindow extends Window {
         Table wrapper = new Table();
         wrapper.setFillParent(true);
         wrapper.top().left();
-        wrapper.add(mainGroup).expand().fill().padBottom(20).row(); // текст занимает всё доступное
+        wrapper.add(mainGroup).expand().fill().row(); // текст занимает всё доступное
         wrapper.add(optionsTable).padBottom(10).center();           // кнопки прижаты к низу
 
         this.clear();
@@ -179,19 +179,13 @@ public class DialogueWindow extends Window {
 
     private void layoutButtons() {
         optionsTable.clear();
-        optionsTable.add(optionButton1).width(300).height(80).padRight(20);
-        optionsTable.add(optionButton2).width(300).height(80);
+        optionsTable.add(optionButton1).width(450).height(80).padRight(20);
+        optionsTable.add(optionButton2).width(450).height(80);
     }
 
     private void updateDialog() {
         nameLabel.setText(currentDialogData.name);
 
-        // Проверяем длину текста и меняем стиль шрифта
-        if (currentDialogData.text.length() > TEXT_LENGTH_THRESHOLD) {
-            textLabel.setStyle(smallerLabelStyle);
-        } else {
-            textLabel.setStyle(defaultLabelStyle);
-        }
         textLabel.setText(currentDialogData.text);
         optionButton1.setText(currentDialogData.option1);
         if (currentDialogData.option2 == null){

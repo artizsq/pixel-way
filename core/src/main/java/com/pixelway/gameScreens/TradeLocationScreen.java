@@ -27,9 +27,11 @@ import com.pixelway.database.PlayerData;
 import com.pixelway.map.TiledObjectsConverter;
 import com.pixelway.map.WorldContactListener;
 import com.pixelway.map.WorldManager;
+import com.pixelway.models.GameDialogs;
 import com.pixelway.models.Player;
 import com.pixelway.utils.ImportantZone;
 import com.pixelway.windows.AlertWindow;
+import com.pixelway.windows.DialogueWindow;
 import com.pixelway.windows.TeleportWindow;
 
 public class TradeLocationScreen implements Screen {
@@ -52,6 +54,7 @@ public class TradeLocationScreen implements Screen {
     private Stage uiStage;     // Stage for the UI
     private boolean isTeleport = false;
     private BaseUIManager baseUIManager;
+    private GameDialogs gameDialogs;
 
 
     public TradeLocationScreen(MainClass game, Player player, PlayerData playerData) {
@@ -76,6 +79,7 @@ public class TradeLocationScreen implements Screen {
         tiledMap = new TmxMapLoader().load("maps/bazar.tmx");
         renderer = new OrthogonalTiledMapRenderer(tiledMap);
         batch = new SpriteBatch();
+        gameDialogs = new GameDialogs(game);
 
         gameCamera = new OrthographicCamera();
         gameCamera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -127,8 +131,8 @@ public class TradeLocationScreen implements Screen {
                 if(player.getInZone()){
                     switch (player.getZoneType()){
                         case SAVE:
-                            playerData.x = player.getPosition().x;
-                            playerData.y = player.getPosition().y;
+                            playerData.x = player.getPosition().x + 26;
+                            playerData.y = player.getPosition().y + 50;
                             playerData.currentMap = "trade";
                             game.saveData();
 
@@ -137,6 +141,10 @@ public class TradeLocationScreen implements Screen {
                             break;
                         case TELEPORT_WINDOW:
                             new TeleportWindow(uiStage, "trade", game, player);
+                            break;
+                        case TRADE1_DIALOG:
+                            new DialogueWindow(uiStage, game, gameDialogs.trade1Dialog());
+                            break;
                     }
                 }
             }
@@ -145,8 +153,10 @@ public class TradeLocationScreen implements Screen {
 
 
         new ImportantZone(worldManager.getWorld(), new Vector2(97, 755), 64, 20 , ImportantZone.ZoneType.TELEPORT_WINDOW);
-        new ImportantZone(worldManager.getWorld(), new Vector2(545, 835), 50, 10 , ImportantZone.ZoneType.SAVE);
-        new ImportantZone(worldManager.getWorld(), new Vector2(575, 870), 10, 50 , ImportantZone.ZoneType.SAVE);
+        new ImportantZone(worldManager.getWorld(), new Vector2(545, 870), 70, 70 , ImportantZone.ZoneType.SAVE);
+        new ImportantZone(worldManager.getWorld(), new Vector2(863, 885), 60, 20 , ImportantZone.ZoneType.TRADE1_DIALOG);
+
+
 
 
     }

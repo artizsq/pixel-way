@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
 import com.pixelway.MainClass;
 import com.pixelway.gameScreens.ShipGameScreen;
 import com.pixelway.gameScreens.TradeLocationScreen;
@@ -22,12 +23,14 @@ public class TeleportWindow extends Window {
     private final Image darkOverlay;
     private final MainClass game;
     private final Player player;
+    private final Stage stage;
 
     public TeleportWindow(Stage stage, String currentLocation, MainClass game, Player player) {
         super("", createWindowStyle());
         VirtualJoystick.inputBlocked = true;
         this.game = game;
         this.player = player;
+        this.stage = stage;
 
         setModal(true);
         setSize(1274, 672);
@@ -49,23 +52,46 @@ public class TeleportWindow extends Window {
         } else if (currentLocation.equals("trade")) {
             location1 = "start";
         } else {
-            location1 = "start"; // fallback
+            location1 = "start";
         }
 
-        // Изображения
+
         Image img1 = createLocationImage("imgs/locations/" + location1 + ".png");
+        boolean hasWinterKey = game.getPlayerData().reqTP_items.contains("winterKey");
+
         Image img2 = createLocationImage("imgs/locations/" + location2 + ".png");
 
-        // Кнопки
+        Stack winterStack = new Stack();
+        winterStack.addActor(img2);
+
+
         TextButton btn1 = createTeleportButton(font, location1);
         TextButton btn2 = createTeleportButton(font, location2);
+        if (!hasWinterKey) {
+            Image dim = new Image(createDimDrawable());
+            dim.setSize(378, 504);
+            winterStack.addActor(dim);
 
-        // Layout
+            Label.LabelStyle labelStyle = new Label.LabelStyle();
+            labelStyle.font = font;
+            labelStyle.fontColor = Color.WHITE;
+
+            Label lockedLabel = new Label("Недоступно", labelStyle);
+            lockedLabel.setFontScale(1.2f);
+            lockedLabel.setAlignment(Align.center);
+            lockedLabel.setSize(378, 504);
+            lockedLabel.setPosition(0, 0);
+
+            winterStack.addActor(lockedLabel);
+
+            btn2.setDisabled(true);
+        }
+
         Table contentTable = new Table();
         contentTable.padTop(34f);
 
         contentTable.add(img1).size(378, 504).padRight(294);
-        contentTable.add(img2).size(378, 504);
+        contentTable.add(winterStack).size(378, 504);
         contentTable.row().padTop(2f);
         contentTable.add(btn1).size(240, 100).padRight(294);
         contentTable.add(btn2).size(240, 100);
@@ -93,6 +119,15 @@ public class TeleportWindow extends Window {
         stage.addActor(darkOverlay);
         stage.addActor(this);
     }
+    private TextureRegionDrawable createDimDrawable() {
+        Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
+        pixmap.setColor(0, 0, 0, 0.6f);
+        pixmap.fill();
+        Texture texture = new Texture(pixmap);
+        pixmap.dispose();
+        return new TextureRegionDrawable(new TextureRegion(texture));
+    }
+
 
 
 
@@ -153,6 +188,12 @@ public class TeleportWindow extends Window {
                 break;
             case "trade":
                 game.setScreen(new TradeLocationScreen(game, player, game.getPlayerData(), true));
+                break;
+            case "winter":
+                if(game.getPlayerData().reqTP_items.contains("winterKey")){
+                    // телепорт на локацию
+                    System.out.println("Teleport to winter");
+                }
                 break;
         }
 

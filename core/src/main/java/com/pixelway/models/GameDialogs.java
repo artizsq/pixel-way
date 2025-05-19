@@ -126,5 +126,63 @@ public class GameDialogs {
         return dialog1;
     }
 
+    public DialogData trade1Dialog(){
+        DialogData dialog5 = new DialogData();
+        dialog5.name = "Торговец";
+        dialog5.imagePath = "trade1.png";
+        dialog5.text = "Слушай, раз ты человек из легенды, вот тебе подарок от меня, надеюсь он тебе поможет.";
+        dialog5.option1 = "...";
+        dialog5.dialogAction = new DialogAction() {
+                @Override
+                public void execute() {
+                    playerData.inventory.add(
+                        new PlayerData.InventorySlot("Медаль Жизни", PlayerData.ItemType.HP, 5, 1, "Запах очень сильно ", "imgs/items/hpmedal.png")
+                    );
+                }
+            };
+
+
+
+
+
+        DialogData dialog4 = new DialogData();
+        dialog4.name = "Торговец";
+        dialog4.imagePath = "trade1.png";
+        dialog4.text = "Ходят легенды о человеке, который прибудет сюда из другого мира, он спасет нас от клана \"Тонель\"";
+        dialog4.option1 = "Ого";
+        dialog4.option2 = "Мне все равно";
+        if(!playerData.inventory.contains("Медаль жизни")){
+            dialog4.newDialogData = dialog5;
+        }
+
+
+        DialogData dialog3 = new DialogData();
+        dialog3.imagePath = "trade1.png";
+        dialog3.name = "Торговец";
+        dialog3.text = "А ты не знаешь? Сейчас на всех островах орудует клан \"Тонель\". Неужели ты...";
+        dialog3.option1 = "...?";
+        dialog3.option2 = "Ок.";
+        dialog3.newDialogData = dialog4;
+
+
+        DialogData dialog2 = new DialogData();
+        dialog2.imagePath = "trade1.png";
+        dialog2.name = "Торговец";
+        dialog2.text = "Сейчас ты находишься на острове Разаб, тут продаются разные и уникальные вещи!";
+        dialog2.option1 = "Почему так пусто?";
+        dialog2.option2 = "Понял.";
+        dialog2.newDialogData = dialog3;
+
+
+        DialogData dialog1 = new DialogData();
+        dialog1.imagePath = "trade1.png";
+        dialog1.name = "Торговец";
+        dialog1.text = "Путник, что тебя сюда привело?";
+        dialog1.option1 = "Что это за место?";
+        dialog1.option2 = "Неважно.";
+        dialog1.newDialogData = dialog2;
+        return dialog1;
+    }
+
 
 }

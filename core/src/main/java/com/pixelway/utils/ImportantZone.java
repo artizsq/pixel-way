@@ -31,7 +31,7 @@ public class ImportantZone {
         DIALOGUE,
         SHOP,
         TELEPORT_WINDOW,
-        TRADE1_WINDOW,
+        TRADE1_DIALOG,
         TRADE2_WINDOW,
         FISH_GAME,
         FISHMAN_DIALOG,

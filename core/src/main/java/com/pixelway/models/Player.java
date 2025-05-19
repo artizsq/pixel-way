@@ -40,7 +40,6 @@ public class Player extends Actor {
         this.width = width;
         this.height = height;
 
-        // Инициализация контроллера звуков
         soundController = new SoundController("sounds/grass.mp3");
 
         Texture walkRightSheet = new Texture("anims/walk_right.png");
@@ -98,7 +97,7 @@ public class Player extends Actor {
         this.direction.set(dir);
         if (direction.len() > 0) {
             direction.nor();
-            lastDirection.set(direction); // запоминаем последнее направление
+            lastDirection.set(direction);
         }
 
         Vector2 vel = new Vector2(direction).scl(playerSpeed);

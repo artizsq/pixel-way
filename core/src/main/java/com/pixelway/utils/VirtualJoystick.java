@@ -63,7 +63,7 @@ public class VirtualJoystick extends Actor {
             Vector2 touchPos = new Vector2(Gdx.input.getX(currentTouchingPointer), Gdx.graphics.getHeight() - Gdx.input.getY(currentTouchingPointer));
 
             if (game.getJoystickControllingPointer() == -1) { // Читаем из MainClass
-                if (touchPos.dst(joystickPosition) <= joystickRadius + 100) {
+                if (touchPos.dst(joystickPosition) <= joystickRadius) {
                     game.setJoystickControllingPointer(currentTouchingPointer); // Записываем в MainClass
                     direction.set(touchPos).sub(joystickPosition).nor();
                     knobPosition.set(joystickPosition).add(direction.cpy().scl(joystickRadius * 0.5f));

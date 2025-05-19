@@ -118,7 +118,7 @@ public class StartIslandScreen implements Screen {
         if (isteleport) {
             player = new Player(new Vector2(1880, player.getPosition().y + 50), 52f, 100f, worldManager.getWorld());
         } else {
-            player = new Player(new Vector2(playerData.x, playerData.y + 50), 52f, 100f, worldManager.getWorld());
+            player = new Player(new Vector2(playerData.x, playerData.y), 52f, 100f, worldManager.getWorld());
         }
 
 
@@ -194,7 +194,7 @@ public class StartIslandScreen implements Screen {
 
                             if (playerData.activeMissions.contains("fishing")){
                                 playerData.x = player.getPosition().x + 26;
-                                playerData.y = player.getPosition().y;
+                                playerData.y = player.getPosition().y + 50;
                                 game.setScreen(new FishCatchGame(game, player));
                             }
                             break;
