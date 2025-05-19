@@ -5,6 +5,8 @@ import com.pixelway.MainClass;
 import com.pixelway.database.PlayerData;
 import com.pixelway.utils.DialogAction;
 
+import net.dermetfan.gdx.physics.box2d.PositionController;
+
 public class GameDialogs {
     private PlayerData playerData;
     public GameDialogs(MainClass game){
@@ -176,11 +178,62 @@ public class GameDialogs {
 
         DialogData dialog1 = new DialogData();
         dialog1.imagePath = "trade1.png";
-        dialog1.name = "Торговец";
+        dialog1.name = "Торговец Ро";
         dialog1.text = "Путник, что тебя сюда привело?";
         dialog1.option1 = "Что это за место?";
         dialog1.option2 = "Неважно.";
         dialog1.newDialogData = dialog2;
+        return dialog1;
+    }
+
+    public DialogData trade2Dialog(){
+        DialogData dialog3fail = new DialogData();
+        dialog3fail.name = "Торговец По";
+        dialog3fail.imagePath = "trade2.png";
+        dialog3fail.text = "У тебя не хватает денег, вернись как накопишь.";
+        dialog3fail.option1 = "...";
+
+
+
+
+        DialogData dialog3 = new DialogData();
+        dialog3.name = "Торговец По";
+        dialog3.imagePath = "trade2.png";
+        dialog3.text = "Вот твой ключ. Попробуй отправиться на другой остров.";
+        dialog3.option1 = "Хорошо";
+        dialog3.dialogAction = new DialogAction() {
+            @Override
+            public void execute() {
+                playerData.reqTP_items.add("winterKey");
+            }
+        };
+
+
+
+        DialogData dialog2 = new DialogData();
+        dialog2.name = "Торговец По";
+        dialog2.imagePath = "trade2.png";
+        dialog2.text = "Отлично, у меня есть Winter Key, для тебя он обойдется в 100 монет, по рукам?";
+        dialog2.option1 = "По рукам";
+        dialog2.option2 = "Нет.";
+        if(playerData.money >= 100 && (playerData.money - 100) > 0){
+            playerData.money -= 100;
+            dialog2.newDialogData = dialog3;
+        } else {
+            dialog2.newDialogData = dialog3fail;
+
+        }
+
+
+        DialogData dialog1 = new DialogData();
+        dialog1.name = "Торговец По";
+        dialog1.imagePath = "trade2.png";
+        dialog1.text = "Слушай, у меня есть один товар, я уверен он тебя заинтересует...Показать?";
+        dialog1.option1 = "Давай";
+        dialog1.option2 = "У меня нет времени.";
+        dialog1.newDialogData = dialog2;
+
+
         return dialog1;
     }
 
