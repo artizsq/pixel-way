@@ -34,6 +34,7 @@ import com.pixelway.models.GameDialogs;
 import com.pixelway.models.Player;
 import com.pixelway.utils.DialogAction;
 import com.pixelway.utils.ImportantZone;
+import com.pixelway.utils.SoundController;
 import com.pixelway.windows.AlertWindow;
 import com.pixelway.windows.ChestWindow;
 import com.pixelway.windows.DialogueWindow;

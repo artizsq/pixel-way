@@ -204,6 +204,7 @@ public class GameDialogs {
         dialog3.dialogAction = new DialogAction() {
             @Override
             public void execute() {
+                playerData.subtractMoney(100);
                 playerData.reqTP_items.add("winterKey");
             }
         };
@@ -217,7 +218,6 @@ public class GameDialogs {
         dialog2.option1 = "По рукам";
         dialog2.option2 = "Нет.";
         if(playerData.money >= 100 && (playerData.money - 100) > 0){
-            playerData.money -= 100;
             dialog2.newDialogData = dialog3;
         } else {
             dialog2.newDialogData = dialog3fail;
@@ -228,7 +228,7 @@ public class GameDialogs {
         DialogData dialog1 = new DialogData();
         dialog1.name = "Торговец По";
         dialog1.imagePath = "trade2.png";
-        dialog1.text = "Слушай, у меня есть один товар, я уверен он тебя заинтересует...Показать?";
+        dialog1.text = "Слушай, у меня есть один товар, я уверен он тебя заинтересует... Показать?";
         dialog1.option1 = "Давай";
         dialog1.option2 = "У меня нет времени.";
         dialog1.newDialogData = dialog2;

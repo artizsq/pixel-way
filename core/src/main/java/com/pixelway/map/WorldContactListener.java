@@ -93,30 +93,7 @@ public class WorldContactListener implements ContactListener {
 
     private void handleZoneExit(ImportantZone zone){
         player.setInZone(false);
-//        switch (zone.getZoneType()){
-//            case DIALOGUE:
-//                player.setInZone(false);
-//                break;
-//            case SAVE:
-//                player.setInZone(false);
-//                break;
-//            case GAME:
-//            case SHOP:
-//                player.setInZone(false);
-//                break;
-//            case CHEST:
-//                player.setInZone(false);
-//                break;
-//            case TELEPORT_WINDOW:
-//                player.setInZone(false);
-//                break;
-//            case TRADE1_WINDOW:
-//                player.setInZone(false);
-//                break;
-//            case TRADE2_WINDOW:
-//                player.setInZone(false);
-//                break;
-//        }
+
     }
 
     private void handleSoundChange(ImportantZone zone) {

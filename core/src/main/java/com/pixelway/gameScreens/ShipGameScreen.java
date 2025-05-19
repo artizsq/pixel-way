@@ -30,6 +30,7 @@ import com.pixelway.map.WorldContactListener;
 import com.pixelway.map.WorldManager;
 import com.pixelway.models.Player;
 import com.pixelway.utils.ImportantZone;
+import com.pixelway.utils.SoundController;
 import com.pixelway.windows.AlertWindow;
 import com.pixelway.windows.TeleportWindow;
 
@@ -97,6 +98,8 @@ public class ShipGameScreen implements Screen {
         Gdx.input.setInputProcessor(multiplexer);
         if (isTeleport){
             player = new Player(new Vector2(772, 483), 52f, 100f, worldManager.getWorld());
+            SoundController soundController = player.getSoundController();
+            soundController.setWalkSound("sounds/wooden.mp3");
 
         } else {
             player = new Player(new Vector2(33 + 10, player.getPosition().y + 50), 52f, 100f, worldManager.getWorld());

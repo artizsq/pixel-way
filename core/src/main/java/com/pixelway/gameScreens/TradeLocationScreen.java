@@ -30,6 +30,7 @@ import com.pixelway.map.WorldManager;
 import com.pixelway.models.GameDialogs;
 import com.pixelway.models.Player;
 import com.pixelway.utils.ImportantZone;
+import com.pixelway.utils.SoundController;
 import com.pixelway.windows.AlertWindow;
 import com.pixelway.windows.DialogueWindow;
 import com.pixelway.windows.TeleportWindow;
@@ -81,6 +82,7 @@ public class TradeLocationScreen implements Screen {
         batch = new SpriteBatch();
         gameDialogs = new GameDialogs(game);
 
+
         gameCamera = new OrthographicCamera();
         gameCamera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         gameCamera.viewportWidth = 640 / 1.5f;  // Apply zoom level
@@ -101,9 +103,13 @@ public class TradeLocationScreen implements Screen {
 
         if(isTeleport){
             player = new Player(new Vector2(93, 698), 52f, 100f, worldManager.getWorld());
+            SoundController soundController = player.getSoundController();
+            soundController.setWalkSound("sounds/wooden.mp3");
         } else {
             player = new Player(new Vector2(playerData.x, playerData.y), 52f, 100f, worldManager.getWorld());
         }
+
+
 
         worldManager.getWorld().setContactListener(new WorldContactListener(game, player));
         fixtures = TiledObjectsConverter.importObjects(tiledMap, worldManager, 1 / 1f);
@@ -145,6 +151,10 @@ public class TradeLocationScreen implements Screen {
                         case TRADE1_DIALOG:
                             new DialogueWindow(uiStage, game, gameDialogs.trade1Dialog());
                             break;
+
+                        case TRADE2_DIALOG:
+                            new DialogueWindow(uiStage, game, gameDialogs.trade2Dialog());
+                            break;
                     }
                 }
             }
@@ -155,7 +165,11 @@ public class TradeLocationScreen implements Screen {
         new ImportantZone(worldManager.getWorld(), new Vector2(97, 755), 64, 20 , ImportantZone.ZoneType.TELEPORT_WINDOW);
         new ImportantZone(worldManager.getWorld(), new Vector2(545, 870), 70, 70 , ImportantZone.ZoneType.SAVE);
         new ImportantZone(worldManager.getWorld(), new Vector2(863, 885), 60, 20 , ImportantZone.ZoneType.TRADE1_DIALOG);
-        new ImportantZone(worldManager.getWorld(), new Vector2(1124, 926), 60, 20 , ImportantZone.ZoneType.TRADE2_DIALOG);
+        new ImportantZone(worldManager.getWorld(), new Vector2(1124, 885), 60, 20 , ImportantZone.ZoneType.TRADE2_DIALOG);
+        new ImportantZone(worldManager.getWorld(), new Vector2(315, 675), 10, 60 , ImportantZone.ZoneType.SOUND, "sounds/wooden.mp3");
+        new ImportantZone(worldManager.getWorld(), new Vector2(369, 675), 10, 60 , ImportantZone.ZoneType.SOUND, "sounds/grass.mp3");
+
+
 
 
 

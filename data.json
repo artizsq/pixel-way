@@ -2,13 +2,30 @@
 playerName: artiz
 musicVolume: 0
 soundVolume: 0.26
-x: 537.5166
-y: 874.6478
+x: 590.68195
+y: 926.43713
+inventory: [
+	{
+		name: Медаль Рыцаря
+		effectType: POWER
+		effectValue: 2
+		quantity: 1
+		itemDesc: "Медаль XVI века, судя по всему\nиспользовалась рыцарями."
+		imagePath: imgs/items/strmedal.png
+	}
+]
 strength: 5
 shield: 1
+money: 126
 activeMissions: []
 currentMap: trade
-dialogIDS: [ 0, 1 ]
-chestItems: []
+dialogIDS: [
+	0
+	1
+	starik
+]
+chestItems: [
+	Медаль Рыцаря
+]
 reqTP_items: []
 }
