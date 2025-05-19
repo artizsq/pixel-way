@@ -19,8 +19,6 @@ public class ImportantZone {
 
     private String map;
 
-    private String screenName;
-
     private boolean inZone = false;
     private Stage stage;
     private int dialogID;
@@ -32,6 +30,7 @@ public class ImportantZone {
         SHOP,
         TELEPORT_WINDOW,
         TRADE1_DIALOG,
+        TRADE2_DIALOG,
         TRADE2_WINDOW,
         FISH_GAME,
         FISHMAN_DIALOG,
@@ -110,13 +109,6 @@ public class ImportantZone {
         return map;
     }
 
-    public void setShopScreen(String screenName){
-        this.screenName = screenName;
-    }
-
-    public String getShopScreen(){
-        return screenName;
-    }
 
     public int getDialogID(){
         return dialogID;
