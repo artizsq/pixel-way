@@ -155,6 +155,7 @@ public class TradeLocationScreen implements Screen {
         new ImportantZone(worldManager.getWorld(), new Vector2(97, 755), 64, 20 , ImportantZone.ZoneType.TELEPORT_WINDOW);
         new ImportantZone(worldManager.getWorld(), new Vector2(545, 870), 70, 70 , ImportantZone.ZoneType.SAVE);
         new ImportantZone(worldManager.getWorld(), new Vector2(863, 885), 60, 20 , ImportantZone.ZoneType.TRADE1_DIALOG);
+        new ImportantZone(worldManager.getWorld(), new Vector2(1124, 926), 60, 20 , ImportantZone.ZoneType.TRADE2_DIALOG);
 
 
 
