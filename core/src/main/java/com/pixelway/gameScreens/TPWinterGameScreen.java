@@ -35,7 +35,7 @@ import com.pixelway.windows.AlertWindow;
 import com.pixelway.windows.DialogueWindow;
 import com.pixelway.windows.TeleportWindow;
 
-public class TradeLocationScreen implements Screen {
+public class TPWinterGameScreen implements Screen {
 
     private final MainClass game;
     private OrthographicCamera gameCamera;   // Game world camera
@@ -58,14 +58,14 @@ public class TradeLocationScreen implements Screen {
     private GameDialogs gameDialogs;
 
 
-    public TradeLocationScreen(MainClass game, Player player, PlayerData playerData) {
+    public TPWinterGameScreen(MainClass game, Player player, PlayerData playerData) {
         this.game = game;
 
         this.worldManager = new WorldManager();
         this.player = player;
         this.playerData = playerData;
     }
-    public TradeLocationScreen(MainClass game, Player player, PlayerData playerData, boolean isTeleport) {
+    public TPWinterGameScreen(MainClass game, Player player, PlayerData playerData, boolean isTeleport) {
         this.game = game;
         this.isTeleport = isTeleport;
         this.worldManager = new WorldManager();
@@ -77,7 +77,7 @@ public class TradeLocationScreen implements Screen {
 
     @Override
     public void show() {
-        tiledMap = new TmxMapLoader().load("maps/bazar.tmx");
+        tiledMap = new TmxMapLoader().load("maps/winter1.tmx");
         renderer = new OrthogonalTiledMapRenderer(tiledMap);
         batch = new SpriteBatch();
         gameDialogs = new GameDialogs(game);
@@ -102,9 +102,9 @@ public class TradeLocationScreen implements Screen {
         Gdx.input.setInputProcessor(multiplexer);
 
         if(isTeleport){
-            player = new Player(new Vector2(93, 698), 52f, 100f, worldManager.getWorld());
-            SoundController soundController = player.getSoundController();
-            soundController.setWalkSound("sounds/wooden.mp3");
+            player = new Player(new Vector2(600, 203), 52f, 100f, worldManager.getWorld());
+//            SoundController soundController = player.getSoundController();
+//            soundController.setWalkSound("sounds/wooden.mp3");
         } else {
             player = new Player(new Vector2(playerData.x, playerData.y), 52f, 100f, worldManager.getWorld());
         }
@@ -134,38 +134,19 @@ public class TradeLocationScreen implements Screen {
         saveButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(player.getInZone()){
+                if (player.getInZone()){
                     switch (player.getZoneType()){
+                        case TELEPORT_WINDOW:
+//                            new DialogueWindow(uiStage, game, gameDialogs.darkDialogue(player));
+                            new TeleportWindow(uiStage, "winter", game, player);
+                            break;
                         case SAVE:
                             playerData.x = player.getPosition().x + 26;
                             playerData.y = player.getPosition().y + 50;
-                            playerData.currentMap = "trade";
+                            playerData.currentMap = "winter";
                             game.saveData();
-
                             new AlertWindow(uiStage, "Успешно сохранил данные!");
-
                             break;
-
-                        case TELEPORT_WINDOW:
-                            new TeleportWindow(uiStage, "trade", game, player);
-                            break;
-
-                        case TRADE1_DIALOG:
-                            if(playerData.dialogIDS.contains("trade1")){
-                                new DialogueWindow(uiStage, game, gameDialogs.failtrade1Dialog());
-                            } else {
-                                new DialogueWindow(uiStage, game, gameDialogs.trade1Dialog());
-                            }
-                            break;
-
-                        case TRADE2_DIALOG:
-                            if(playerData.dialogIDS.contains("trade2")){
-                                new DialogueWindow(uiStage, game, gameDialogs.failtrade2Dialog());
-                            } else {
-                                new DialogueWindow(uiStage, game, gameDialogs.trade2Dialog());
-                            }
-                            break;
-
                     }
                 }
             }
@@ -173,13 +154,9 @@ public class TradeLocationScreen implements Screen {
         uiStage.addActor(saveButton);
 
 
-        new ImportantZone(worldManager.getWorld(), new Vector2(97, 755), 64, 20 , ImportantZone.ZoneType.TELEPORT_WINDOW);
-        new ImportantZone(worldManager.getWorld(), new Vector2(545, 870), 70, 70 , ImportantZone.ZoneType.SAVE);
-        new ImportantZone(worldManager.getWorld(), new Vector2(863, 885), 60, 20 , ImportantZone.ZoneType.TRADE1_DIALOG);
-        new ImportantZone(worldManager.getWorld(), new Vector2(1124, 885), 60, 20 , ImportantZone.ZoneType.TRADE2_DIALOG);
-        new ImportantZone(worldManager.getWorld(), new Vector2(315, 675), 10, 60 , ImportantZone.ZoneType.SOUND, "sounds/wooden.mp3");
-        new ImportantZone(worldManager.getWorld(), new Vector2(369, 675), 10, 60 , ImportantZone.ZoneType.SOUND, "sounds/grass.mp3");
-
+        new ImportantZone(worldManager.getWorld(), new Vector2(480, 180), 80, 20, ImportantZone.ZoneType.TELEPORT_WINDOW);
+        new ImportantZone(worldManager.getWorld(), new Vector2(953, 153), 10, 200, ImportantZone.ZoneType.TELEPORT).setNextZone("winter2", game.getPlayerData());
+        new ImportantZone(worldManager.getWorld(), new Vector2(673, 220), 70, 70, ImportantZone.ZoneType.SAVE);
 
 
 
@@ -191,10 +168,8 @@ public class TradeLocationScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // Update Box2D world
         worldManager.getWorld().step(1 / 60f, 6, 2);
 
-        // Update game camera
         int mapWidth = tiledMap.getProperties().get("width", Integer.class) * tiledMap.getProperties().get("tilewidth", Integer.class);
         int mapHeight = tiledMap.getProperties().get("height", Integer.class) * tiledMap.getProperties().get("tileheight", Integer.class);
         float cameraHalfWidth = gameCamera.viewportWidth / 2f;
@@ -204,30 +179,24 @@ public class TradeLocationScreen implements Screen {
         gameCamera.position.set(cameraX, cameraY, 0);
         gameCamera.update();
 
-        // Render the map
         renderer.setView(gameCamera);
         renderer.render();
 
-        // Render the player
         batch.setProjectionMatrix(gameCamera.combined);
         batch.begin();
         player.render(batch);
         batch.end();
 
-        // Update and draw the game stage
         gameStage.act(delta);
         gameStage.draw();
 
-        // Update and draw the UI stage
         uiStage.act(delta);
         uiStage.draw();
 
-        // Update player based on input (joystick should be part of UI)
         if (baseUIManager.getJoystick() != null) {
             player.update(delta, baseUIManager.getJoystick().getDirection());
         }
 
-        // Render Box2D debug lines
         debugRenderer.render(worldManager.getWorld(), gameCamera.combined);
 
     }

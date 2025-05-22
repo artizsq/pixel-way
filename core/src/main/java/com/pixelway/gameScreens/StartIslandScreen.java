@@ -21,6 +21,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.FloatArray;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.pixelway.MainClass;
@@ -62,7 +63,7 @@ public class StartIslandScreen implements Screen {
     private Stage uiStage;
     private GameDialogs gameDialogs;
 
-    private boolean isteleport;
+    private boolean isteleport = false;
     private BaseUIManager baseUIManager;
     private boolean isGame;
 
@@ -162,8 +163,8 @@ public class StartIslandScreen implements Screen {
                 if (player.getInZone()) {
                     switch (player.getZoneType()) {
                         case SAVE:
-                            playerData.x = player.getPosition().x;
-                            playerData.y = player.getPosition().y;
+                            playerData.x = player.getPosition().x + 26;
+                            playerData.y = player.getPosition().y + 50;
                             playerData.currentMap = "start";
                             game.saveData();
                             new AlertWindow(uiStage, "Успешно сохранил данные!");

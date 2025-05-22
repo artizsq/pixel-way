@@ -14,7 +14,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.pixelway.MainClass;
 import com.pixelway.gameScreens.ShipGameScreen;
+import com.pixelway.gameScreens.TPWinterGameScreen;
 import com.pixelway.gameScreens.TradeLocationScreen;
+
 import com.pixelway.models.Player;
 import com.pixelway.utils.VirtualJoystick;
 
@@ -46,14 +48,16 @@ public class TeleportWindow extends Window {
 
         BitmapFont font = new BitmapFont(Gdx.files.internal("fonts/def.fnt"));
 
-        String location1, location2 = "winter";
+        String location2 = "winter";
+        String location1 = "start";
         if (currentLocation.equals("start")) {
             location1 = "trade";
         } else if (currentLocation.equals("trade")) {
             location1 = "start";
-        } else {
-            location1 = "start";
+        } else if (currentLocation.equals("winter")) {
+            location2 = "trade";
         }
+
 
 
         Image img1 = createLocationImage("imgs/locations/" + location1 + ".png");
@@ -193,6 +197,7 @@ public class TeleportWindow extends Window {
                 if(game.getPlayerData().reqTP_items.contains("winterKey")){
                     // телепорт на локацию
                     System.out.println("Teleport to winter");
+                    game.setScreen(new TPWinterGameScreen(game, player, game.getPlayerData(), true));
                 }
                 break;
         }

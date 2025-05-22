@@ -3,14 +3,17 @@ package com.pixelway.models;
 import com.badlogic.gdx.Game;
 import com.pixelway.MainClass;
 import com.pixelway.database.PlayerData;
+import com.pixelway.gameScreens.StartIslandScreen;
 import com.pixelway.utils.DialogAction;
 
 import net.dermetfan.gdx.physics.box2d.PositionController;
 
 public class GameDialogs {
     private PlayerData playerData;
+    private MainClass game;
     public GameDialogs(MainClass game){
         playerData = game.getPlayerData();
+        this.game = game;
     }
 
     public DialogData starikDialog(){
@@ -137,14 +140,12 @@ public class GameDialogs {
         dialog5.dialogAction = new DialogAction() {
                 @Override
                 public void execute() {
+                    playerData.dialogIDS.add("trade1");
                     playerData.inventory.add(
                         new PlayerData.InventorySlot("Медаль Жизни", PlayerData.ItemType.HP, 5, 1, "Запах очень сильно ", "imgs/items/hpmedal.png")
                     );
                 }
             };
-
-
-
 
 
         DialogData dialog4 = new DialogData();
@@ -153,9 +154,7 @@ public class GameDialogs {
         dialog4.text = "Ходят легенды о человеке, который прибудет сюда из другого мира, он спасет нас от клана \"Тонель\"";
         dialog4.option1 = "Ого";
         dialog4.option2 = "Мне все равно";
-        if(!playerData.inventory.contains("Медаль жизни")){
-            dialog4.newDialogData = dialog5;
-        }
+        dialog4.newDialogData = dialog5;
 
 
         DialogData dialog3 = new DialogData();
@@ -186,6 +185,15 @@ public class GameDialogs {
         return dialog1;
     }
 
+    public DialogData failtrade1Dialog(){
+        DialogData dialog1 = new DialogData();
+        dialog1.imagePath = "trade1.png";
+        dialog1.name = "Торговец Ро";
+        dialog1.text = "Что-то случилось?";
+        dialog1.option1 = "Нет.";
+        return dialog1;
+    }
+
     public DialogData trade2Dialog(){
         DialogData dialog3fail = new DialogData();
         dialog3fail.name = "Торговец По";
@@ -199,13 +207,14 @@ public class GameDialogs {
         DialogData dialog3 = new DialogData();
         dialog3.name = "Торговец По";
         dialog3.imagePath = "trade2.png";
-        dialog3.text = "Вот твой ключ. Попробуй отправиться на другой остров.";
+        dialog3.text = "Вот твой товар. Попробуй отправиться на другой остров.";
         dialog3.option1 = "Хорошо";
         dialog3.dialogAction = new DialogAction() {
             @Override
             public void execute() {
                 playerData.subtractMoney(100);
                 playerData.reqTP_items.add("winterKey");
+                playerData.dialogIDS.add("trade2");
             }
         };
 
@@ -217,7 +226,7 @@ public class GameDialogs {
         dialog2.text = "Отлично, у меня есть Winter Key, для тебя он обойдется в 100 монет, по рукам?";
         dialog2.option1 = "По рукам";
         dialog2.option2 = "Нет.";
-        if(playerData.money >= 100 && (playerData.money - 100) > 0){
+        if(playerData.money >= 100 && (playerData.money - 100) <= 0){
             dialog2.newDialogData = dialog3;
         } else {
             dialog2.newDialogData = dialog3fail;
@@ -235,6 +244,32 @@ public class GameDialogs {
 
 
         return dialog1;
+    }
+
+    public DialogData failtrade2Dialog(){
+        DialogData dialogData = new DialogData();
+        dialogData.imagePath = "trade2.png";
+        dialogData.name = "Торговец По";
+        dialogData.text = "Тебе что-то нужно?";
+        dialogData.option1 = "Нет.";
+
+        return dialogData;
+    }
+
+    public DialogData darkDialogue(Player player){
+        DialogData dialogData = new DialogData();
+        dialogData.imagePath = "dark.png";
+        dialogData.name = "Темный попутчик";
+        dialogData.text = "Хочешь вернуться обратно?";
+        dialogData.option1 = "Да";
+        dialogData.option2 = "Нет";
+        dialogData.dialogAction = new DialogAction() {
+            @Override
+            public void execute() {
+                game.setScreen(new StartIslandScreen(game, player, game.getPlayerData(), true));
+            }
+        };
+        return dialogData;
     }
 
 

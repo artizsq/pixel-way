@@ -8,6 +8,7 @@ import com.pixelway.MainClass;
 import com.pixelway.database.DatabaseHelper;
 import com.pixelway.database.PlayerData;
 import com.pixelway.gameScreens.StartIslandScreen;
+import com.pixelway.gameScreens.TPWinterGameScreen;
 import com.pixelway.gameScreens.TradeLocationScreen;
 import com.pixelway.map.WorldManager;
 import com.pixelway.models.Player;
@@ -37,6 +38,9 @@ public class UploadGameScreen implements Screen {
                 break;
             case "trade":
                 game.setScreen(new TradeLocationScreen(game, player, loadedPlayerData, false));
+                break;
+            case "winter":
+                game.setScreen(new TPWinterGameScreen(game, player, loadedPlayerData, false));
                 break;
             default:
                 game.setScreen(new StartIslandScreen(game, player, loadedPlayerData, false));

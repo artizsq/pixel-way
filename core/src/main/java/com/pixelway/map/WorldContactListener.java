@@ -5,6 +5,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.pixelway.MainClass;
 import com.pixelway.database.DatabaseHelper;
 import com.pixelway.database.PlayerData;
+import com.pixelway.gameScreens.TPWinterGameScreen;
 import com.pixelway.models.Player;
 import com.pixelway.utils.ImportantZone;
 import com.pixelway.utils.SoundController;
@@ -112,6 +113,9 @@ public class WorldContactListener implements ContactListener {
                 break;
             case "startMap":
                 game.setScreen(new StartIslandScreen(game, player, playerData, true) );
+                break;
+            case "winter2":
+                game.setScreen(new TPWinterGameScreen(game, player, playerData, true));
                 break;
             default:
                 Gdx.app.log("TELEPORT", "Неизвестная карта: " + mapName);
