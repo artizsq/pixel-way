@@ -1,11 +1,11 @@
 {
 playerName: artiz
-musicVolume: 0
-soundVolume: 0.26
-x: 665.82196
-y: 235.65173
-strength: 5
-shield: 1
+musicVolume: 0.06
+x: 692.4382
+y: 300.65173
+strength: 500
+hp: 180
+shield: 50
 money: 0
 activeMissions: []
 currentMap: winter
@@ -14,8 +14,13 @@ dialogIDS: [
 	1
 	starik
 	trade2
+	trade1
+	2
+	3
 ]
-chestItems: []
+chestItems: [
+	Компот жизни
+]
 reqTP_items: [
 	winterKey
 ]

@@ -15,6 +15,10 @@ public class SoundController {
         assets = new AssetManager();
         assets.load("sounds/grass.mp3", Sound.class);
         assets.load("sounds/wooden.mp3", Sound.class);
+        assets.load("sounds/hit.mp3", Sound.class);
+        assets.load("sounds/pluh.mp3", Sound.class);
+        assets.load("sounds/shield.mp3", Sound.class);
+
 //        assets.load("sounds/stone.mp3", Sound.class);
         assets.finishLoading();
 

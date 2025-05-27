@@ -191,4 +191,6 @@ public class ShopScreen extends Window implements MoneyChangeListener {
     public void onMoneyChanged(int newMoney) {
         Gdx.app.log("LISTENER", "Player money: " + newMoney);
     }
+
+
 }

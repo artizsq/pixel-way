@@ -3,15 +3,14 @@ package com.pixelway.map;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.physics.box2d.*;
 import com.pixelway.MainClass;
-import com.pixelway.database.DatabaseHelper;
 import com.pixelway.database.PlayerData;
-import com.pixelway.gameScreens.TPWinterGameScreen;
-import com.pixelway.models.Player;
+import com.pixelway.screens.location.TPWinterLocationScreen;
+import com.pixelway.screens.location.WinterLocationScreen;
+import com.pixelway.models.characters.Player;
 import com.pixelway.utils.ImportantZone;
 import com.pixelway.utils.SoundController;
-import com.pixelway.gameScreens.ShipGameScreen;
-import com.pixelway.gameScreens.StartIslandScreen;
-import com.pixelway.windows.AlertWindow;
+import com.pixelway.screens.location.ShipLocationScreen;
+import com.pixelway.screens.location.StartIslandScreen;
 import com.pixelway.windows.SuperDialogue;
 
 public class WorldContactListener implements ContactListener {
@@ -88,6 +87,27 @@ public class WorldContactListener implements ContactListener {
                         }
 
                         break;
+
+                    case 2:
+                        if (!playerData.dialogIDS.contains("2")) {
+                            new SuperDialogue(zone.getStage(), "То предсказание, неужели я серьзено должен помочь им?");
+                            playerData.dialogIDS.add("2");
+                        }
+                        break;
+                    case 3:
+                        if (!playerData.dialogIDS.contains("3")) {
+                            new SuperDialogue(zone.getStage(), "Торговец рассказал, что тут находится их база. Я должен уничтожить её.");
+                            playerData.dialogIDS.add("3");
+                        }
+                        break;
+                    case 4:
+                        if (!playerData.dialogIDS.contains("4")) {
+                            new SuperDialogue(zone.getStage(), "Я чувствую на себе ответственность. Нельзя их повести!");
+                            playerData.dialogIDS.add("4");
+                        }
+                        break;
+
+
                 }
         }
     }
@@ -109,13 +129,16 @@ public class WorldContactListener implements ContactListener {
     private void handleTransition(String mapName, PlayerData playerData) {
         switch (mapName) {
             case "shipMap":
-                game.setScreen(new ShipGameScreen(game, player, playerData));
+                game.setScreen(new ShipLocationScreen(game, player, playerData));
                 break;
             case "startMap":
                 game.setScreen(new StartIslandScreen(game, player, playerData, true) );
                 break;
             case "winter2":
-                game.setScreen(new TPWinterGameScreen(game, player, playerData, true));
+                game.setScreen(new WinterLocationScreen(game, player, playerData, true));
+                break;
+            case "winter1":
+                game.setScreen(new TPWinterLocationScreen(game, player, playerData, true, false));
                 break;
             default:
                 Gdx.app.log("TELEPORT", "Неизвестная карта: " + mapName);

@@ -7,11 +7,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.pixelway.MainClass;
 import com.pixelway.database.DatabaseHelper;
 import com.pixelway.database.PlayerData;
-import com.pixelway.gameScreens.StartIslandScreen;
-import com.pixelway.gameScreens.TPWinterGameScreen;
-import com.pixelway.gameScreens.TradeLocationScreen;
+import com.pixelway.screens.location.StartIslandScreen;
+import com.pixelway.screens.location.TPWinterLocationScreen;
+import com.pixelway.screens.location.TradeLocationScreen;
 import com.pixelway.map.WorldManager;
-import com.pixelway.models.Player;
+import com.pixelway.models.characters.Player;
 
 public class UploadGameScreen implements Screen {
 
@@ -40,7 +40,7 @@ public class UploadGameScreen implements Screen {
                 game.setScreen(new TradeLocationScreen(game, player, loadedPlayerData, false));
                 break;
             case "winter":
-                game.setScreen(new TPWinterGameScreen(game, player, loadedPlayerData, false));
+                game.setScreen(new TPWinterLocationScreen(game, player, loadedPlayerData, false, false));
                 break;
             default:
                 game.setScreen(new StartIslandScreen(game, player, loadedPlayerData, false));

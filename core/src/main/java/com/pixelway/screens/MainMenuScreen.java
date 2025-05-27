@@ -15,7 +15,7 @@ import com.pixelway.MainClass;
 
 import com.pixelway.database.DatabaseHelper;
 import com.pixelway.database.PlayerData;
-import com.pixelway.gameScreens.StartIslandScreen;
+import com.pixelway.screens.location.StartIslandScreen;
 import com.pixelway.windows.AlertWindow;
 
 public class MainMenuScreen implements Screen {

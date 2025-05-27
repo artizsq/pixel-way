@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.pixelway.MainClass;
-import com.pixelway.gameScreens.BaseUIManager;
 
 public class VirtualJoystick extends Actor {
     private Texture joystickBackground;

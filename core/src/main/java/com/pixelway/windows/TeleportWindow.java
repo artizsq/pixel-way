@@ -13,11 +13,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.pixelway.MainClass;
-import com.pixelway.gameScreens.ShipGameScreen;
-import com.pixelway.gameScreens.TPWinterGameScreen;
-import com.pixelway.gameScreens.TradeLocationScreen;
+import com.pixelway.screens.location.ShipLocationScreen;
+import com.pixelway.screens.location.TPWinterLocationScreen;
+import com.pixelway.screens.location.TradeLocationScreen;
 
-import com.pixelway.models.Player;
+import com.pixelway.models.characters.Player;
 import com.pixelway.utils.VirtualJoystick;
 
 public class TeleportWindow extends Window {
@@ -188,7 +188,7 @@ public class TeleportWindow extends Window {
         VirtualJoystick.inputBlocked = false;
         switch (location){
             case "start":
-                game.setScreen(new ShipGameScreen(game, player, game.getPlayerData(), true));
+                game.setScreen(new ShipLocationScreen(game, player, game.getPlayerData(), true));
                 break;
             case "trade":
                 game.setScreen(new TradeLocationScreen(game, player, game.getPlayerData(), true));
@@ -197,7 +197,7 @@ public class TeleportWindow extends Window {
                 if(game.getPlayerData().reqTP_items.contains("winterKey")){
                     // телепорт на локацию
                     System.out.println("Teleport to winter");
-                    game.setScreen(new TPWinterGameScreen(game, player, game.getPlayerData(), true));
+                    game.setScreen(new TPWinterLocationScreen(game, player, game.getPlayerData(), false, true));
                 }
                 break;
         }

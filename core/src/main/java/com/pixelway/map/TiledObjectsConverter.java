@@ -61,6 +61,40 @@ public class TiledObjectsConverter {
         }
         return fixtures;
     }
+    public static Array<Fixture> bossImportObjects(TiledMap tiledMap, BossWorldManager worldManager, float scale) {
+        Array<Fixture> fixtures = new Array<>();
+
+        MapObjects objects = tiledMap.getLayers().get("objects").getObjects();
+
+        for (MapObject object : objects) {
+            Shape shape;
+
+            if (object instanceof RectangleMapObject) {
+                shape = getRectangle((RectangleMapObject) object, scale);
+            } else if (object instanceof CircleMapObject) {
+                shape = getCircle((CircleMapObject) object, scale);
+            } else if (object instanceof PolylineMapObject) {
+                shape = getPolyline((PolylineMapObject) object, scale);
+            } else if (object instanceof PolygonMapObject) {
+                shape = getPolygon((PolygonMapObject) object, scale);
+            } else {
+                Gdx.app.error("Tiled Map importing", "Can't import object of " + object.getClass() + " type");
+                continue;
+            }
+
+            BodyDef bodyDef = new BodyDef();
+            bodyDef.type = BodyDef.BodyType.StaticBody;
+
+            Body body = worldManager.getWorld().createBody(bodyDef);
+
+            Fixture fixture = body.createFixture(shape, 1);
+
+            shape.dispose();
+
+            fixtures.add(fixture);
+        }
+        return fixtures;
+    }
 
     private static PolygonShape getRectangle(RectangleMapObject rectangleMapObject, float scale) {
         Rectangle rect = rectangleMapObject.getRectangle();

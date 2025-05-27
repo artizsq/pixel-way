@@ -1,10 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="20" height="15" tilewidth="64" tileheight="64" infinite="0" nextlayerid="4" nextobjectid="5">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="20" height="15" tilewidth="64" tileheight="64" infinite="0" nextlayerid="7" nextobjectid="9">
  <tileset firstgid="1" name="winterText-export" tilewidth="64" tileheight="64" tilecount="15" columns="3">
   <image source="texs/winterText-export.png" width="192" height="320"/>
  </tileset>
  <tileset firstgid="16" name="winterTree-x" tilewidth="64" tileheight="64" tilecount="24" columns="4">
   <image source="texs/winterTree-x.png" width="256" height="384"/>
+ </tileset>
+ <tileset firstgid="40" name="chest" tilewidth="40" tileheight="40" tilecount="1" columns="1">
+  <image source="builds/chest.png" width="40" height="40"/>
+ </tileset>
+ <tileset firstgid="41" name="пещера" tilewidth="64" tileheight="64" tilecount="36" columns="6">
+  <image source="builds/пещера.png" width="384" height="384"/>
+ </tileset>
+ <tileset firstgid="77" name="chest2" tilewidth="60" tileheight="60" tilecount="1" columns="1">
+  <image source="builds/chest2.png" width="64" height="64"/>
  </tileset>
  <layer id="1" name="layer1" width="20" height="15">
   <data encoding="csv">
@@ -44,8 +53,47 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
+ <layer id="4" name="layer3" width="20" height="15">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
+ <layer id="6" name="layer4" width="20" height="15">
+  <data encoding="csv">
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,41,42,43,44,45,46,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,47,48,49,50,51,52,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,53,54,55,56,57,58,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,59,60,61,62,63,64,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,65,66,67,68,69,70,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,71,72,73,74,75,76,0,0,0,0,0,0,0,
+0,0,0,0,0,0,77,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
+0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
+</data>
+ </layer>
  <objectgroup id="3" name="objects">
   <object id="3" x="0" y="621.212" width="1280.73" height="20.1515"/>
   <object id="4" x="-4.365" y="881.924" width="1280.73" height="20.1515"/>
+  <object id="8" x="390" y="640.667" width="52" height="44.3333"/>
  </objectgroup>
 </map>

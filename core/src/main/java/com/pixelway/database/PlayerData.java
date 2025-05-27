@@ -1,4 +1,5 @@
 package com.pixelway.database;
+import com.pixelway.utils.HPChangeListener;
 import com.pixelway.utils.MoneyChangeListener;
 
 import java.util.ArrayList;
@@ -15,8 +16,8 @@ public class PlayerData {
     public ArrayList<InventorySlot> inventory = new ArrayList<>(6);  // максимум 6 слотов
     public int strength = 2;
     public int fishCount = 0;
-    public int hp = 10;
-    public int shield = 0;
+    public int hp = 10; // Изначальное HP игрока
+    public int shield = 0; // Изначальный щит игрока
     public int money = 50;
     public ArrayList<String> activeMissions;
     public String currentMap = "startMap";
@@ -24,6 +25,24 @@ public class PlayerData {
     public ArrayList<String> chestItems;
     public ArrayList<String> reqTP_items;
 
+
+    // --- Добавленные геттеры для удобства ---
+    public int getStrength() {
+        return strength;
+    }
+
+    public int getHp() {
+        return hp;
+    }
+
+    public void setHp(int hp) { // Добавлен сеттер, так как MiniPlayer будет изменять hp
+        this.hp = hp;
+    }
+
+    public int getShield() {
+        return shield;
+    }
+    // --- Конец добавленных геттеров ---
 
 
     public static class InventorySlot {
@@ -121,6 +140,21 @@ public class PlayerData {
         }
     }
 
+    private transient List<HPChangeListener> hpChangeListeners = new ArrayList<>();
+    public void addHPListener(HPChangeListener listener){
+        hpChangeListeners.add(listener);
+    }
 
-
+    public void removeHPListener(HPChangeListener listener){
+        hpChangeListeners.remove(listener);
+    }
+    public void notifyHPListener(){
+        for (HPChangeListener listener : hpChangeListeners) {
+            listener.onHPchanged(this.hp);
+        }
+    }
+    public void substractHP(int HP){
+        this.hp -= HP;
+        notifyHPListener();
+    }
 }

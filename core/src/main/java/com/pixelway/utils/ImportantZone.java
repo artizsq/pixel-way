@@ -1,13 +1,10 @@
 package com.pixelway.utils;
 
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
 import com.pixelway.database.PlayerData;
-import com.pixelway.models.Player;
+import com.pixelway.models.characters.Player;
 
 public class ImportantZone {
 
@@ -37,7 +34,8 @@ public class ImportantZone {
         BOSS_GAME,
         SOUND,
         CHEST,
-        SUPER_DIALOGUE
+        SUPER_DIALOGUE,
+        CLICK_TELEPORT
     }
 
 
