@@ -104,8 +104,6 @@ public class TPWinterLocationScreen implements Screen {
 
         if(isTeleport){
             player = new Player(new Vector2(920, player.getPosition().y + 50), 52f, 100f, worldManager.getWorld());
-//            SoundController soundController = player.getSoundController();
-//            soundController.setWalkSound("sounds/wooden.mp3");
         } else if (isLongTeleport){
             player = new Player(new Vector2(550, 200), 52f, 100f, worldManager.getWorld());
 
@@ -141,7 +139,7 @@ public class TPWinterLocationScreen implements Screen {
                 if (player.getInZone()){
                     switch (player.getZoneType()){
                         case TELEPORT_WINDOW:
-                            new DialogueWindow(uiStage, game, gameDialogs.darkDialogue(player));
+                            new DialogueWindow(uiStage, game, gameDialogs.darkDialogue(uiStage, player, "winter"));
 
                             break;
                         case SAVE:
@@ -202,7 +200,7 @@ public class TPWinterLocationScreen implements Screen {
             player.update(delta, baseUIManager.getJoystick().getDirection());
         }
 
-        debugRenderer.render(worldManager.getWorld(), gameCamera.combined);
+//        debugRenderer.render(worldManager.getWorld(), gameCamera.combined);
 
     }
 

@@ -30,6 +30,7 @@ public class ChestWindow extends Window {
 
     public ChestWindow(Stage stage, MainClass game, List<PlayerData.InventorySlot> chestItems) {
         super("", createWindowStyle());
+        VirtualJoystick.inputBlocked = true;
         setSize(606, 252);
         setPosition((Gdx.graphics.getWidth() - getWidth()) / 2,
             (Gdx.graphics.getHeight() - getHeight()) / 2);

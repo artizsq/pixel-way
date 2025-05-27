@@ -56,12 +56,12 @@ public class WinterLocationScreen implements Screen {
     private Stage uiStage;     // Stage for the UI
     private boolean isTeleport = false;
     private BaseUIManager baseUIManager;
-    private GameDialogs gameDialogs;
+
+
 
 
     public WinterLocationScreen(MainClass game, Player player, PlayerData playerData) {
         this.game = game;
-
         this.worldManager = new WorldManager();
         this.player = player;
         this.playerData = playerData;
@@ -81,7 +81,7 @@ public class WinterLocationScreen implements Screen {
         tiledMap = new TmxMapLoader().load("maps/winter2.tmx");
         renderer = new OrthogonalTiledMapRenderer(tiledMap);
         batch = new SpriteBatch();
-        gameDialogs = new GameDialogs(game);
+
 
 
         gameCamera = new OrthographicCamera();
@@ -102,8 +102,11 @@ public class WinterLocationScreen implements Screen {
         multiplexer.addProcessor(uiStage);
         Gdx.input.setInputProcessor(multiplexer);
 
-        player = new Player(new Vector2(60, player.getPosition().y + 50), 52f, 100f, worldManager.getWorld());
-
+        if(isTeleport) {
+            player = new Player(new Vector2(60, player.getPosition().y + 50), 52f, 100f, worldManager.getWorld());
+        } else {
+            player = new Player(new Vector2(639, 335), 52f, 100f, worldManager.getWorld());
+        }
 
 
         worldManager.getWorld().setContactListener(new WorldContactListener(game, player));
@@ -197,7 +200,7 @@ public class WinterLocationScreen implements Screen {
             player.update(delta, baseUIManager.getJoystick().getDirection());
         }
 
-        debugRenderer.render(worldManager.getWorld(), gameCamera.combined);
+//        debugRenderer.render(worldManager.getWorld(), gameCamera.combined);
 
     }
 

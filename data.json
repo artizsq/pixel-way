@@ -1,11 +1,19 @@
 {
 playerName: artiz
 musicVolume: 0.06
-x: 692.4382
-y: 300.65173
-strength: 500
-hp: 180
-shield: 50
+x: 647.84814
+y: 292.22522
+inventory: [
+	{
+		name: Медаль Рыцаря
+		effectType: POWER
+		effectValue: 2
+		quantity: 1
+		itemDesc: "Медаль XVI века, судя по всему\nиспользовалась рыцарями."
+		imagePath: imgs/items/strmedal.png
+	}
+]
+strength: 5
 money: 0
 activeMissions: []
 currentMap: winter
@@ -14,12 +22,11 @@ dialogIDS: [
 	1
 	starik
 	trade2
-	trade1
 	2
 	3
 ]
 chestItems: [
-	Компот жизни
+	Медаль Рыцаря
 ]
 reqTP_items: [
 	winterKey

@@ -1,11 +1,13 @@
 package com.pixelway.models.dialogs;
 
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.pixelway.MainClass;
 import com.pixelway.database.PlayerData;
 import com.pixelway.models.characters.Player;
 import com.pixelway.screens.location.StartIslandScreen;
 import com.pixelway.screens.minigames.BossBattleScreen;
 import com.pixelway.utils.DialogAction;
+import com.pixelway.windows.TeleportWindow;
 
 public class GameDialogs {
     private PlayerData playerData;
@@ -225,7 +227,7 @@ public class GameDialogs {
         dialog2.text = "Отлично, у меня есть Winter Key, для тебя он обойдется в 100 монет, по рукам?";
         dialog2.option1 = "По рукам";
         dialog2.option2 = "Нет.";
-        if(playerData.money >= 100 && (playerData.money - 100) <= 0){
+        if(playerData.money >= 100){
             dialog2.newDialogData = dialog3;
         } else {
             dialog2.newDialogData = dialog3fail;
@@ -255,7 +257,7 @@ public class GameDialogs {
         return dialogData;
     }
 
-    public DialogData darkDialogue(Player player){
+    public DialogData darkDialogue(Stage stage, Player player, String currentZone){
         DialogData dialogData = new DialogData();
         dialogData.imagePath = "dark.png";
         dialogData.name = "Темный попутчик";
@@ -265,25 +267,35 @@ public class GameDialogs {
         dialogData.dialogAction = new DialogAction() {
             @Override
             public void execute() {
-                game.setScreen(new StartIslandScreen(game, player, game.getPlayerData(), true));
+                new TeleportWindow(stage, currentZone, game, player);
             }
         };
         return dialogData;
     }
 
     public DialogData bossDialog(){
-        DialogData dialogData1 = new DialogData();
-        dialogData1.name = "Голем";
-        dialogData1.imagePath = "golem.png";
-        dialogData1.text = "Так ты и вправду пришел...Готов к сражению?";
-        dialogData1.option1 = "Да";
-        dialogData1.option2 = "Нет";
-        dialogData1.dialogAction = new DialogAction() {
+        DialogData dialogData2 = new DialogData();
+        dialogData2.name = "Голем";
+        dialogData2.imagePath = "golem.png";
+        dialogData2.text = "Ха-ха-ха, мне нравится твоя самоуверенность. Покажи мне, на что способен.";
+        dialogData2.option1 = "Базару 0";
+        dialogData2.option2 = "Я не хочу";
+        dialogData2.dialogAction = new DialogAction() {
             @Override
             public void execute() {
                 game.setScreen(new BossBattleScreen(game));
             }
         };
+
+
+
+        DialogData dialogData1 = new DialogData();
+        dialogData1.name = "Голем";
+        dialogData1.imagePath = "golem.png";
+        dialogData1.text = "Так ты и вправду пришел...Считаешь, что сможешь победить меня?";
+        dialogData1.option1 = "Да";
+        dialogData1.option2 = "Нет";
+        dialogData1.newDialogData = dialogData2;
         return dialogData1;
     }
 

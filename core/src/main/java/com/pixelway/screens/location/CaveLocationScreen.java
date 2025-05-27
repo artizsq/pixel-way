@@ -120,7 +120,14 @@ public class CaveLocationScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if(player.getInZone()){
-                    new DialogueWindow(uiStage, game, gameDialogs.bossDialog());
+                    switch (player.getZoneType()){
+                        case CLICK_TELEPORT:
+                            game.setScreen(new WinterLocationScreen(game, player, playerData, false));
+                            break;
+                        case DIALOGUE:
+                            new DialogueWindow(uiStage, game, gameDialogs.bossDialog());
+                            break;
+                    }
                 }
             }
         }
@@ -129,6 +136,7 @@ public class CaveLocationScreen implements Screen {
 
 
         new ImportantZone(worldManager.getWorld(), new Vector2(246, 440), 120, 10, ImportantZone.ZoneType.DIALOGUE);
+        new ImportantZone(worldManager.getWorld(), new Vector2(246, 30), 240, 10, ImportantZone.ZoneType.CLICK_TELEPORT);
 
 
 
@@ -167,7 +175,7 @@ public class CaveLocationScreen implements Screen {
             player.update(delta, baseUIManager.getJoystick().getDirection());
         }
 
-        debugRenderer.render(worldManager.getWorld(), gameCamera.combined);
+//        debugRenderer.render(worldManager.getWorld(), gameCamera.combined);
 
     }
 

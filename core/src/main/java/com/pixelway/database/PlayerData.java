@@ -17,7 +17,7 @@ public class PlayerData {
     public int strength = 2;
     public int fishCount = 0;
     public int hp = 10; // Изначальное HP игрока
-    public int shield = 0; // Изначальный щит игрока
+    public int shield = 10; // Изначальный щит игрока
     public int money = 50;
     public ArrayList<String> activeMissions;
     public String currentMap = "startMap";

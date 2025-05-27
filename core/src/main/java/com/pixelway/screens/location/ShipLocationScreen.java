@@ -185,7 +185,7 @@ public class ShipLocationScreen implements Screen {
         }
 
 
-        debugRenderer.render(worldManager.getWorld(), gameCamera.combined);
+//        debugRenderer.render(worldManager.getWorld(), gameCamera.combined);
     }
 
     @Override

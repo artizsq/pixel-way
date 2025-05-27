@@ -124,12 +124,11 @@ public class MiniPlayer extends Actor {
 
     public void takeDamage(int amount) {
         if (shield >= amount) {
-            // Щит полностью поглощает урон
             shield -= amount;
 
             soundController.playWalk();
         } else {
-            // Щита недостаточно — остальной урон идёт по здоровью
+
             int remainingDamage = amount - shield;
             shield = 0;
             health -= remainingDamage;

@@ -208,10 +208,8 @@ public class TradeLocationScreen implements Screen {
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // Update Box2D world
         worldManager.getWorld().step(1 / 60f, 6, 2);
 
-        // Update game camera
         int mapWidth = tiledMap.getProperties().get("width", Integer.class) * tiledMap.getProperties().get("tilewidth", Integer.class);
         int mapHeight = tiledMap.getProperties().get("height", Integer.class) * tiledMap.getProperties().get("tileheight", Integer.class);
         float cameraHalfWidth = gameCamera.viewportWidth / 2f;
@@ -221,31 +219,25 @@ public class TradeLocationScreen implements Screen {
         gameCamera.position.set(cameraX, cameraY, 0);
         gameCamera.update();
 
-        // Render the map
         renderer.setView(gameCamera);
         renderer.render();
 
-        // Render the player
         batch.setProjectionMatrix(gameCamera.combined);
         batch.begin();
         player.render(batch);
         batch.end();
 
-        // Update and draw the game stage
         gameStage.act(delta);
         gameStage.draw();
 
-        // Update and draw the UI stage
         uiStage.act(delta);
         uiStage.draw();
 
-        // Update player based on input (joystick should be part of UI)
         if (baseUIManager.getJoystick() != null) {
             player.update(delta, baseUIManager.getJoystick().getDirection());
         }
 
-        // Render Box2D debug lines
-        debugRenderer.render(worldManager.getWorld(), gameCamera.combined);
+//        debugRenderer.render(worldManager.getWorld(), gameCamera.combined);
 
     }
 

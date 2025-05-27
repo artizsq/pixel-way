@@ -36,6 +36,7 @@ public class DatabaseHelper {
         data.currentMap = "start";
         data.chestItems = new ArrayList<>();
         data.reqTP_items = new ArrayList<>();
+        data.shield = 10;
         game.saveData();
         return data;
     }
