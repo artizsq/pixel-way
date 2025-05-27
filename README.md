@@ -4,6 +4,8 @@
 # Контакты
 *Telegram: [@ArtizSQ](https://t.me/artizsq)*
 
+*Канал с туториалом: [ТЫК](https://t.me/pixelway_news)*
+
 
 
 
