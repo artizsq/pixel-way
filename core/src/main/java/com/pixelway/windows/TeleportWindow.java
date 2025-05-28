@@ -186,6 +186,7 @@ public class TeleportWindow extends Window {
         darkOverlay.remove();
         this.remove();
         VirtualJoystick.inputBlocked = false;
+        game.getScreen().dispose();
         switch (location){
             case "start":
                 game.setScreen(new ShipLocationScreen(game, player, game.getPlayerData(), true));

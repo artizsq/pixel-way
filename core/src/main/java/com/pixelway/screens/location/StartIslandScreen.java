@@ -193,6 +193,8 @@ public class StartIslandScreen implements Screen {
                             if (playerData.activeMissions.contains("fishing")){
                                 playerData.x = player.getPosition().x + 26;
                                 playerData.y = player.getPosition().y + 50;
+                                dispose();
+
                                 game.setScreen(new FishCatchGame(game, player));
                             }
                             break;

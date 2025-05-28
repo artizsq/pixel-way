@@ -79,6 +79,7 @@ public class FishCatchGame implements Screen {
             public void clicked(InputEvent event, float x, float y) {
                 if(fishCaught > 0){
                     if(alertCount == 1){
+                        dispose();
                         game.setScreen(new StartIslandScreen(game, player, game.getPlayerData(), false));
                         fishCaught = 0;
                     } else {
@@ -86,6 +87,7 @@ public class FishCatchGame implements Screen {
                         alertCount++;
                     }
                 } else {
+                    dispose();
                     game.setScreen(new StartIslandScreen(game, player, game.getPlayerData(), false));
                     fishCaught = 0;
                 }
@@ -150,6 +152,7 @@ public class FishCatchGame implements Screen {
                 returnButton.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
+                        dispose();
                         game.setScreen(new StartIslandScreen(game, player, game.getPlayerData(), false));
                     }
                 });
@@ -211,14 +214,15 @@ public class FishCatchGame implements Screen {
     @Override public void resume() {}
     @Override public void hide() {}
     @Override public void dispose() {
-        stage.dispose();
-        fishTexture.dispose();
-        backTexture.dispose();
+        stage.dispose();            // Освобождает Stage и его внутренний SpriteBatch, а также актеров.
+        fishTexture.dispose();      // Текстура рыбы
+        backTexture.dispose();      // Текстура кнопки назад
+        gameOverFont.dispose();     // Шрифт для "Игра ОКОНЧЕНА"
         font.dispose();
-        batch.dispose();
         if (darkOverlay != null && darkOverlay.getDrawable() instanceof TextureRegionDrawable) {
             TextureRegion tex = ((TextureRegionDrawable) darkOverlay.getDrawable()).getRegion();
             if (tex.getTexture() != null) tex.getTexture().dispose();
         }
+        batch.dispose();
     }
 }

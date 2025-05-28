@@ -2,6 +2,7 @@ package com.pixelway;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.pixelway.database.DatabaseHelper;
@@ -53,8 +54,6 @@ public class MainClass extends Game {
         this.bgMusic.setVolume(playerData.musicVolume); // Apply current volume
         this.bgMusic.play();            // Start playing the new music
     }
-
-
 
     public int getJoystickControllingPointer() {
         return joystickControllingPointer;
