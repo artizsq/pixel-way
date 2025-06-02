@@ -8,8 +8,6 @@ import com.pixelway.database.DatabaseHelper;
 public class SoundController {
     private AssetManager assets;
     private Sound currentWalkSound;
-    private Sound previousWalkSound;
-    private String currentSoundPath;
 
     public SoundController(String defaultSoundPath) {
         assets = new AssetManager();
@@ -18,13 +16,12 @@ public class SoundController {
         assets.load("sounds/hit.mp3", Sound.class);
         assets.load("sounds/pluh.mp3", Sound.class);
         assets.load("sounds/shield.mp3", Sound.class);
+        assets.load("sounds/text/main.wav", Sound.class);
 
-//        assets.load("sounds/stone.mp3", Sound.class);
         assets.finishLoading();
 
         if (assets.isLoaded(defaultSoundPath, Sound.class)) {
             currentWalkSound = assets.get(defaultSoundPath, Sound.class);
-            currentSoundPath = defaultSoundPath;
         } else {
             Gdx.app.error("SoundController", "Default sound not loaded: " + defaultSoundPath);
         }
@@ -45,33 +42,16 @@ public class SoundController {
         }
 
         if (assets.isLoaded(newSoundPath, Sound.class)) {
-            previousWalkSound = currentWalkSound; // Сохраняем текущий звук перед заменой
             currentWalkSound = assets.get(newSoundPath, Sound.class);
-            currentSoundPath = newSoundPath;
         } else {
             Gdx.app.error("SoundController", "Sound not loaded: " + newSoundPath);
         }
     }
 
-    public void revertToPrevious() {
-        if (previousWalkSound != null) {
-            Sound temp = currentWalkSound;
-            currentWalkSound = previousWalkSound;
-            previousWalkSound = temp; // Чтобы можно было туда-сюда менять
-            Gdx.app.log("SoundController", "Возвращён предыдущий звук шагов");
-        } else {
-            Gdx.app.error("SoundController", "Нет сохранённого предыдущего звука");
-        }
-    }
 
-    /** Освобождение ресурсов */
+
     public void dispose() {
         assets.dispose();
     }
-    public boolean isCurrentSound(String soundPath) {
-        if (currentWalkSound == null || !assets.isLoaded(soundPath, Sound.class)) {
-            return false;
-        }
-        return currentWalkSound == assets.get(soundPath, Sound.class);
-    }
+
 }

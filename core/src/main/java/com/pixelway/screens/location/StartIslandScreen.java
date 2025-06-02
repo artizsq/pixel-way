@@ -61,12 +61,10 @@ public class StartIslandScreen implements Screen {
 
     private boolean isteleport = false;
     private BaseUIManager baseUIManager;
-    private boolean isGame;
 
     public StartIslandScreen(MainClass game) {
         this.game = game;
         this.worldManager = new WorldManager();
-        game.clearPlayerData();
         playerData = game.getPlayerData();
     }
 
@@ -80,14 +78,12 @@ public class StartIslandScreen implements Screen {
 
     @Override
     public void show() {
-        // Load map and initialize renderers
         tiledMap = new TmxMapLoader().load("maps/startIslandMap.tmx");
         renderer = new OrthogonalTiledMapRenderer(tiledMap);
         batch = new SpriteBatch();
 
         gameDialogs = new GameDialogs(game);
 
-        // Initialize game camera and stage
         gameCamera = new OrthographicCamera();
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
@@ -100,15 +96,13 @@ public class StartIslandScreen implements Screen {
 
         System.out.println(game.getPlayerData().fishCount);
 
-        // Initialize UI camera and stage
         uiCamera = new OrthographicCamera();
         uiCamera.setToOrtho(false, screenWidth, screenHeight);
         uiCamera.update();
         uiStage = new Stage(new ScreenViewport(uiCamera));
 
-        // Set up input multiplexer to handle input for both stages (if needed)
         InputMultiplexer multiplexer = new InputMultiplexer();
-//        multiplexer.addProcessor(gameStage); // If you need input on the game stage
+//        multiplexer.addProcessor(gameStage);
         multiplexer.addProcessor(uiStage);
         Gdx.input.setInputProcessor(multiplexer);
 
@@ -124,19 +118,21 @@ public class StartIslandScreen implements Screen {
         fixtures = TiledObjectsConverter.importObjects(tiledMap, worldManager, 1);
         debugRenderer = new Box2DDebugRenderer();
 
+
         new ImportantZone(worldManager.getWorld(), new Vector2(1060, 563), 100, 20, ImportantZone.ZoneType.SHOP);
         new ImportantZone(worldManager.getWorld(), new Vector2(1915, 555), 10, 300, ImportantZone.ZoneType.TELEPORT).setNextZone("shipMap", playerData);
-        new ImportantZone((worldManager.getWorld()), new Vector2(1465, 565), 115, 20, ImportantZone.ZoneType.DIALOGUE);
+        new ImportantZone((worldManager.getWorld()), new Vector2(887, 567), 115, 20, ImportantZone.ZoneType.DIALOGUE);
         new ImportantZone(worldManager.getWorld(), new Vector2(527, 540), 40, 400, ImportantZone.ZoneType.SUPER_DIALOGUE).setStageAndDialog(uiStage, 0);
-        new ImportantZone(worldManager.getWorld(), new Vector2(1100, 300), 40, 600, ImportantZone.ZoneType.SUPER_DIALOGUE).setStageAndDialog(uiStage, 1);
+        new ImportantZone(worldManager.getWorld(), new Vector2(694, 550), 40, 600, ImportantZone.ZoneType.SUPER_DIALOGUE).setStageAndDialog(uiStage, 1);
         new ImportantZone(worldManager.getWorld(), new Vector2(1237, 566), 40, 20, ImportantZone.ZoneType.CHEST);
-        new ImportantZone(worldManager.getWorld(), new Vector2(924, 580), 50, 20, ImportantZone.ZoneType.SAVE);
-        new ImportantZone(worldManager.getWorld(), new Vector2(940, 110), 48, 48, ImportantZone.ZoneType.FISH_GAME);
+        new ImportantZone(worldManager.getWorld(), new Vector2(737, 610),80, 80, ImportantZone.ZoneType.SAVE);
+        new ImportantZone(worldManager.getWorld(), new Vector2(950, 110), 64, 64, ImportantZone.ZoneType.FISH_GAME);
 
 
         new ImportantZone(worldManager.getWorld(), new Vector2(1237, 140), 70, 70, ImportantZone.ZoneType.FISHMAN_DIALOG);
 
-        baseUIManager = new BaseUIManager(uiStage, playerData, game); // Pass uiStage
+
+        baseUIManager = new BaseUIManager(uiStage, playerData, game);
         baseUIManager.init();
 
 
@@ -249,7 +245,7 @@ public class StartIslandScreen implements Screen {
             player.update(delta, baseUIManager.getJoystick().getDirection());
         }
 
-//        debugRenderer.render(worldManager.getWorld(), gameCamera.combined);
+        debugRenderer.render(worldManager.getWorld(), gameCamera.combined);
     }
 
     private void updateCameraPosition() {

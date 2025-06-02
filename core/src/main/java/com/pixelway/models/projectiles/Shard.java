@@ -6,12 +6,11 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class Shard extends BossAttack {
     private static final float SHARD_SPEED = 5000f;
-    private static final float SHARD_WIDTH = 20f; // Определяем размеры как константы
-    private static final float SHARD_HEIGHT = 40f;
+    private static final float SHARD_WIDTH = 40f;
+    private static final float SHARD_HEIGHT = 60f;
 
     public Shard(World world, Vector2 startPosition, Texture texture) {
-        // Передаем ширину и высоту в конструктор BossAttack
-        super(world, startPosition, texture, 10, SHARD_WIDTH, SHARD_HEIGHT);
+        super(world, startPosition, texture, 10, SHARD_WIDTH - 20, SHARD_HEIGHT);
 
         body.setLinearVelocity(0, -SHARD_SPEED);
     }

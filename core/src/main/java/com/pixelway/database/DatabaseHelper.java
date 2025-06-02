@@ -18,13 +18,20 @@ public class DatabaseHelper {
             Json json = new Json();
             return json.fromJson(PlayerData.class, file);
         } else {
-            PlayerData data = new PlayerData();
-            return data;
+            return new PlayerData();
         }
     }
 
-    public static PlayerData emptyPlayerData(MainClass game){
-        PlayerData data = game.getPlayerData();
+
+    public static PlayerData emptyPlayerData() {
+        PlayerData oldData = loadPlayerData();
+
+        PlayerData data = new PlayerData();
+
+        data.playerName = oldData.playerName;
+        data.musicVolume = oldData.musicVolume;
+        data.soundVolume = oldData.soundVolume;
+
         data.x = 527;
         data.y = 540;
         data.inventory = new ArrayList<>();
@@ -33,13 +40,15 @@ public class DatabaseHelper {
         data.activeMissions = new ArrayList<>();
         data.strength = 5;
         data.dialogIDS = new ArrayList<>();
-        data.currentMap = "start";
+        data.currentMap = "";
         data.chestItems = new ArrayList<>();
         data.reqTP_items = new ArrayList<>();
         data.shield = 10;
-        game.saveData();
+        data.isGameStarted = true;
+
         return data;
     }
+
 
     public static void savePlayerData(PlayerData data) {
         Json json = new Json();
@@ -53,10 +62,12 @@ public class DatabaseHelper {
         Json json = new Json();
         PlayerData data = json.fromJson(PlayerData.class, file);
 
-        boolean hasGameplayData = data.x != 527 || data.y != 540 || data.hp < 10 || !data.inventory.isEmpty();
-
-        return hasGameplayData;
+        return data.isGameStarted &&
+            data.x != 547 &&
+            data.y != 540 &&
+            data.currentMap != "";
     }
+
 
 
 

@@ -23,15 +23,20 @@ public class UploadGameScreen implements Screen {
 
     @Override
     public void show() {
-        // Всегда загружаем данные из файла при отображении экрана
+        // Принудительно загружаем данные из файла
         PlayerData loadedPlayerData = DatabaseHelper.loadPlayerData();
-        game.setPlayerData(loadedPlayerData); // Обновляем ссылку в MainClass на загруженные данные
+        game.setPlayerData(loadedPlayerData);
 
         WorldManager worldManager = new WorldManager();
-        Player player;
 
-        player = new Player(new Vector2(loadedPlayerData.x, loadedPlayerData.y), 52f, 100f, worldManager.getWorld());
+        Player player = new Player(
+            new Vector2(loadedPlayerData.x, loadedPlayerData.y),
+            52f, 100f,
+            worldManager.getWorld()
+        );
+
         game.setBgMusic("songs/game.mp3");
+
         switch (loadedPlayerData.currentMap) {
             case "start":
                 game.setScreen(new StartIslandScreen(game, player, loadedPlayerData, false));
@@ -45,11 +50,11 @@ public class UploadGameScreen implements Screen {
             default:
                 game.setScreen(new StartIslandScreen(game, player, loadedPlayerData, false));
                 break;
-
         }
 
         worldManager.dispose();
     }
+
 
     @Override
     public void render(float delta) {

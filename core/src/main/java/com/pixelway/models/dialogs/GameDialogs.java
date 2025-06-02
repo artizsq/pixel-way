@@ -32,7 +32,7 @@ public class GameDialogs {
 
         DialogData forthNode = new DialogData();
         forthNode.name = "Старик";
-        forthNode.text = "Клан Тонель разрушил ВСЁ! Мы сумели сохранить лишь наш главный дом, зайди туда как-нибудь.";
+        forthNode.text = "Клан Тонель разрушил ВСЁ! Мы сумели восстановить только главное здание, обязательно зайди туда !";
         forthNode.imagePath = "starik.png";
         forthNode.option1 = "Хорошо";
         forthNode.option2 = "Не";
@@ -52,7 +52,7 @@ public class GameDialogs {
 
         DialogData secondNode = new DialogData();
         secondNode.name = "Старик";
-        secondNode.text = playerData.playerName + "? Интересное имя, очень необычное в наших краях.";
+        secondNode.text = playerData.playerName + " ? Интересное имя, очень необычное в наших краях.";
         secondNode.imagePath = "starik.png";
         secondNode.option1 = "Что за края?";
         secondNode.option2 = "Спс...";

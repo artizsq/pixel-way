@@ -7,43 +7,29 @@ import java.util.List;
 
 public class PlayerData {
     public String playerName = "Player";
-    public float musicVolume = 1.0f;
+    public float musicVolume = 0.5f;
     public float soundVolume = 1.0f;
 
     public float x = 527;
     public float y = 540;
 
-    public ArrayList<InventorySlot> inventory = new ArrayList<>(6);  // максимум 6 слотов
+    public ArrayList<InventorySlot> inventory = new ArrayList<>(6);
     public int strength = 2;
     public int fishCount = 0;
-    public int hp = 10; // Изначальное HP игрока
-    public int shield = 10; // Изначальный щит игрока
+    public int hp = 30;
+    public int shield = 10;
     public int money = 50;
-    public ArrayList<String> activeMissions;
-    public String currentMap = "startMap";
-    public ArrayList<String> dialogIDS;
-    public ArrayList<String> chestItems;
-    public ArrayList<String> reqTP_items;
+    public String currentMap = "";
+    public ArrayList<String> activeMissions = new ArrayList<>();
+    public ArrayList<String> dialogIDS = new ArrayList<>();
+    public ArrayList<String> chestItems = new ArrayList<>();
+    public ArrayList<String> reqTP_items = new ArrayList<>();
 
 
-    // --- Добавленные геттеры для удобства ---
-    public int getStrength() {
-        return strength;
-    }
+    public boolean isGameStarted = false;
 
-    public int getHp() {
-        return hp;
-    }
 
-    public void setHp(int hp) { // Добавлен сеттер, так как MiniPlayer будет изменять hp
-        this.hp = hp;
-    }
-
-    public int getShield() {
-        return shield;
-    }
-    // --- Конец добавленных геттеров ---
-
+    public PlayerData(){}
 
     public static class InventorySlot {
 

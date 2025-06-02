@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.pixelway.database.DatabaseHelper;
 import com.pixelway.database.PlayerData;
 import com.pixelway.screens.MainMenuScreen;
-import com.pixelway.utils.VirtualJoystick;
 
 public class MainClass extends Game {
     public SpriteBatch batch;
@@ -25,10 +24,10 @@ public class MainClass extends Game {
 
         bgMusic = Gdx.audio.newMusic(Gdx.files.internal("songs/main.mp3"));
         bgMusic.setLooping(true);
-        bgMusic.setVolume(playerData.musicVolume);  // стартовый уровень
+        bgMusic.setVolume(playerData.musicVolume);
 
         bgMusic.play();
-        setScreen(new MainMenuScreen(this)); // Открываем главное меню
+        setScreen(new MainMenuScreen(this));
     }
 
     public Music getBgMusic() {
@@ -80,7 +79,8 @@ public class MainClass extends Game {
     }
 
     public void clearPlayerData() {
-        playerData = DatabaseHelper.emptyPlayerData(this);
+        playerData = DatabaseHelper.emptyPlayerData();
+        saveData();
     }
 
     public void setPlayerData(PlayerData loadedPlayerData) {

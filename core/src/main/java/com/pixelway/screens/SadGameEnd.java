@@ -3,24 +3,27 @@ package com.pixelway.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.pixelway.MainClass;
+import com.pixelway.screens.location.StartIslandScreen;
+import com.pixelway.utils.TextManager;
+
+import java.util.List;
 
 public class SadGameEnd implements Screen {
     private final MainClass game;
     private SpriteBatch batch;
     private BitmapFont font;
-    private Music music;
 
     private final String fullText;
 
-
-    private StringBuilder currentText = new StringBuilder();
-    private float timer = 0;
-    private float typeSpeed = 0.1f;
-    private int charIndex = 0;
+    private Sound textSound;
+    private TextManager textManager;
+    private List<Texture> dialogImages;
 
     public SadGameEnd(MainClass game) {
 
@@ -37,33 +40,38 @@ public class SadGameEnd implements Screen {
         font.getData().setScale(1.5f);
         game.setBgMusic("songs/sad.mp3");
 
-
-
-
-
+        textSound = Gdx.audio.newSound(Gdx.files.internal("sounds/text/main.wav"));
+        List<String> dialogs = List.of(
+            fullText
+        );
+        dialogImages = List.of(
+            new Texture(Gdx.files.internal("imgs/intro/sad.png"))
+        );
+        textManager = new TextManager(dialogs, 0.12f, textSound, font);
 
     }
 
     @Override
     public void render(float delta) {
-        // Очистка экрана — чёрный фон
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // Текст по буквам
-        timer += delta;
-        if (timer >= typeSpeed && charIndex < fullText.length()) {
-            currentText.append(fullText.charAt(charIndex++));
+        batch.begin();
 
-            timer = 0;
+        int index = textManager.getCurrentDialogIndex();
+        if (index < dialogImages.size()) {
+            Texture img = dialogImages.get(index);
+            batch.draw(img, Gdx.graphics.getWidth() / 2 - 432, 100, 864, 576);
         }
 
-        batch.begin();
-        font.draw(batch, currentText.toString(), 60, Gdx.graphics.getHeight() - 100);
+        textManager.draw(batch, 50, Gdx.graphics.getHeight() - 50);
         batch.end();
 
+        textManager.update(delta);
 
-        if (Gdx.input.justTouched() && charIndex >= fullText.length()) {
+        if (textManager.isFinished()) {
+            dispose();
+            game.setBgMusic("songs/game.mp3");
             game.setScreen(new UploadGameScreen(game));
         }
     }
@@ -84,6 +92,9 @@ public class SadGameEnd implements Screen {
     public void dispose() {
         batch.dispose();
         font.dispose();
-        music.dispose();
+        textSound.dispose();
+        for (Texture t : dialogImages) {
+            t.dispose();
+        }
     }
 }

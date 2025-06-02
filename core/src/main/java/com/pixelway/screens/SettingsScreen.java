@@ -3,6 +3,7 @@ package com.pixelway.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -32,6 +33,7 @@ import com.pixelway.database.DatabaseHelper;
 import com.pixelway.MainClass;
 import com.pixelway.database.PlayerData;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
+import com.pixelway.utils.SoundController;
 import com.pixelway.windows.AlertWindow;
 
 
@@ -59,7 +61,6 @@ public class SettingsScreen implements Screen {
                     new AlertWindow(stage, "Имя не может быть длиннее 10 символов!");
                     return;
                 }
-                playerData.musicVolume = music.getVolume();
                 game.saveData();
                 new AlertWindow(stage, "Настройки сохранены!");
 
@@ -262,10 +263,6 @@ public class SettingsScreen implements Screen {
         stage.addActor(volumeSlider);
         stage.addActor(volumeLabel);
 
-        // Dispose of the textures as the skin now owns the TextureRegions
-        // backgroundTexture.dispose();
-        // knobTexture.dispose();
-        // knobBeforeTexture.dispose();
     }
 
 

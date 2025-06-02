@@ -1,5 +1,7 @@
 package com.pixelway.models.characters;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -30,6 +32,7 @@ public class MiniPlayer extends Actor {
     private int shield;
     private MainClass game;
     private SoundController soundController;
+    private Sound pluhSound;
 
 
     public MiniPlayer(Vector2 position, float width, float height, World world, MainClass game) {
@@ -41,6 +44,8 @@ public class MiniPlayer extends Actor {
         this.shield = game.getPlayerData().shield;
         this.game = game;
         this.soundController = new SoundController("sounds/shield.mp3");
+        pluhSound = Gdx.audio.newSound(Gdx.files.internal("sounds/pluh.mp3"));
+
 
         miniPlayerTexture = new Texture("texture/boss/miniplayer.png");
         bulletTexture = new Texture("texture/boss/bullet.png");
@@ -136,8 +141,7 @@ public class MiniPlayer extends Actor {
             soundController.setWalkSound("sounds/hit.mp3");
             soundController.playWalk();
             if (health <= 0) {
-                soundController.setWalkSound("sounds/pluh.mp3");
-                soundController.playWalk();
+                pluhSound.play(0.3f);
                 game.setScreen(new SadGameEnd(game));
             }
         }

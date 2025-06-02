@@ -4,10 +4,18 @@ package com.pixelway.screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.pixelway.MainClass;
+import com.pixelway.utils.TextManager;
+
+import org.w3c.dom.Text;
+
+import java.util.List;
 
 
 public class GameEndScreen implements Screen {
@@ -15,26 +23,9 @@ public class GameEndScreen implements Screen {
     private final MainClass game;
     private SpriteBatch batch;
     private BitmapFont font;
-    private Music music;
+    private Texture image;
+    private TextManager textManager;
 
-    private final String fullText =
-        "Когда дым рассеялся,\n" +
-            "и последний удар был нанесён,\n" +
-            "тишина окутала долину.\n\n" +
-            "Деревня лежала в руинах, но она была свободна.\n" +
-            "Жители, уцелевшие в аду, начали строить новую жизнь.\n\n" +
-            "Клан Тонель, лишённый своего лидера, не смог продержаться долго.\n" +
-            "Они пали один за другим, как тени прошлого.\n\n" +
-            "Ты стал героем.\n" +
-            "Тем, кто положил конец эпохе страха и тьмы.\n\n" +
-            "Твоё имя будет жить в легендах.\n" +
-            "А мир... наконец вздохнул свободно.";
-
-
-    private StringBuilder currentText = new StringBuilder();
-    private float timer = 0;
-    private float typeSpeed = 0.1f;
-    private int charIndex = 0;
 
     public GameEndScreen(MainClass game) {
         this.game = game;
@@ -46,27 +37,40 @@ public class GameEndScreen implements Screen {
         batch = new SpriteBatch();
         font = new BitmapFont(Gdx.files.internal("fonts/mono.fnt"));
         font.getData().setScale(1f);
+
+        image = new Texture(Gdx.files.internal("imgs/intro/gameEnd.png"));
+
+        Sound textSound = Gdx.audio.newSound(Gdx.files.internal("sounds/text/main.wav"));
+        List<String> dialogTexts = List.of(
+        "С последним ударом Голем рухнул на землю, сотрясая окрестности. Тишина, что наступила после его падения, была пугающе непривычной.\n" +
+            "Клан Тонель, лишившись своего вождя, начал стремительно разрушаться изнутри. Без жестокой воли Голема - они были ничем.\n" +
+            "Жители, впервые за долгое время, смогли вдохнуть свободно. Их страх рассеялся, будто ночной туман при свете рассвета.\n" +
+            "Герой, пришедший из иного мира, не остался, чтобы собирать плоды своей победы. Он просто исчез, так же внезапно, как и появился.\n" +
+            "Но память о нём останется навсегда.\n" +
+            "Потому что именно он положил конец эпохе ужаса.\n" +
+            "Потому что именно он дал миру шанс на новую жизнь..."
+        );
+
+        textManager = new TextManager(dialogTexts, 0.12f, textSound, font);
     }
 
     @Override
     public void render(float delta) {
-        // Очистка экрана — чёрный фон
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // Текст по буквам
-        timer += delta;
-        if (timer >= typeSpeed && charIndex < fullText.length()) {
-            currentText.append(fullText.charAt(charIndex++));
-            timer = 0;
-        }
-
         batch.begin();
-        font.draw(batch, currentText.toString(), 60, Gdx.graphics.getHeight() - 100);
+
+
+        batch.draw(image, Gdx.graphics.getWidth() / 2 - 430, 100, 861, 483);
+
+        textManager.draw(batch, 50, Gdx.graphics.getHeight() - 50);
         batch.end();
 
-        // Клик — возврат в меню
-        if (Gdx.input.justTouched() && charIndex >= fullText.length()) {
+        textManager.update(delta);
+
+        if (textManager.isFinished()) {
+            dispose();
             game.setBgMusic("songs/main.mp3");
             game.setScreen(new MainMenuScreen(game));
         }
@@ -88,7 +92,6 @@ public class GameEndScreen implements Screen {
     public void dispose() {
         batch.dispose();
         font.dispose();
-        music.dispose();
     }
 }
 

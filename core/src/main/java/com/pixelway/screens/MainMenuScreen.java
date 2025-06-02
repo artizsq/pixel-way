@@ -18,20 +18,16 @@ import com.pixelway.database.PlayerData;
 import com.pixelway.screens.location.StartIslandScreen;
 import com.pixelway.windows.AlertWindow;
 
+import javax.xml.crypto.Data;
+
 public class MainMenuScreen implements Screen {
 
     private final MainClass game;
     private Stage stage;
     private Texture backgroundTexture;
+    private TextureRegionDrawable sunTextureRegion;
     private Image backgroundImage;
 
-    // --- START OF CORRECTION ---
-    // Declare a field for the invisible button texture so it's loaded only once
-    private Texture invisibleButtonTexture;
-    // --- END OF CORRECTION ---
-
-    private static final float WORLD_WIDTH = 1920;
-    private static final float WORLD_HEIGHT = 1080;
     private Music music;
     private PlayerData playerData;
     private int alertCount = 0;
@@ -43,32 +39,31 @@ public class MainMenuScreen implements Screen {
         playerData = game.getPlayerData();
 
         music.setVolume(playerData.musicVolume);
-        Viewport viewport = new FitViewport(WORLD_WIDTH, WORLD_HEIGHT);
-        stage = new Stage(viewport); // Stage correctly creates its own internal SpriteBatch here.
+        Viewport viewport = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        stage = new Stage(viewport);
         Gdx.input.setInputProcessor(stage);
 
-        backgroundTexture = new Texture(Gdx.files.internal("imgs/mainMenu.jpg"));
+        backgroundTexture = new Texture(Gdx.files.internal("btns/menu/menu.png"));
         backgroundImage = new Image(backgroundTexture);
-        backgroundImage.setFillParent(true); // Растягиваем на весь экран
+        backgroundImage.setFillParent(true);
         stage.addActor(backgroundImage);
 
-        // --- START OF CORRECTION ---
-        // Load the invisible button texture ONCE in the constructor
-        invisibleButtonTexture = new Texture("none.png");
-        // --- END OF CORRECTION ---
+        sunTextureRegion = new TextureRegionDrawable(new Texture(Gdx.files.internal("btns/menu/sun.png")));
+        sunTextureRegion.setMinSize(484, 456);
+        Image sunImage = new Image(sunTextureRegion);
+        sunImage.setPosition(Gdx.graphics.getWidth() - 500, Gdx.graphics.getHeight() - 460);
+        stage.addActor(sunImage);
 
-        createButton(85, 603, 343, 179, () -> {
+
+        // Кнопка "Новая игра"
+        createButton(85, 630, 368, 184, "btns/menu/start.png", () -> {
             if(!DatabaseHelper.hasSaveData()){
-                // You called dispose() here, which caused the problem if not managed carefully by MainClass
-                // If MainClass's setScreen already disposes the old screen, you don't need this.
-                // Assuming MainClass.setScreen handles disposal.
-                game.setBgMusic("songs/game.mp3");
-                game.setScreen(new StartIslandScreen(game)); // Use game.setScreenAndDisposeOld if you have it!
+                dispose();
+                game.setScreen(new IntroScreen(game));
             } else {
                 if(alertCount == 1){
-                    // Same as above, if MainClass.setScreen handles disposal, this dispose() is redundant.
-                    game.setBgMusic("songs/game.mp3");
-                    game.setScreen(new StartIslandScreen(game)); // Use game.setScreenAndDisposeOld if you have it!
+                    dispose();
+                    game.setScreen(new IntroScreen(game));
                 } else {
                     new AlertWindow(stage, "У вас есть сохранения!\nНажмите еще раз чтобы продолжить.");
                     alertCount++;
@@ -76,30 +71,34 @@ public class MainMenuScreen implements Screen {
             }
         });
 
-        createButton(70, 380,  397, 201, () -> {
-            // Same as above, if MainClass.setScreen handles disposal, this dispose() is redundant.
-            game.setScreen(new UploadGameScreen(game)); // Use game.setScreenAndDisposeOld if you have it!
+        // Кнопка "Загрузить игру"
+        createButton(70, 380,  432, 220, "btns/menu/load.png", () -> {
+            dispose();
+            game.setScreen(new UploadGameScreen(game));
         });
 
-        createButton(50, 120, 445, 223, () -> {
-            // Same as above, if MainClass.setScreen handles disposal, this dispose() is redundant.
-            game.setScreen(new SettingsScreen(game)); // Use game.setScreenAndDisposeOld if you have it!
-        }); // Настройки
+        // Кнопка "Настройки"
+        createButton(50, 120, 472, 240, "btns/menu/set.png", () -> {
+            dispose();
+            game.setScreen(new SettingsScreen(game));
+        });
 
-        createButton(1600, 30, 300, 175, () -> {
+        // Кнопка "Выход"
+        createButton(Gdx.graphics.getWidth() - 500, 30, 425, 210, "btns/menu/camen.png", () -> {
+            dispose();
             Gdx.app.exit();
-        }); // Выход из игры
+        });
     }
 
-    private void createButton(float x, float y, float width, float height, Runnable action) {
-        // --- START OF CORRECTION ---
-        // Use the already loaded invisibleButtonTexture
-        TextureRegionDrawable invisibleDrawable = new TextureRegionDrawable(invisibleButtonTexture);
-        // --- END OF CORRECTION ---
+    private void createButton(float x, float y, float width, float height, String imagePath, Runnable action) {
+        Texture buttonTexture = new Texture(Gdx.files.internal(imagePath));
 
-        ImageButton button = new ImageButton(invisibleDrawable); // Use the shared drawable
-        button.setColor(1, 1, 1, 0); // Make it invisible
+        TextureRegionDrawable buttonDrawable = new TextureRegionDrawable(buttonTexture);
+        buttonDrawable.setMinSize(width, height);
+
+        ImageButton button = new ImageButton(buttonDrawable);
         button.setBounds(x, y, width, height);
+
         button.addListener(event -> {
             if (event.toString().equals("touchDown")) {
                 action.run();
@@ -107,8 +106,11 @@ public class MainMenuScreen implements Screen {
             }
             return false;
         });
+
         stage.addActor(button);
+
     }
+
 
     @Override
     public void render(float delta) {
@@ -124,27 +126,23 @@ public class MainMenuScreen implements Screen {
     }
 
     @Override
-    public void show() {}
+    public void show() {
+    }
 
     @Override
     public void hide() {}
 
     @Override
-    public void pause() {}
+    public void pause() {
+    }
 
     @Override
-    public void resume() {}
+    public void resume() {
+    }
 
     @Override
     public void dispose() {
-        backgroundTexture.dispose(); // Dispose background texture
-        stage.dispose();             // Dispose stage (which includes its internal SpriteBatch and actors)
-
-        // --- START OF CORRECTION ---
-        // Dispose the invisible button texture
-        if (invisibleButtonTexture != null) {
-            invisibleButtonTexture.dispose();
-        }
-        // --- END OF CORRECTION ---
+        backgroundTexture.dispose();
+        stage.dispose();
     }
 }
