@@ -23,6 +23,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.pixelway.MainClass;
+import com.pixelway.database.ChestData;
 import com.pixelway.database.PlayerData;
 import com.pixelway.map.TiledObjectsConverter;
 import com.pixelway.map.WorldContactListener;
@@ -31,6 +32,7 @@ import com.pixelway.models.dialogs.GameDialogs;
 import com.pixelway.models.characters.Player;
 import com.pixelway.utils.BaseUIManager;
 import com.pixelway.utils.ImportantZone;
+import com.pixelway.utils.loot.ChestLootGenerator;
 import com.pixelway.windows.ChestWindow;
 
 import java.util.ArrayList;
@@ -41,7 +43,7 @@ public class WinterLocationScreen implements Screen {
     private final MainClass game;
     private OrthographicCamera gameCamera;   // Game world camera
     private OrthographicCamera uiCamera;     // UI camera
-    private String mapPath;
+    private ChestData chestData;
     private TiledMap tiledMap;
     private OrthogonalTiledMapRenderer renderer;
     private Player player;
@@ -56,22 +58,17 @@ public class WinterLocationScreen implements Screen {
     private Stage uiStage;     // Stage for the UI
     private boolean isTeleport = false;
     private BaseUIManager baseUIManager;
+    private ChestLootGenerator chestLootGenerator;
 
 
-
-
-    public WinterLocationScreen(MainClass game, Player player, PlayerData playerData) {
-        this.game = game;
-        this.worldManager = new WorldManager();
-        this.player = player;
-        this.playerData = playerData;
-    }
     public WinterLocationScreen(MainClass game, Player player, PlayerData playerData, boolean isTeleport) {
         this.game = game;
         this.isTeleport = isTeleport;
         this.worldManager = new WorldManager();
         this.player = player;
         this.playerData = playerData;
+        chestData = game.loadChestData();
+        chestLootGenerator = game.getChestLootGenerator();
     }
 
 
@@ -135,14 +132,19 @@ public class WinterLocationScreen implements Screen {
                 if (player.getInZone()){
                     switch (player.getZoneType()){
                         case CHEST:
-                            List<PlayerData.InventorySlot> chestItems = new ArrayList<>();
-                            if (!playerData.chestItems.contains("Зелье силы")) {
-                                chestItems.add(new PlayerData.InventorySlot("Зелье силы", PlayerData.ItemType.POWER,
-                                    4, 1,
-                                    "Почему оно выглядит как борщ?", "imgs/items/strpoi.png"));
+                            List<PlayerData.InventorySlot> currentChestContents;
+
+                            if (!chestData.allChestsState.containsKey("winter_1")) {
+                                currentChestContents = chestLootGenerator.generateLootForChest();
+                                chestData.setChestContents("winter_1", currentChestContents);
+                                System.out.println("NEW: " + "winter_1" + ". Сгенерировано: " + currentChestContents.size() + " предметов.");
+                            } else {
+                                currentChestContents = chestData.getChestContents("winter_1");
+                                System.out.println("OLD: " + "winter_1" + ". Содержимое: " + currentChestContents.size() + " предметов.");
                             }
 
-                            new ChestWindow(uiStage, game, chestItems);
+
+                            new ChestWindow(uiStage, game, currentChestContents, "winter_1");
                             break;
                         case CLICK_TELEPORT:
                             game.setScreen(new CaveLocationScreen(game, player, game.getPlayerData()));

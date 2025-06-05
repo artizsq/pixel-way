@@ -104,7 +104,7 @@ public class Player extends Actor {
             body.getPosition().y - height / 2);
 
         stateTime += delta;
-        System.out.println("X: " + body.getPosition().x + "Y: " + body.getPosition().y);
+//        System.out.println("X: " + body.getPosition().x + "Y: " + body.getPosition().y);
 
         if (dir.len() > 0) {
             walkSoundTimer += delta;

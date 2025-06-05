@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 public class DatabaseHelper {
     private static final String USER_FILE_PATH = "data.json";
+    private static final String CHEST_FILE_PATH = "chestData.json";
 
 
     public static PlayerData loadPlayerData() {
@@ -66,6 +67,21 @@ public class DatabaseHelper {
             data.x != 547 &&
             data.y != 540 &&
             data.currentMap != "";
+    }
+
+    public static ChestData loadChestData() {
+        Json json = new Json();
+        FileHandle file = Gdx.files.local(CHEST_FILE_PATH);
+        if (file.exists()) {
+            return json.fromJson(ChestData.class, file.readString());
+        }
+        return new ChestData();
+    }
+
+    public static void saveChestData(ChestData chestData){
+        Json json = new Json();
+        FileHandle file = Gdx.files.local(CHEST_FILE_PATH);
+        file.writeString(json.prettyPrint(chestData), false);
     }
 
 

@@ -4,23 +4,31 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Json;
+import com.pixelway.database.ChestData;
 import com.pixelway.database.DatabaseHelper;
 import com.pixelway.database.PlayerData;
 import com.pixelway.screens.MainMenuScreen;
+import com.pixelway.utils.loot.ChestLootGenerator;
 
 public class MainClass extends Game {
     public SpriteBatch batch;
-
+    private ChestData chestData;
     private Music bgMusic;
     private PlayerData playerData;
     private int joystickControllingPointer = -1;
+    private ChestLootGenerator chestLootGenerator;
 
 
     @Override
     public void create() {
         batch = new SpriteBatch();
         this.playerData = DatabaseHelper.loadPlayerData();
+        chestData = DatabaseHelper.loadChestData();
+
+        chestLootGenerator = new ChestLootGenerator();
 
         bgMusic = Gdx.audio.newMusic(Gdx.files.internal("songs/main.mp3"));
         bgMusic.setLooping(true);
@@ -40,7 +48,12 @@ public class MainClass extends Game {
     }
 
     public void saveData() {
+        DatabaseHelper.saveChestData(loadChestData());
         DatabaseHelper.savePlayerData(getPlayerData());
+    }
+
+    public ChestLootGenerator getChestLootGenerator() {
+        return chestLootGenerator;
     }
 
     public void setBgMusic(String path) {
@@ -85,6 +98,14 @@ public class MainClass extends Game {
 
     public void setPlayerData(PlayerData loadedPlayerData) {
         this.playerData = loadedPlayerData;
+    }
+
+    public ChestData loadChestData() {
+        return chestData;
+    }
+
+    public void setChestData(ChestData chestData) {
+        this.chestData = chestData;
     }
 
 

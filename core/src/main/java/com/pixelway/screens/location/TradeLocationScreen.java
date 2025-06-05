@@ -23,6 +23,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.pixelway.MainClass;
+import com.pixelway.database.ChestData;
 import com.pixelway.database.PlayerData;
 import com.pixelway.map.TiledObjectsConverter;
 import com.pixelway.map.WorldContactListener;
@@ -32,6 +33,7 @@ import com.pixelway.models.characters.Player;
 import com.pixelway.utils.BaseUIManager;
 import com.pixelway.utils.ImportantZone;
 import com.pixelway.utils.SoundController;
+import com.pixelway.utils.loot.ChestLootGenerator;
 import com.pixelway.windows.AlertWindow;
 import com.pixelway.windows.ChestWindow;
 import com.pixelway.windows.DialogueWindow;
@@ -45,7 +47,7 @@ public class TradeLocationScreen implements Screen {
     private final MainClass game;
     private OrthographicCamera gameCamera;   // Game world camera
     private OrthographicCamera uiCamera;     // UI camera
-    private String mapPath;
+    private ChestData chestData;
     private TiledMap tiledMap;
     private OrthogonalTiledMapRenderer renderer;
     private Player player;
@@ -61,21 +63,16 @@ public class TradeLocationScreen implements Screen {
     private boolean isTeleport = false;
     private BaseUIManager baseUIManager;
     private GameDialogs gameDialogs;
+    private ChestLootGenerator chestLootGenerator;
 
-
-    public TradeLocationScreen(MainClass game, Player player, PlayerData playerData) {
-        this.game = game;
-
-        this.worldManager = new WorldManager();
-        this.player = player;
-        this.playerData = playerData;
-    }
     public TradeLocationScreen(MainClass game, Player player, PlayerData playerData, boolean isTeleport) {
         this.game = game;
         this.isTeleport = isTeleport;
         this.worldManager = new WorldManager();
         this.player = player;
         this.playerData = playerData;
+        chestData = game.loadChestData();
+        this.chestLootGenerator = game.getChestLootGenerator();
     }
 
 
@@ -172,15 +169,20 @@ public class TradeLocationScreen implements Screen {
                             break;
 
                         case CHEST:
-                            if(!playerData.chestItems.contains("Компот жизни")){
-                                List<PlayerData.InventorySlot> chestItems = new ArrayList<>();
-                                if (!playerData.chestItems.contains("Компот жизни")) {
-                                    chestItems.add(new PlayerData.InventorySlot("Компот жизни", PlayerData.ItemType.HP,
-                                        3, 1,
-                                        "Компот из столовой.", "imgs/items/HPpoi.png"));
-                                }
-                                new ChestWindow(uiStage, game, chestItems);
+                            List<PlayerData.InventorySlot> currentChestContents;
+
+                            if (!chestData.allChestsState.containsKey("trade_1")) {
+                                currentChestContents = chestLootGenerator.generateLootForChest();
+                                chestData.setChestContents("trade_1", currentChestContents);
+                                System.out.println("NEW: " + "trade_1" + ". Сгенерировано: " + currentChestContents.size() + " предметов.");
+                            } else {
+                                currentChestContents = chestData.getChestContents("start_1");
+                                System.out.println("OLD: " + "trade_1" + ". Содержимое: " + currentChestContents.size() + " предметов.");
                             }
+
+
+                            new ChestWindow(uiStage, game, currentChestContents, "trade_1");
+                            break;
 
                     }
                 }

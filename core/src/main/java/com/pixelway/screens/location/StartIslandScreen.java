@@ -23,6 +23,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.pixelway.MainClass;
+import com.pixelway.database.ChestData;
 import com.pixelway.database.PlayerData;
 import com.pixelway.screens.minigames.FishCatchGame;
 import com.pixelway.map.TiledObjectsConverter;
@@ -32,6 +33,7 @@ import com.pixelway.models.dialogs.GameDialogs;
 import com.pixelway.models.characters.Player;
 import com.pixelway.utils.BaseUIManager;
 import com.pixelway.utils.ImportantZone;
+import com.pixelway.utils.loot.ChestLootGenerator;
 import com.pixelway.windows.AlertWindow;
 import com.pixelway.windows.ChestWindow;
 import com.pixelway.windows.DialogueWindow;
@@ -58,14 +60,18 @@ public class StartIslandScreen implements Screen {
     private Stage gameStage;
     private Stage uiStage;
     private GameDialogs gameDialogs;
+    private ChestData chestData;
 
     private boolean isteleport = false;
     private BaseUIManager baseUIManager;
+    private ChestLootGenerator chestLootGenerator;
 
     public StartIslandScreen(MainClass game) {
         this.game = game;
         this.worldManager = new WorldManager();
         playerData = game.getPlayerData();
+        this.chestLootGenerator = game.getChestLootGenerator();
+        chestData = game.loadChestData();
     }
 
     public StartIslandScreen(MainClass game, Player player, PlayerData playerData, boolean isteleport) {
@@ -74,6 +80,8 @@ public class StartIslandScreen implements Screen {
         this.player = player;
         this.playerData = playerData;
         this.isteleport = isteleport;
+        this.chestLootGenerator = new ChestLootGenerator();
+        chestData = game.loadChestData();
     }
 
     @Override
@@ -174,13 +182,20 @@ public class StartIslandScreen implements Screen {
 
 
                         case CHEST:
-                            List<PlayerData.InventorySlot> chestItems = new ArrayList<>();
-                            if (!playerData.chestItems.contains("Медаль Рыцаря")) {
-                                chestItems.add(new PlayerData.InventorySlot("Медаль Рыцаря", PlayerData.ItemType.POWER,
-                                    2, 1,
-                                    "Медаль XVI века, судя по всему\nиспользовалась рыцарями.", "imgs/items/strmedal.png"));
+
+                            List<PlayerData.InventorySlot> currentChestContents;
+
+                            if (!chestData.allChestsState.containsKey("start_1")) {
+                                currentChestContents = chestLootGenerator.generateLootForChest();
+                                chestData.setChestContents("start_1", currentChestContents);
+                                System.out.println("NEW: " + "start_1" + ". Сгенерировано: " + currentChestContents.size() + " предметов.");
+                            } else {
+                                currentChestContents = chestData.getChestContents("start_1");
+                                System.out.println("OLD: " + "start_1" + ". Содержимое: " + currentChestContents.size() + " предметов.");
                             }
-                            new ChestWindow(uiStage, game, chestItems);
+
+
+                            new ChestWindow(uiStage, game, currentChestContents, "start_1");
                             break;
 
 
