@@ -83,11 +83,11 @@ public class WinterLocationScreen implements Screen {
 
         gameCamera = new OrthographicCamera();
         gameCamera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        gameCamera.viewportWidth = 640 / 1.5f;  // Apply zoom level
-        gameCamera.viewportHeight = 360 / 1.5f; // Apply zoom level
+        gameCamera.viewportWidth = 640 / 1.5f;
+        gameCamera.viewportHeight = 360 / 1.5f;
         gameCamera.position.set(gameCamera.viewportWidth / 2f, gameCamera.viewportHeight / 2f, 0);
         gameCamera.update();
-        gameStage = new Stage(new ExtendViewport(640, 360, gameCamera)); // Use the initial viewport dimensions
+        gameStage = new Stage(new ExtendViewport(640, 360, gameCamera));
 
         uiCamera = new OrthographicCamera();
         uiCamera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -95,7 +95,6 @@ public class WinterLocationScreen implements Screen {
         uiStage = new Stage(new ScreenViewport(uiCamera));
 
         InputMultiplexer multiplexer = new InputMultiplexer();
-//        multiplexer.addProcessor(gameStage); // Add if you need input on the game stage
         multiplexer.addProcessor(uiStage);
         Gdx.input.setInputProcessor(multiplexer);
 
@@ -113,12 +112,10 @@ public class WinterLocationScreen implements Screen {
         baseUIManager = new BaseUIManager(uiStage, playerData, game);
         baseUIManager.init();
 
-        // Create save button
         buttonTexture = new Texture(Gdx.files.internal("btns/mainBtn.png"));
         TextureRegionDrawable buttonDrawable = new TextureRegionDrawable(new TextureRegion(buttonTexture));
         saveButton = new ImageButton(buttonDrawable);
 
-        // Position and size the save button
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
         float buttonWidth = 240 * 2f;
@@ -137,10 +134,8 @@ public class WinterLocationScreen implements Screen {
                             if (!chestData.allChestsState.containsKey("winter_1")) {
                                 currentChestContents = chestLootGenerator.generateLootForChest();
                                 chestData.setChestContents("winter_1", currentChestContents);
-                                System.out.println("NEW: " + "winter_1" + ". Сгенерировано: " + currentChestContents.size() + " предметов.");
                             } else {
                                 currentChestContents = chestData.getChestContents("winter_1");
-                                System.out.println("OLD: " + "winter_1" + ". Содержимое: " + currentChestContents.size() + " предметов.");
                             }
 
 

@@ -28,16 +28,14 @@ public class ChestWindow extends Window {
 
     private final Image darkOverlay;
     private final MainClass game;
-    private final String chestId; // Уникальный ID текущего сундука
-    // Ссылка на список предметов ИЗ ГЛОБАЛЬНОГО ChestData.allChestsState для этого сундука.
+    private final String chestId;
     private final List<PlayerData.InventorySlot> currentChestItems;
 
-    // Изменяем конструктор, чтобы принимать List<...> и chestId
     public ChestWindow(Stage stage, MainClass game, List<PlayerData.InventorySlot> chestItems, String chestId) {
         super("", createWindowStyle());
         this.game = game;
         this.chestId = chestId;
-        this.currentChestItems = chestItems; // СОХРАНЯЕМ ССЫЛКУ НА ЭТОТ СПИСОК
+        this.currentChestItems = chestItems;
 
         VirtualJoystick.inputBlocked = true;
         setSize(606, 252);
@@ -57,10 +55,8 @@ public class ChestWindow extends Window {
         int maxItemsInARow = 3;
         int itemsInCurrentRow = 0;
 
-        // Добавляем кнопки для каждого предмета
         for (PlayerData.InventorySlot slot : currentChestItems) {
             if (slot != null && slot.name != null && !slot.name.isEmpty()) {
-                // Используй AssetManager для загрузки текстур!
                 TextureRegionDrawable itemTexture = new TextureRegionDrawable(new Texture(Gdx.files.internal(slot.imagePath)));
                 itemTexture.setMinSize(122, 122);
                 ImageButton itemButton = new ImageButton(itemTexture);
@@ -68,7 +64,6 @@ public class ChestWindow extends Window {
                 itemButton.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        // Передаем slot, currentChestItems (ссылку на список), chestId и game
                         new ChestItemWindow(stage, game, slot, currentChestItems, chestId);
                         darkOverlay.remove();
                         ChestWindow.this.remove();
@@ -94,8 +89,6 @@ public class ChestWindow extends Window {
         exitImage.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                // Состояние ChestData уже обновлено, если предмет был забран.
-                // Просто закрываем окно.
                 darkOverlay.remove();
                 ChestWindow.this.remove();
                 VirtualJoystick.inputBlocked = false;
@@ -134,19 +127,16 @@ class ChestItemWindow extends Window{
     private final TextButton grabButton;
     private final Label itemName;
     private final PlayerData.InventorySlot selectedSlot;
-    // Ссылка на список предметов ИЗ ГЛОБАЛЬНОГО ChestData.allChestsState для этого сундука.
     private final List<PlayerData.InventorySlot> currentChestItems;
-    private final String chestId; // Уникальный ID сундука
+    private final String chestId;
     private final MainClass game;
-    private final Stage stage; // Добавлено для создания нового ChestWindow
-
-    // Изменяем конструктор, чтобы принимать List<...> и chestId
+    private final Stage stage;
     public ChestItemWindow(Stage stage, MainClass game, PlayerData.InventorySlot slot, List<PlayerData.InventorySlot> chestItems, String chestId){
         super("", createWindowStyle());
         this.stage = stage;
         this.game = game;
         this.selectedSlot = slot;
-        this.currentChestItems = chestItems; // СОХРАНЯЕМ ССЫЛКУ НА ЭТОТ СПИСОК
+        this.currentChestItems = chestItems;
         this.chestId = chestId;
 
         setSize(336, 336);
@@ -202,7 +192,7 @@ class ChestItemWindow extends Window{
         overlay.addListener(new ClickListener() {});
 
 
-        Texture exitTexture = new Texture(Gdx.files.internal("btns/exit.png")); // Используй AssetManager!
+        Texture exitTexture = new Texture(Gdx.files.internal("btns/exit.png"));
         TextureRegionDrawable exitDrawable = new TextureRegionDrawable(new TextureRegion(exitTexture));
         exitDrawable.setMinSize(50, 50);
         ImageButton exitImage = new ImageButton(exitDrawable);
@@ -212,7 +202,6 @@ class ChestItemWindow extends Window{
             public void clicked(InputEvent event, float x, float y) {
                 overlay.remove();
                 ChestItemWindow.this.remove();
-                // Заново открываем ChestWindow с тем же списком предметов и тем же ID
                 new ChestWindow(stage, game, currentChestItems, chestId);
             }
         });
@@ -223,8 +212,8 @@ class ChestItemWindow extends Window{
     }
 
     private static WindowStyle createWindowStyle() {
-        BitmapFont font = new BitmapFont(Gdx.files.internal("fonts/def.fnt")); // Используй AssetManager!
-        Texture bgTex = new Texture(Gdx.files.internal("imgs/chestItem.png")); // Используй AssetManager!
+        BitmapFont font = new BitmapFont(Gdx.files.internal("fonts/def.fnt"));
+        Texture bgTex = new Texture(Gdx.files.internal("imgs/chestItem.png"));
         TextureRegionDrawable background = new TextureRegionDrawable(new TextureRegion(bgTex));
 
         WindowStyle style = new WindowStyle();

@@ -68,7 +68,6 @@ public class Boss extends Actor {
     }
 
     public void render(SpriteBatch batch) {
-        // Отрисовка текстуры босса
         batch.draw(bossTexture, position.x, position.y, width, height);
     }
 

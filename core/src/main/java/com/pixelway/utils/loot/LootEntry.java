@@ -1,7 +1,6 @@
 package com.pixelway.utils.loot;
 
-import com.pixelway.database.PlayerData; // Импортируем PlayerData, чтобы использовать ItemType
-
+import com.pixelway.database.PlayerData;
 
 public class LootEntry {
     public String name;
@@ -9,7 +8,7 @@ public class LootEntry {
     public int effectValue;
     public String itemDesc;
     public String imagePath;
-    public float dropChance; // Вероятность выпадения (от 0 до 1)
+    public float dropChance;
     public int minQuantity;
     public int maxQuantity;
 

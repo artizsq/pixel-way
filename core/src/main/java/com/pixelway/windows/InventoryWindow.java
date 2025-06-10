@@ -24,8 +24,8 @@ public class InventoryWindow extends Window {
     private final Label HP, STR, SHIELD, userNameLabel, moneyLabel;
     private final Label HPValue, STRValue, SHIELDValue;
     private TextButton useButton, deleteButton;
-    private Table leftTable; // Сделаем leftTable полем класса, чтобы можно было перестраивать
-    private PlayerData.InventorySlot selectedSlot; // Храним выбранный слот для удаления/экипировки
+    private Table leftTable;
+    private PlayerData.InventorySlot selectedSlot;
     private MainClass game;
     private Stage stage;
 
@@ -106,7 +106,7 @@ public class InventoryWindow extends Window {
         leftTable.addActor(STR);
         leftTable.addActor(SHIELD);
 
-        populateInventoryTable(); // Заполняем таблицу инвентаря при создании окна
+        populateInventoryTable();
 
         Table rightTable = new Table();
         Texture itemInfoTex = new Texture(Gdx.files.internal("imgs/itemInfo.png"));
@@ -144,25 +144,24 @@ public class InventoryWindow extends Window {
         buttonStyle.down = buttonsTextureRegion;
 
         deleteButton = new TextButton("Удалить", buttonStyle);
-        deleteButton.setPosition(930, getHeight() - 500); // Поменяли позицию
+        deleteButton.setPosition(930, getHeight() - 500);
         deleteButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 if (selectedSlot != null) {
                     game.getPlayerData().inventory.remove(selectedSlot);
-                    populateInventoryTable(); // Перестраиваем таблицу после удаления
-                    // Очищаем правую панель после удаления
+                    populateInventoryTable();
                     nameLabel.setText("");
                     descLabel.setText("Выберите предмет из инвентаря\nчтобы посмотреть его данные.");
                     effectLabel.setText("");
                     itemImage.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("null.png")))));
-                    selectedSlot = null; // Сбрасываем выбранный слот
+                    selectedSlot = null;
                 }
             }
         });
 
         useButton = new TextButton("Экипировать", buttonStyle);
-        useButton.setPosition(1120, getHeight() - 500); // Поменяли позицию
+        useButton.setPosition(1120, getHeight() - 500);
         useButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -181,20 +180,19 @@ public class InventoryWindow extends Window {
                             SHIELDValue.setText(game.getPlayerData().shield);
                             break;
                     }
-                    game.getPlayerData().inventory.remove(selectedSlot); // Удаляем предмет после экипировки
-                    populateInventoryTable(); // Перестраиваем таблицу после экипировки
-                    // Очищаем правую панель
+                    game.getPlayerData().inventory.remove(selectedSlot);
+                    populateInventoryTable();
                     nameLabel.setText("");
                     descLabel.setText("Выберите предмет из инвентаря\nчтобы посмотреть его данные.");
                     effectLabel.setText("");
                     itemImage.setDrawable(new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("null.png")))));
-                    selectedSlot = null; // Сбрасываем выбранный слот
+                    selectedSlot = null;
                 }
             }
         });
 
-        rightTable.addActor(deleteButton); // Поменяли порядок добавления
-        rightTable.addActor(useButton);    // Поменяли порядок добавления
+        rightTable.addActor(deleteButton);
+        rightTable.addActor(useButton);
 
         SplitPane.SplitPaneStyle splitStyle = new SplitPane.SplitPaneStyle();
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
@@ -205,13 +203,13 @@ public class InventoryWindow extends Window {
         splitStyle.handle = new TextureRegionDrawable(new TextureRegion(handleTexture));
 
         SplitPane splitPane = new SplitPane(leftTable, rightTable, false, splitStyle);
-        splitPane.setSplitAmount(904f / (904f + 512f)); // Устанавливаем пропорцию разделения
+        splitPane.setSplitAmount(904f / (904f + 512f));
         splitPane.setFillParent(true);
 
         this.addActor(splitPane);
         this.addActor(itemImage);
-        this.addActor(deleteButton); // Поменяли порядок добавления
-        this.addActor(useButton);    // Поменяли порядок добавления
+        this.addActor(deleteButton);
+        this.addActor(useButton);
         this.addActor(nameLabel);
         this.addActor(descLabel);
         this.addActor(effectLabel);
@@ -269,7 +267,6 @@ public class InventoryWindow extends Window {
                     }
                     index++;
                 } else {
-                    // Если слотов инвентаря меньше, чем ячеек таблицы, добавляем пустые кнопки
                     Texture emptyTexture = new Texture(Gdx.files.internal("null.png"));
                     TextureRegionDrawable textureRegionDrawable = new TextureRegionDrawable(new TextureRegion(emptyTexture));
                     textureRegionDrawable.setMinSize(192, 192);
@@ -278,13 +275,13 @@ public class InventoryWindow extends Window {
                     index++;
                 }
             }
-            leftTable.padLeft(-425).row(); // <- Переносим вызов row() после завершения внутреннего цикла
+            leftTable.padLeft(-425).row();
         }
     }
 
     private static WindowStyle createWindowStyle() {
         BitmapFont font = new BitmapFont(Gdx.files.internal("fonts/def.fnt"));
-        Texture bgTex = new Texture(Gdx.files.internal("null.png")); // или свой фон
+        Texture bgTex = new Texture(Gdx.files.internal("null.png"));
         WindowStyle style = new WindowStyle();
         style.titleFont = font;
         style.background = new TextureRegionDrawable(new TextureRegion(bgTex));

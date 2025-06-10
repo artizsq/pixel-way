@@ -12,7 +12,7 @@ public class ImportantZone {
     private ZoneType zoneType;
     private PlayerData playerData;
     private Player player;
-    private String soundPath; // опциональный путь к звуку
+    private String soundPath;
 
     private String map;
 

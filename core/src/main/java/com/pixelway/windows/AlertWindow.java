@@ -11,15 +11,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Null;
-import com.pixelway.database.PlayerData;
 import com.pixelway.utils.VirtualJoystick;
 
-/**
- * AlertWindow — кастомное всплывающее окно без использования Skin.
- * Показывает текстовое сообщение и кнопку "ОК" для закрытия.
- */
+
 public class AlertWindow extends Window {
 
     private final Image darkOverlay;
@@ -29,7 +23,6 @@ public class AlertWindow extends Window {
         VirtualJoystick.inputBlocked = true;
 
 
-        // Размер и позиция окна
         setModal(true);
         this.setSize(600, 400);
         this.setPosition(
@@ -44,34 +37,29 @@ public class AlertWindow extends Window {
         darkOverlay.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         darkOverlay.addListener(new ClickListener() {});
 
-        // Шрифт
         BitmapFont font = new BitmapFont(Gdx.files.internal("fonts/def.fnt"));
 
 
-        // Сообщение
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = font;
         labelStyle.font.getData().scale(0.5f);
-        labelStyle.fontColor = Color.BLACK; // <-- вот здесь
-
+        labelStyle.fontColor = Color.BLACK;
         Label message = new Label(messageText, labelStyle);
 
         this.add(message).padTop(100f);
         this.row();
 
-        // Кнопка OK
         TextButton okButton = createOkButton(font);
-        okButton.setSize(120, 50); // Задаём желаемый размер
+        okButton.setSize(120, 50);
 
 
-
-        this.row(); // новая строка
+        this.row();
         this.add(okButton)
-            .expandY() // растягиваем пустое пространство сверху
-            .bottom()  // прижимаем вниз
-            .padBottom(50f); // отступ от низа
+            .expandY()
+            .bottom()
+            .padBottom(50f);
 
-        // Добавляем затемнение и окно на сцену
+
         stage.addActor(darkOverlay);
         stage.addActor(this);
     }
@@ -88,7 +76,6 @@ public class AlertWindow extends Window {
     }
 
     private static TextureRegionDrawable createOverlayDrawable() {
-        // 1x1 чёрный пиксель с прозрачностью 0.6f
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
         pixmap.setColor(0, 0, 0, 0.6f);
         pixmap.fill();
@@ -108,7 +95,7 @@ public class AlertWindow extends Window {
         buttonStyle.up = okDrawable;
         buttonStyle.down = okDrawable;
 
-        TextButton button = new TextButton("OK", buttonStyle); // текст на самой картинке
+        TextButton button = new TextButton("OK", buttonStyle);
         button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {

@@ -17,7 +17,7 @@ public class PlayerData {
     public int strength = 2;
     public int fishCount = 0;
     public int hp = 30;
-    public int shield = 10;
+    public int shield = 0;
     public int money = 50;
     public String currentMap = "";
     public ArrayList<String> activeMissions = new ArrayList<>();

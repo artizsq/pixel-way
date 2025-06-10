@@ -68,7 +68,7 @@ public class SuperDialogue extends Window {
 
         setPosition(
             (Gdx.graphics.getWidth() - getWidth()) / 2f,
-            WINDOW_BOTTOM_OFFSET // Используем новое смещение
+            WINDOW_BOTTOM_OFFSET
         );
 
         stage.addActor(darkOverlay);

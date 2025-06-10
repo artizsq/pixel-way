@@ -6,7 +6,6 @@ import com.badlogic.gdx.physics.box2d.World;
 public class BossWorldManager extends WorldManager{
     private World world;
     private Vector2 center;
-    // В WorldManager.java
 
 
 

@@ -37,7 +37,7 @@ public class ShopScreen extends Window implements MoneyChangeListener {
         this.stage = stage;
 
         PlayerData playerData = game.getPlayerData();
-        playerData.addMoneyChangeListener(this); // Регистрируем ShopScreen как слушателя
+        playerData.addMoneyChangeListener(this);
 
         setModal(true);
         setMovable(false);
@@ -50,7 +50,7 @@ public class ShopScreen extends Window implements MoneyChangeListener {
         TextureRegionDrawable overlayDrawable = createOverlayDrawable();
         darkOverlay = new Image(overlayDrawable);
         darkOverlay.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        darkOverlay.addListener(new ClickListener() {}); // блокирует клики
+        darkOverlay.addListener(new ClickListener() {});
 
         font = new BitmapFont(Gdx.files.internal("fonts/def.fnt"));
         font.getData().scale(0.3f);
@@ -58,18 +58,16 @@ public class ShopScreen extends Window implements MoneyChangeListener {
 
 
 
-        Label priceLabel = new Label("- ЦЕНЫ -\n\nХП: 15\nСИЛА: 20\nЩИТ: 30", labelStyle);
+        Label priceLabel = new Label("- ЦЕНЫ -\n\nХП: 15\nСИЛА: 20\nЩИТ: 50", labelStyle);
         priceLabel.setBounds(35, 110, 80, 50);
 
         this.addActor(priceLabel);
 
 
-        // Создаем Label для текущих характеристик
         currentHPLabel = new Label(playerData.hp + "", labelStyle);
         currentSTRLabel = new Label(playerData.strength + "", labelStyle);
         currentSHIELDLabel = new Label(playerData.shield + "", labelStyle);
 
-        // Создаем изображения характеристик
         Image HPImage = new Image(new TextureRegion(new Texture(Gdx.files.internal("imgs/hp.png"))));
         Image STRImage = new Image(new TextureRegion(new Texture(Gdx.files.internal("imgs/str.png"))));
         Image ShieldImage = new Image(new TextureRegion(new Texture(Gdx.files.internal("imgs/shield.png"))));
@@ -82,7 +80,7 @@ public class ShopScreen extends Window implements MoneyChangeListener {
             if (playerData.money < 15) {
                 new AlertWindow(stage, "У вас недостаточно средств!");
             } else {
-                playerData.subtractMoney(15); // Используем метод PlayerData
+                playerData.subtractMoney(15);
                 playerData.hp += 1;
                 currentHPLabel.setText(playerData.hp + "");
             }
@@ -91,16 +89,18 @@ public class ShopScreen extends Window implements MoneyChangeListener {
             if (playerData.money < 20) {
                 new AlertWindow(stage, "У вас недостаточно средств!");
             } else {
-                playerData.subtractMoney(20); // Используем метод PlayerData
+                playerData.subtractMoney(20);
                 playerData.strength += 1;
                 currentSTRLabel.setText(playerData.strength + "");
             }
         });
         TextButton upgradeSHIELDButton = createUpgradeButton(() -> {
-            if (playerData.money < 30) {
+            if (playerData.money < 50) {
                 new AlertWindow(stage, "У вас недостаточно средств!");
+            } else if (playerData.shield == 10) {
+                new AlertWindow(stage, "Вы достигли максимального\nзначения щита!");
             } else {
-                playerData.subtractMoney(30); // Используем метод PlayerData
+                playerData.subtractMoney(50);
                 playerData.shield += 1;
                 currentSHIELDLabel.setText(playerData.shield + "");
             }

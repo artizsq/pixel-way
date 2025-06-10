@@ -23,17 +23,16 @@ import com.pixelway.utils.VirtualJoystick;
 public class PauseOverlay extends Window {
 
     private final Image darkOverlay;
-    private final Stage stage; // Добавлено поле для доступа к Stage
+    private final Stage stage;
     private MainClass game;
 
 
     public PauseOverlay(Stage stage, MainClass game) {
         super("", createWindowStyle());
         this.game = game;
-        this.stage = stage; // Сохраняем ссылку на Stage
-
+        this.stage = stage;
         VirtualJoystick.inputBlocked = true;
-        // Размер и позиция окна
+
         this.setSize(600, 400);
         this.setPosition(
             (Gdx.graphics.getWidth() - this.getWidth()) / 2f,
@@ -46,10 +45,8 @@ public class PauseOverlay extends Window {
         darkOverlay.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         darkOverlay.addListener(new ClickListener() {});
 
-        // Шрифт
         BitmapFont font = new BitmapFont(Gdx.files.internal("fonts/def.fnt"));
 
-        // Сообщение
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = font;
         labelStyle.font.getData().scale(0.5f);

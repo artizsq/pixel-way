@@ -38,14 +38,12 @@ import com.pixelway.windows.AlertWindow;
 import com.pixelway.windows.ChestWindow;
 import com.pixelway.windows.DialogueWindow;
 import com.pixelway.windows.ShopScreen;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class StartIslandScreen implements Screen {
     private final MainClass game;
-    private OrthographicCamera gameCamera; // Renamed game camera
-    private OrthographicCamera uiCamera;   // New UI camera
+    private OrthographicCamera gameCamera;
+    private OrthographicCamera uiCamera;
     private TiledMap tiledMap;
     private OrthogonalTiledMapRenderer renderer;
     private Player player;
@@ -188,10 +186,11 @@ public class StartIslandScreen implements Screen {
                             if (!chestData.allChestsState.containsKey("start_1")) {
                                 currentChestContents = chestLootGenerator.generateLootForChest();
                                 chestData.setChestContents("start_1", currentChestContents);
-                                System.out.println("NEW: " + "start_1" + ". Сгенерировано: " + currentChestContents.size() + " предметов.");
+                                System.out.println("New chest");
                             } else {
                                 currentChestContents = chestData.getChestContents("start_1");
-                                System.out.println("OLD: " + "start_1" + ". Содержимое: " + currentChestContents.size() + " предметов.");
+                                System.out.println("Old chest");
+
                             }
 
 

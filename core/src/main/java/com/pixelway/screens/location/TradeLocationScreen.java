@@ -45,8 +45,8 @@ import java.util.List;
 public class TradeLocationScreen implements Screen {
 
     private final MainClass game;
-    private OrthographicCamera gameCamera;   // Game world camera
-    private OrthographicCamera uiCamera;     // UI camera
+    private OrthographicCamera gameCamera;
+    private OrthographicCamera uiCamera;
     private ChestData chestData;
     private TiledMap tiledMap;
     private OrthogonalTiledMapRenderer renderer;
@@ -58,8 +58,8 @@ public class TradeLocationScreen implements Screen {
     private ImageButton saveButton;
     private Texture buttonTexture;
     private PlayerData playerData;
-    private Stage gameStage;   // Stage for the game world
-    private Stage uiStage;     // Stage for the UI
+    private Stage gameStage;
+    private Stage uiStage;
     private boolean isTeleport = false;
     private BaseUIManager baseUIManager;
     private GameDialogs gameDialogs;
@@ -174,10 +174,8 @@ public class TradeLocationScreen implements Screen {
                             if (!chestData.allChestsState.containsKey("trade_1")) {
                                 currentChestContents = chestLootGenerator.generateLootForChest();
                                 chestData.setChestContents("trade_1", currentChestContents);
-                                System.out.println("NEW: " + "trade_1" + ". Сгенерировано: " + currentChestContents.size() + " предметов.");
                             } else {
                                 currentChestContents = chestData.getChestContents("start_1");
-                                System.out.println("OLD: " + "trade_1" + ". Содержимое: " + currentChestContents.size() + " предметов.");
                             }
 
 

@@ -10,7 +10,6 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.pixelway.MainClass;
 import com.pixelway.models.projectiles.PlayerBullet;
-import com.pixelway.screens.GameEndScreen;
 import com.pixelway.screens.SadGameEnd;
 import com.pixelway.utils.SoundController;
 
@@ -122,7 +121,6 @@ public class MiniPlayer extends Actor {
         }
     }
 
-    // MiniPlayer.java
     public void shoot() {
         bullets.add(new PlayerBullet(world, new Vector2(position.x + width / 2f, position.y + height), game.getPlayerData().strength));
     }

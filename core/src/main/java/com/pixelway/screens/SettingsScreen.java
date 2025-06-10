@@ -43,8 +43,7 @@ public class SettingsScreen implements Screen {
 
     private Music music;
     private PlayerData playerData;
-    private TextField nameTextField; // Добавляем ссылку на текстовое поле имени
-
+    private TextField nameTextField;
 
     public SettingsScreen(MainClass game) {
         this.game = game;
@@ -177,7 +176,6 @@ public class SettingsScreen implements Screen {
     private void createVolumeSliderWithLabel(float x, float y, float width, float height, Music music, float initialValue) {
         Skin skin = new Skin();
 
-        // Load textures with desired thickness (replace with your actual texture paths)
         Texture backgroundTexture = new Texture(Gdx.files.internal("texture/slider/back.png"));
         Texture knobTexture = new Texture(Gdx.files.internal("texture/slider/knob.png"));
         Texture knobBeforeTexture = new Texture(Gdx.files.internal("texture/slider/knobBefore.png"));
@@ -197,14 +195,12 @@ public class SettingsScreen implements Screen {
         volumeSlider.setBounds(x, y, width, height);
         volumeSlider.setValue(initialValue);
 
-        // Создаём лейбл
         BitmapFont font = new BitmapFont(Gdx.files.internal("fonts/def.fnt"));
         font.getData().scale(2f);
         Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.BLACK);
         final Label volumeLabel = new Label((int) (initialValue * 100) + "%", labelStyle);
         volumeLabel.setPosition(x + width + 30, y + height / 4f); // справа от слайдера
         createTextTexture(x + width + 20, y + height / 4f, 163, 99);
-        // Обновление значения при изменении
         volumeSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -223,7 +219,6 @@ public class SettingsScreen implements Screen {
     private void createSoundSliderWithLabel(float x, float y, float width, float height, float initialValue) {
         Skin skin = new Skin();
 
-        // Load textures with desired thickness (replace with your actual texture paths)
         Texture backgroundTexture = new Texture(Gdx.files.internal("texture/slider/back.png"));
         Texture knobTexture = new Texture(Gdx.files.internal("texture/slider/knob.png"));
         Texture knobBeforeTexture = new Texture(Gdx.files.internal("texture/slider/knobBefore.png"));
@@ -243,14 +238,12 @@ public class SettingsScreen implements Screen {
         volumeSlider.setBounds(x, y, width, height);
         volumeSlider.setValue(initialValue);
 
-        // Создаём лейбл
         BitmapFont font = new BitmapFont(Gdx.files.internal("fonts/def.fnt"));
         font.getData().scale(2f);
         Label.LabelStyle labelStyle = new Label.LabelStyle(font, Color.BLACK);
         final Label volumeLabel = new Label((int) (initialValue * 100) + "%", labelStyle);
         volumeLabel.setPosition(x + width + 30, y + height / 4f); // справа от слайдера
         createTextTexture(x + width + 20, y + height / 4f, 163, 99);
-        // Обновление значения при изменении
         volumeSlider.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {

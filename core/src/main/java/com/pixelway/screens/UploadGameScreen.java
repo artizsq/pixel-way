@@ -23,7 +23,6 @@ public class UploadGameScreen implements Screen {
 
     @Override
     public void show() {
-        // Принудительно загружаем данные из файла
         PlayerData loadedPlayerData = DatabaseHelper.loadPlayerData();
         game.setPlayerData(loadedPlayerData);
 

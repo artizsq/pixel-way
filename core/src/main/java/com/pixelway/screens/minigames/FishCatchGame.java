@@ -69,7 +69,6 @@ public class FishCatchGame implements Screen {
 
         fishList = new Array<>();
 
-        // Кнопка назад
         TextureRegionDrawable backDrawable = new TextureRegionDrawable(new TextureRegion(backTexture));
         backDrawable.setMinSize(128, 128);
         backButton = new ImageButton(backDrawable);
@@ -214,10 +213,10 @@ public class FishCatchGame implements Screen {
     @Override public void resume() {}
     @Override public void hide() {}
     @Override public void dispose() {
-        stage.dispose();            // Освобождает Stage и его внутренний SpriteBatch, а также актеров.
-        fishTexture.dispose();      // Текстура рыбы
-        backTexture.dispose();      // Текстура кнопки назад
-        gameOverFont.dispose();     // Шрифт для "Игра ОКОНЧЕНА"
+        stage.dispose();
+        fishTexture.dispose();
+        backTexture.dispose();
+        gameOverFont.dispose();
         font.dispose();
         if (darkOverlay != null && darkOverlay.getDrawable() instanceof TextureRegionDrawable) {
             TextureRegion tex = ((TextureRegionDrawable) darkOverlay.getDrawable()).getRegion();

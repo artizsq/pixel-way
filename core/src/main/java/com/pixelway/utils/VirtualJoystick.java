@@ -19,7 +19,7 @@ public class VirtualJoystick extends Actor {
     private float outerRadiusThreshold;
 
     private Vector2 direction;
-    private MainClass game; // Ссылка на MainClass
+    private MainClass game;
     public static boolean inputBlocked;
 
     public VirtualJoystick(float x, float y, float joystickRadius, float knobRadius, MainClass game) {
@@ -29,7 +29,7 @@ public class VirtualJoystick extends Actor {
         this.knobRadius = knobRadius;
         this.direction = new Vector2(0, 0);
         this.outerRadiusThreshold = joystickRadius * 2f;
-        this.game = game; // Получаем ссылку на MainClass
+        this.game = game;
 
         joystickBackground = new Texture("texture/joystick/background.png");
         joystickKnob = new Texture("texture/joystick/knob.png");
@@ -39,10 +39,10 @@ public class VirtualJoystick extends Actor {
 
     @Override
     public void act(float delta) {
-        if (game != null && inputBlocked) { // Используем нестатическую переменную из BaseUIManager
+        if (game != null && inputBlocked) {
             direction.set(new Vector2(0, 0));
             knobPosition.set(joystickPosition);
-            game.setJoystickControllingPointer(-1); // Сбрасываем управление
+            game.setJoystickControllingPointer(-1);
             return;
         }
         super.act(delta);
@@ -61,13 +61,13 @@ public class VirtualJoystick extends Actor {
         if (isTouched) {
             Vector2 touchPos = new Vector2(Gdx.input.getX(currentTouchingPointer), Gdx.graphics.getHeight() - Gdx.input.getY(currentTouchingPointer));
 
-            if (game.getJoystickControllingPointer() == -1) { // Читаем из MainClass
+            if (game.getJoystickControllingPointer() == -1) {
                 if (touchPos.dst(joystickPosition) <= joystickRadius) {
-                    game.setJoystickControllingPointer(currentTouchingPointer); // Записываем в MainClass
+                    game.setJoystickControllingPointer(currentTouchingPointer);
                     direction.set(touchPos).sub(joystickPosition).nor();
                     knobPosition.set(joystickPosition).add(direction.cpy().scl(joystickRadius * 0.5f));
                 }
-            } else if (game.getJoystickControllingPointer() == currentTouchingPointer) { // Читаем из MainClass
+            } else if (game.getJoystickControllingPointer() == currentTouchingPointer) {
                 direction.set(touchPos).sub(joystickPosition).nor();
                 float distance = touchPos.dst(joystickPosition);
                 if (distance > joystickRadius * 0.5f) {
@@ -77,7 +77,7 @@ public class VirtualJoystick extends Actor {
                 }
             }
         } else {
-            game.setJoystickControllingPointer(-1); // Сбрасываем управление
+            game.setJoystickControllingPointer(-1);
             direction.setZero();
             knobPosition.set(joystickPosition);
         }
@@ -101,7 +101,7 @@ public class VirtualJoystick extends Actor {
     public void reset() {
         direction.setZero();
         knobPosition.set(joystickPosition);
-        game.setJoystickControllingPointer(-1); // Сбрасываем при ресете
+        game.setJoystickControllingPointer(-1);
     }
 
     public void dispose() {

@@ -182,7 +182,6 @@ public class TeleportWindow extends Window {
     }
 
     private void teleportTo(String location) {
-//        System.out.println(location);
         darkOverlay.remove();
         this.remove();
         VirtualJoystick.inputBlocked = false;
@@ -196,8 +195,6 @@ public class TeleportWindow extends Window {
                 break;
             case "winter":
                 if(game.getPlayerData().reqTP_items.contains("winterKey")){
-                    // телепорт на локацию
-                    System.out.println("Teleport to winter");
                     game.setScreen(new TPWinterLocationScreen(game, player, game.getPlayerData(), false, true));
                 }
                 break;

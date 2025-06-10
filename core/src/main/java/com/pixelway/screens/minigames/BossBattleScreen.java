@@ -190,7 +190,6 @@ public class BossBattleScreen implements Screen {
         playerHP = new Label(game.getPlayerData().hp +"", labelStyle);
         bossHP = new Label(boss.getHealth()+"", labelStyle);
 
-//        playerHP.setPosition();
 
         bossHP.setPosition(900, 950);
         playerHP.setPosition(50, 950);

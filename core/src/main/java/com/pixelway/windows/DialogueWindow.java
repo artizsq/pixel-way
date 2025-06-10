@@ -18,7 +18,7 @@ import com.pixelway.utils.VirtualJoystick;
 
 public class DialogueWindow extends Window {
     private final Label nameLabel;
-    private Label textLabel; // Теперь не final, чтобы можно было менять стиль
+    private Label textLabel;
     private final Image npcImage;
     private final Stage stage;
     private DialogData currentDialogData;
@@ -33,9 +33,7 @@ public class DialogueWindow extends Window {
     private BitmapFont defaultFont;
     private BitmapFont smallerFont;
     private Label.LabelStyle defaultLabelStyle;
-    private Label.LabelStyle smallerLabelStyle;
 
-    private static final int TEXT_LENGTH_THRESHOLD = 150; // Порог символов для уменьшения шрифта
     private static final float DEFAULT_FONT_SCALE = 0.6f;
     private static final float SMALLER_FONT_SCALE = 0.4f;
     private static final float NPC_IMAGE_SIZE = 128f;
@@ -54,7 +52,7 @@ public class DialogueWindow extends Window {
 
         overlay = new Image();
         overlay.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        overlay.addListener(new ClickListener() {}); // Блокирует клики позади окна
+        overlay.addListener(new ClickListener() {});
 
         defaultFont = new BitmapFont(Gdx.files.internal("fonts/def.fnt"));
         defaultFont.getData().scale(DEFAULT_FONT_SCALE);
@@ -62,14 +60,13 @@ public class DialogueWindow extends Window {
 
         smallerFont = new BitmapFont(Gdx.files.internal("fonts/def.fnt"));
         smallerFont.getData().scale(SMALLER_FONT_SCALE);
-        smallerLabelStyle = new Label.LabelStyle(smallerFont, Color.WHITE);
 
         BitmapFont nameFont = new BitmapFont(Gdx.files.internal("fonts/def.fnt"));
         nameFont.getData().scale(0.2f);
         Label.LabelStyle nameStyle = new Label.LabelStyle(nameFont, Color.LIGHT_GRAY);
 
         nameLabel = new Label(dialogData.name, nameStyle);
-        textLabel = new Label(dialogData.text, defaultLabelStyle); // Изначально используем стандартный стиль
+        textLabel = new Label(dialogData.text, defaultLabelStyle);
         textLabel.setWrap(true);
         textLabel.setAlignment(Align.topLeft);
 
@@ -124,12 +121,11 @@ public class DialogueWindow extends Window {
         mainGroup.addActor(nameLabel);
         mainGroup.addActor(textLabel);
 
-// Основной контейнер: текст + кнопки снизу
         Table wrapper = new Table();
         wrapper.setFillParent(true);
         wrapper.top().left();
-        wrapper.add(mainGroup).expand().fill().row(); // текст занимает всё доступное
-        wrapper.add(optionsTable).padBottom(10).center();           // кнопки прижаты к низу
+        wrapper.add(mainGroup).expand().fill().row();
+        wrapper.add(optionsTable).padBottom(10).center();
 
         this.clear();
         this.add(wrapper).expand().fill();
@@ -141,14 +137,12 @@ public class DialogueWindow extends Window {
         float newHeight = Math.max(minHeight, desiredHeight);
         setSize(Math.max(1100, getWidth()), newHeight);
 
-// фиксируем нижнюю грань
         float bottomY = 100;
         setPosition((Gdx.graphics.getWidth() - getWidth()) / 2f, bottomY);
         moveBy(0, newHeight - minHeight);
 
 
 
-        // NPC Image слева
         float npcX = getX() - npcImage.getWidth() - 20;
         float npcY = getY() + getHeight() - npcImage.getHeight() + 64;
         npcImage.setPosition(npcX, npcY);
@@ -161,9 +155,8 @@ public class DialogueWindow extends Window {
     private static WindowStyle createWindowStyle() {
         BitmapFont font = new BitmapFont(Gdx.files.internal("fonts/def.fnt"));
 
-        // Используем .9.png файл для растягиваемого фона
         Texture ninePatchTexture = new Texture(Gdx.files.internal("imgs/dialog.png"));
-        NinePatch ninePatch = new NinePatch(ninePatchTexture, 0, 0, 0, 0); // отступы: left, right, top, bottom
+        NinePatch ninePatch = new NinePatch(ninePatchTexture, 0, 0, 0, 0);
         NinePatchDrawable background = new NinePatchDrawable(ninePatch);
 
         WindowStyle style = new WindowStyle();

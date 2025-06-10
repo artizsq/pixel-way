@@ -44,7 +44,7 @@ public class DatabaseHelper {
         data.currentMap = "";
         data.chestItems = new ArrayList<>();
         data.reqTP_items = new ArrayList<>();
-        data.shield = 10;
+        data.shield = 0;
         data.isGameStarted = true;
 
         return data;

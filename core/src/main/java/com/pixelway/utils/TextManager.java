@@ -4,8 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.Align; // Импортируем Align для выравнивания текста
-
+import com.badlogic.gdx.utils.Align;
 import java.util.List;
 
 public class TextManager {

@@ -36,8 +36,8 @@ import com.pixelway.windows.TeleportWindow;
 public class ShipLocationScreen implements Screen {
 
     private final MainClass game;
-    private OrthographicCamera gameCamera;   // Game world camera
-    private OrthographicCamera uiCamera;     // UI camera
+    private OrthographicCamera gameCamera;
+    private OrthographicCamera uiCamera;
 
     private TiledMap tiledMap;
     private OrthogonalTiledMapRenderer renderer;
@@ -49,8 +49,8 @@ public class ShipLocationScreen implements Screen {
     private ImageButton mainButton;
     private Texture buttonTexture;
     private PlayerData playerData;
-    private Stage gameStage;   // Stage for the game world
-    private Stage uiStage;     // Stage for the UI
+    private Stage gameStage;
+    private Stage uiStage;
     private boolean isTeleport;
     private BaseUIManager baseUIManager;
 
@@ -71,12 +71,10 @@ public class ShipLocationScreen implements Screen {
 
     @Override
     public void show() {
-        // Load map and initialize renderers
         tiledMap = new TmxMapLoader().load("maps/shipMap.tmx");
         renderer = new OrthogonalTiledMapRenderer(tiledMap);
         batch = new SpriteBatch();
 
-        // Initialize game camera and stage
         gameCamera = new OrthographicCamera();
         gameCamera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         gameCamera.viewportWidth = 640 / 1.5f;  // Apply zoom level
@@ -85,7 +83,6 @@ public class ShipLocationScreen implements Screen {
         gameCamera.update();
         gameStage = new Stage(new ExtendViewport(640, 360, gameCamera)); // Use the initial viewport dimensions
 
-        // Initialize UI camera and stage
         uiCamera = new OrthographicCamera();
         uiCamera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         uiCamera.update();

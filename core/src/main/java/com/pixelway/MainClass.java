@@ -2,11 +2,8 @@ package com.pixelway;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.utils.Json;
 import com.pixelway.database.ChestData;
 import com.pixelway.database.DatabaseHelper;
 import com.pixelway.database.PlayerData;
@@ -58,13 +55,13 @@ public class MainClass extends Game {
 
     public void setBgMusic(String path) {
         if (this.bgMusic != null) {
-            this.bgMusic.stop();        // Stop the current music
-            this.bgMusic.dispose();     // Release resources of the current music
+            this.bgMusic.stop();
+            this.bgMusic.dispose();
         }
         this.bgMusic = Gdx.audio.newMusic(Gdx.files.internal(path));
         this.bgMusic.setLooping(true);
-        this.bgMusic.setVolume(playerData.musicVolume); // Apply current volume
-        this.bgMusic.play();            // Start playing the new music
+        this.bgMusic.setVolume(playerData.musicVolume);
+        this.bgMusic.play();
     }
 
     public int getJoystickControllingPointer() {
@@ -79,14 +76,14 @@ public class MainClass extends Game {
 
     @Override
     public void render() {
-        super.render(); // Отрисовка текущего экрана
+        super.render();
     }
 
     @Override
     public void dispose() {
         batch.dispose();
         if (bgMusic != null) {
-            bgMusic.dispose(); // Dispose of music on game exit
+            bgMusic.dispose();
         }
 
     }
@@ -94,6 +91,11 @@ public class MainClass extends Game {
     public void clearPlayerData() {
         playerData = DatabaseHelper.emptyPlayerData();
         saveData();
+    }
+
+    public void clearChestData(){
+        chestData = new ChestData();
+        setChestData(chestData);
     }
 
     public void setPlayerData(PlayerData loadedPlayerData) {

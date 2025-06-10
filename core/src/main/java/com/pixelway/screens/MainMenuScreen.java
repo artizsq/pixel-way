@@ -15,10 +15,7 @@ import com.pixelway.MainClass;
 
 import com.pixelway.database.DatabaseHelper;
 import com.pixelway.database.PlayerData;
-import com.pixelway.screens.location.StartIslandScreen;
 import com.pixelway.windows.AlertWindow;
-
-import javax.xml.crypto.Data;
 
 public class MainMenuScreen implements Screen {
 
@@ -59,10 +56,12 @@ public class MainMenuScreen implements Screen {
         createButton(85, 630, 368, 184, "btns/menu/start.png", () -> {
             if(!DatabaseHelper.hasSaveData()){
                 dispose();
+                game.clearChestData();
                 game.setScreen(new IntroScreen(game));
             } else {
                 if(alertCount == 1){
                     dispose();
+                    game.clearChestData();
                     game.setScreen(new IntroScreen(game));
                 } else {
                     new AlertWindow(stage, "У вас есть сохранения!\nНажмите еще раз чтобы продолжить.");

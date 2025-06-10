@@ -37,8 +37,8 @@ import com.pixelway.windows.DialogueWindow;
 public class TPWinterLocationScreen implements Screen {
 
     private final MainClass game;
-    private OrthographicCamera gameCamera;   // Game world camera
-    private OrthographicCamera uiCamera;     // UI camera
+    private OrthographicCamera gameCamera;
+    private OrthographicCamera uiCamera;
     private String mapPath;
     private TiledMap tiledMap;
     private OrthogonalTiledMapRenderer renderer;
@@ -50,21 +50,14 @@ public class TPWinterLocationScreen implements Screen {
     private ImageButton saveButton;
     private Texture buttonTexture;
     private PlayerData playerData;
-    private Stage gameStage;   // Stage for the game world
-    private Stage uiStage;     // Stage for the UI
+    private Stage gameStage;
+    private Stage uiStage;
     private boolean isTeleport = false;
     private BaseUIManager baseUIManager;
     private boolean isLongTeleport;
     private GameDialogs gameDialogs;
 
 
-    public TPWinterLocationScreen(MainClass game, Player player, PlayerData playerData) {
-        this.game = game;
-
-        this.worldManager = new WorldManager();
-        this.player = player;
-        this.playerData = playerData;
-    }
     public TPWinterLocationScreen(MainClass game, Player player, PlayerData playerData, boolean isTeleport, boolean isLongTeleport) {
         this.game = game;
         this.isTeleport = isTeleport;
@@ -87,8 +80,8 @@ public class TPWinterLocationScreen implements Screen {
 
         gameCamera = new OrthographicCamera();
         gameCamera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        gameCamera.viewportWidth = 640 / 1.5f;  // Apply zoom level
-        gameCamera.viewportHeight = 360 / 1.5f; // Apply zoom level
+        gameCamera.viewportWidth = 640 / 1.5f;
+        gameCamera.viewportHeight = 360 / 1.5f;
         gameCamera.position.set(gameCamera.viewportWidth / 2f, gameCamera.viewportHeight / 2f, 0);
         gameCamera.update();
         gameStage = new Stage(new ExtendViewport(640, 360, gameCamera)); // Use the initial viewport dimensions
@@ -120,12 +113,10 @@ public class TPWinterLocationScreen implements Screen {
         baseUIManager = new BaseUIManager(uiStage, playerData, game);
         baseUIManager.init();
 
-        // Create save button
         buttonTexture = new Texture(Gdx.files.internal("btns/mainBtn.png"));
         TextureRegionDrawable buttonDrawable = new TextureRegionDrawable(new TextureRegion(buttonTexture));
         saveButton = new ImageButton(buttonDrawable);
 
-        // Position and size the save button
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
         float buttonWidth = 240 * 2f;

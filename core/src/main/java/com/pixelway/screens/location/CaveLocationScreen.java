@@ -36,8 +36,8 @@ import com.pixelway.windows.DialogueWindow;
 public class CaveLocationScreen implements Screen {
 
     private final MainClass game;
-    private OrthographicCamera gameCamera;   // Game world camera
-    private OrthographicCamera uiCamera;     // UI camera
+    private OrthographicCamera gameCamera;
+    private OrthographicCamera uiCamera;
     private String mapPath;
     private TiledMap tiledMap;
     private OrthogonalTiledMapRenderer renderer;
@@ -49,8 +49,8 @@ public class CaveLocationScreen implements Screen {
     private ImageButton saveButton;
     private Texture buttonTexture;
     private PlayerData playerData;
-    private Stage gameStage;   // Stage for the game world
-    private Stage uiStage;     // Stage for the UI
+    private Stage gameStage;
+    private Stage uiStage;
     private boolean isTeleport = false;
     private BaseUIManager baseUIManager;
     private GameDialogs gameDialogs;
@@ -103,12 +103,10 @@ public class CaveLocationScreen implements Screen {
         baseUIManager = new BaseUIManager(uiStage, playerData, game);
         baseUIManager.init();
 
-        // Create save button
         buttonTexture = new Texture(Gdx.files.internal("btns/mainBtn.png"));
         TextureRegionDrawable buttonDrawable = new TextureRegionDrawable(new TextureRegion(buttonTexture));
         saveButton = new ImageButton(buttonDrawable);
 
-        // Position and size the save button
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
         float buttonWidth = 240 * 2f;
