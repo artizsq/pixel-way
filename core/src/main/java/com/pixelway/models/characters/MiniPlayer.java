@@ -28,9 +28,9 @@ public class MiniPlayer extends Actor {
     private float stateTime;
     private int health;
     private World world;
+    private Sound damageSound;
     private int shield;
     private MainClass game;
-    private SoundController soundController;
     private Sound pluhSound;
 
 
@@ -42,7 +42,8 @@ public class MiniPlayer extends Actor {
         this.health = game.getPlayerData().hp;
         this.shield = game.getPlayerData().shield;
         this.game = game;
-        this.soundController = new SoundController("sounds/shield.mp3");
+
+        damageSound = Gdx.audio.newSound(Gdx.files.internal("sounds/hit.mp3"));
         pluhSound = Gdx.audio.newSound(Gdx.files.internal("sounds/pluh.mp3"));
 
 
@@ -126,25 +127,21 @@ public class MiniPlayer extends Actor {
     }
 
     public void takeDamage(int amount) {
-        if (shield >= amount) {
-            shield -= amount;
 
-            soundController.playWalk();
-        } else {
+        int remainingDamage = Math.max(0, amount - shield);
+        health -= remainingDamage;
+        game.getPlayerData().substractHP(remainingDamage);
 
-            int remainingDamage = amount - shield;
-            shield = 0;
-            health -= remainingDamage;
-            game.getPlayerData().substractHP(remainingDamage);
-            soundController.setWalkSound("sounds/hit.mp3");
-            soundController.playWalk();
-            if (health <= 0) {
-                pluhSound.play(0.3f);
-                game.setScreen(new SadGameEnd(game));
-            }
+
+        if (health <= 0) {
+            pluhSound.play(game.getPlayerData().soundVolume);
+            game.setScreen(new SadGameEnd(game));
         }
-        System.out.println(shield);
+
+        damageSound.play(game.getPlayerData().soundVolume);
     }
+
+
 
 
     public void dispose() {

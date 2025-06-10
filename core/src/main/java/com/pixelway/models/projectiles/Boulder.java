@@ -6,11 +6,10 @@ import com.badlogic.gdx.physics.box2d.World;
 
 public class Boulder extends BossAttack {
     private static final float BOULDER_SPEED = 3000f;
-    private static final float BOULDER_WIDTH = 64f; // Определяем размеры как константы
+    private static final float BOULDER_WIDTH = 64f;
     private static final float BOULDER_HEIGHT = 64f;
 
     public Boulder(World world, Vector2 startPosition, Texture texture) {
-        // Передаем ширину и высоту в конструктор BossAttack
         super(world, startPosition, texture, 30, BOULDER_WIDTH, BOULDER_HEIGHT);
 
         float direction = (startPosition.x < 640) ? 1 : -1;

@@ -10,7 +10,7 @@ public class Shard extends BossAttack {
     private static final float SHARD_HEIGHT = 60f;
 
     public Shard(World world, Vector2 startPosition, Texture texture) {
-        super(world, startPosition, texture, 10, SHARD_WIDTH - 20, SHARD_HEIGHT);
+        super(world, startPosition, texture, 20, SHARD_WIDTH - 20, SHARD_HEIGHT);
 
         body.setLinearVelocity(0, -SHARD_SPEED);
     }

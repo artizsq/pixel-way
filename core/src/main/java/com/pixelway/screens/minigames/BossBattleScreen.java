@@ -282,7 +282,7 @@ public class BossBattleScreen implements Screen {
             numberOfShards = 0;
             numberOfBoulders = MathUtils.random(2, 3);
             currentAttackInterval = MathUtils.random(0.8f, 1.5f);
-        } else if (currentBossHP > 0){ // Фаза 3: 500 - 0 HP (Все вместе)
+        } else if (currentBossHP > 0){
             numberOfShards = MathUtils.random(2, 3);
             numberOfBoulders = MathUtils.random(1, 2);
             currentAttackInterval = MathUtils.random(0.5f, 1.0f);
@@ -371,6 +371,7 @@ public class BossBattleScreen implements Screen {
                 Boss targetBoss = (Boss) userDataB;
                 targetBoss.takeDamage(bullet.getDamage());
                 bullet.markForRemoval();
+
             } else if (userDataB instanceof PlayerBullet && userDataA instanceof Boss) {
                 PlayerBullet bullet = (PlayerBullet) userDataB;
                 Boss targetBoss = (Boss) userDataA;
