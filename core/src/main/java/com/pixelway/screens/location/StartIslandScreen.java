@@ -25,6 +25,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.pixelway.MainClass;
 import com.pixelway.database.ChestData;
 import com.pixelway.database.PlayerData;
+import com.pixelway.screens.minigames.BerryCatchGame;
 import com.pixelway.screens.minigames.FishCatchGame;
 import com.pixelway.map.TiledObjectsConverter;
 import com.pixelway.map.WorldContactListener;
@@ -49,7 +50,6 @@ public class StartIslandScreen implements Screen {
     private Player player;
     private final WorldManager worldManager;
     private Array<Fixture> fixtures;
-
     private Box2DDebugRenderer debugRenderer;
     private SpriteBatch batch;
     private ImageButton mainButton;
@@ -133,8 +133,9 @@ public class StartIslandScreen implements Screen {
         new ImportantZone(worldManager.getWorld(), new Vector2(1237, 566), 40, 20, ImportantZone.ZoneType.CHEST);
         new ImportantZone(worldManager.getWorld(), new Vector2(737, 610),80, 80, ImportantZone.ZoneType.SAVE);
         new ImportantZone(worldManager.getWorld(), new Vector2(950, 110), 64, 64, ImportantZone.ZoneType.FISH_GAME);
+        new ImportantZone(worldManager.getWorld(), new Vector2(1450, 580), 80, 25, ImportantZone.ZoneType.BERRY_GAME);
 
-
+        new ImportantZone(worldManager.getWorld(), new Vector2(1325, 563), 80, 20, ImportantZone.ZoneType.BERRY_DIALOG);
         new ImportantZone(worldManager.getWorld(), new Vector2(1237, 140), 70, 70, ImportantZone.ZoneType.FISHMAN_DIALOG);
 
 
@@ -201,12 +202,33 @@ public class StartIslandScreen implements Screen {
                         case FISH_GAME:
 
                             if (playerData.activeMissions.contains("fishing")){
-                                playerData.x = player.getPosition().x + 26;
-                                playerData.y = player.getPosition().y + 50;
-                                dispose();
+                                if (playerData.fishCount > 0){
+                                    new AlertWindow(uiStage, "У вас уже есть рыба, продайте ее!");
 
-                                game.setScreen(new FishCatchGame(game, player));
+                                } else {
+                                    playerData.x = player.getPosition().x + 26;
+                                    playerData.y = player.getPosition().y + 50;
+                                    dispose();
+
+                                    game.setScreen(new FishCatchGame(game, player));
+                                }
                             }
+                            break;
+
+                        case BERRY_GAME:
+                            if(playerData.activeMissions.contains("berryCatching")) {
+                                if(playerData.berryCount > 0){
+                                    new AlertWindow(uiStage, "У вас уже есть ягоды, продайте их!");
+
+                                } else {
+                                    playerData.x = player.getPosition().x + 26;
+                                    playerData.y = player.getPosition().y + 50;
+                                    dispose();
+
+                                    game.setScreen(new BerryCatchGame(game, player));
+                                }
+                            }
+
                             break;
 
                         case FISHMAN_DIALOG:
@@ -223,7 +245,11 @@ public class StartIslandScreen implements Screen {
                                 new DialogueWindow(uiStage, game, gameDialogs.fishmanDialog());
                             }
                             break;
+                        case BERRY_DIALOG:
+                            new DialogueWindow(uiStage, game, gameDialogs.berryDialog());
+                            break;
                     }
+
                 }
             }
         });

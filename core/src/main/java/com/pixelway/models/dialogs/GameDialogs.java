@@ -9,6 +9,8 @@ import com.pixelway.screens.minigames.BossBattleScreen;
 import com.pixelway.utils.DialogAction;
 import com.pixelway.windows.TeleportWindow;
 
+import net.dermetfan.gdx.physics.box2d.PositionController;
+
 public class GameDialogs {
     private PlayerData playerData;
     private MainClass game;
@@ -123,7 +125,6 @@ public class GameDialogs {
             @Override
             public void execute() {
                 playerData.addMoney(playerData.fishCount * 2);
-                playerData.activeMissions.remove("fishing");
                 playerData.fishCount = 0;
             }
         };
@@ -298,6 +299,59 @@ public class GameDialogs {
         dialogData1.newDialogData = dialogData2;
         return dialogData1;
     }
+
+    public DialogData berryDialog(){
+        if(playerData.activeMissions.contains("berryCatching") && playerData.berryCount <= 0){
+            DialogData dialogData1 = new DialogData();
+            dialogData1.name = "Фом";
+            dialogData1.imagePath = "berry.png";
+            dialogData1.text = "Кусты справа от таблички";
+            dialogData1.option1 = "Понял";
+
+            return dialogData1;
+        } else if (playerData.activeMissions.contains("berryCatching") && playerData.berryCount > 0) {
+            DialogData dialogData1 = new DialogData();
+            dialogData1.name = "Фом";
+            dialogData1.imagePath = "berry.png";
+            dialogData1.text = "Спасибо за помощь, ты собрал "+playerData.berryCount+ " ягод! Я заплачу тебе по 1 монете за каждую ягоду.";
+            dialogData1.option1 = "Хорошо";
+            dialogData1.option2 = "Я против.";
+            dialogData1.dialogAction = new DialogAction() {
+                @Override
+                public void execute() {
+                    playerData.addMoney(playerData.berryCount);
+                    playerData.berryCount = 0;
+                }
+            };
+
+            return dialogData1;
+        } else {
+            DialogData dialogData1 = new DialogData();
+            dialogData1.name = "Фом";
+            dialogData1.imagePath = "berry.png";
+            dialogData1.text = "Собери ягоды около меня, я тебе заплачу.";
+            dialogData1.option1 = "Хорошо.";
+            dialogData1.option2 = "Нет.";
+            dialogData1.dialogAction = new DialogAction() {
+                @Override
+                public void execute() {
+                    playerData.activeMissions.add("berryCatching");
+                }
+            };
+
+            DialogData dialogData = new DialogData();
+            dialogData.name = "Фом";
+            dialogData.imagePath = "berry.png";
+            dialogData.text = "Слушай, ты можешь помочь мне с кое-чем?";
+            dialogData.option1 = "С чем?";
+            dialogData.option2 = "Не могу.";
+            dialogData.newDialogData = dialogData1;
+
+
+            return dialogData;
+        }
+    }
+
 
 
 }

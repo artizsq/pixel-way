@@ -23,7 +23,7 @@ public class ChestLootGenerator {
 
 
         allPossibleLoot.add(new LootEntry("Медаль рыцаря", PlayerData.ItemType.POWER, 3, "Медаль XVI века, судя по всему\nиспользовалась рыцарями.", "imgs/items/strmedal.png", 0.3f, 1, 1));
-        allPossibleLoot.add(new LootEntry("Компот здоровья", PlayerData.ItemType.HP, 10, "Сладкий и очень полезный компот", "imgs/items/HPpoi.png", 0.5f, 1, 2));
+        allPossibleLoot.add(new LootEntry("Зелье здоровья", PlayerData.ItemType.HP, 10, "Сладкое и очень полезное", "imgs/items/HPpoi.png", 0.5f, 1, 2));
         allPossibleLoot.add(new LootEntry("Зелье силы", PlayerData.ItemType.POWER, 10, "Странновато выглядит...", "imgs/items/strpoi.png", 0.5f, 1, 1));
         allPossibleLoot.add(new LootEntry("Меч короля Артура", PlayerData.ItemType.SHIELD, 10, "Меч того самого?", "imgs/items/sword.png", 0.2f, 1, 1));
 

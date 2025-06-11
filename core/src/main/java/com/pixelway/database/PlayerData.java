@@ -16,6 +16,7 @@ public class PlayerData {
     public ArrayList<InventorySlot> inventory = new ArrayList<>(6);
     public int strength = 2;
     public int fishCount = 0;
+    public int berryCount = 0;
     public int hp = 30;
     public int shield = 0;
     public int money = 50;
