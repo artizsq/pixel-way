@@ -63,7 +63,6 @@ public class WorldContactListener implements ContactListener {
 
         player.incrementZoneContact();
         player.setZone(zone.getZoneType());
-        System.out.println(zone.getZoneType() + " status: " + player.getInZone());
         switch (zone.getZoneType()) {
             case TELEPORT:
                 handleTransition(zone.getNextZone(), zone.getPlayerData());
@@ -116,8 +115,6 @@ public class WorldContactListener implements ContactListener {
 
     private void handleZoneExit(ImportantZone zone){
         player.decrementZoneContact();
-        System.out.println(zone.getZoneType() + " status: " + player.getInZone());
-
     }
 
     private void handleSoundChange(ImportantZone zone) {

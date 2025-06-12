@@ -40,8 +40,12 @@ public class ChestLootGenerator {
             return droppedItems;
         }
 
+        List<LootEntry> availableLoot = new ArrayList<>(allPossibleLoot);
+
         for (int i = 0; i < numItemsToDrop; i++) {
-            LootEntry chosenEntry = chooseRandomLootEntry(allPossibleLoot);
+            if (availableLoot.isEmpty()) break;
+
+            LootEntry chosenEntry = chooseRandomLootEntry(availableLoot);
 
             if (chosenEntry != null) {
                 int quantity = random.nextInt(chosenEntry.maxQuantity - chosenEntry.minQuantity + 1) + chosenEntry.minQuantity;
@@ -54,11 +58,15 @@ public class ChestLootGenerator {
                     chosenEntry.itemDesc,
                     chosenEntry.imagePath
                 );
+
                 droppedItems.add(slot);
+                availableLoot.remove(chosenEntry);
             }
         }
+
         return droppedItems;
     }
+
 
     private int determineNumberOfItems() {
         float roll = random.nextFloat();
