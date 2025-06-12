@@ -187,10 +187,35 @@ public class DialogueWindow extends Window {
 
 
     private void closeDialog() {
+        dispose();
         this.remove();
         VirtualJoystick.inputBlocked = false;
         npcImage.remove();
         overlay.remove();
+    }
+
+    public void dispose() {
+        if (defaultFont != null) defaultFont.dispose();
+        if (smallerFont != null) smallerFont.dispose();
+        if (nameLabel.getStyle().font != null) nameLabel.getStyle().font.dispose();
+
+        if (npcImage.getDrawable() instanceof TextureRegionDrawable) {
+            TextureRegionDrawable drawable = (TextureRegionDrawable) npcImage.getDrawable();
+            if (drawable.getRegion().getTexture() != null) {
+                drawable.getRegion().getTexture().dispose();
+            }
+        }
+
+        if (optionButton1.getStyle().up instanceof TextureRegionDrawable) {
+            TextureRegionDrawable drawable = (TextureRegionDrawable) optionButton1.getStyle().up;
+            if (drawable.getRegion().getTexture() != null) {
+                drawable.getRegion().getTexture().dispose();
+            }
+        }
+
+        this.clear();
+        overlay.clear();
+        npcImage.clear();
     }
 
 

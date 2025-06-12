@@ -60,8 +60,10 @@ public class WorldContactListener implements ContactListener {
     }
 
     private void handleZone(ImportantZone zone) {
-        player.setInZone(true);
+
+        player.incrementZoneContact();
         player.setZone(zone.getZoneType());
+        System.out.println(zone.getZoneType() + " status: " + player.getInZone());
         switch (zone.getZoneType()) {
             case TELEPORT:
                 handleTransition(zone.getNextZone(), zone.getPlayerData());
@@ -102,7 +104,7 @@ public class WorldContactListener implements ContactListener {
                         break;
                     case 4:
                         if (!playerData.dialogIDS.contains("4")) {
-                            new SuperDialogue(zone.getStage(), "Я чувствую на себе ответственность. Нельзя их повести!");
+                            new SuperDialogue(zone.getStage(), "Я чувствую на себе ответственность. Нельзя их подвести!");
                             playerData.dialogIDS.add("4");
                         }
                         break;
@@ -113,7 +115,8 @@ public class WorldContactListener implements ContactListener {
     }
 
     private void handleZoneExit(ImportantZone zone){
-        player.setInZone(false);
+        player.decrementZoneContact();
+        System.out.println(zone.getZoneType() + " status: " + player.getInZone());
 
     }
 

@@ -43,6 +43,8 @@ public class BerryCatchGame implements Screen {
     private BitmapFont font, gameOverFont;
     private GlyphLayout layout;
     private Image darkOverlay;
+    private Texture backgroundTexture;
+
     private TextButton returnButton;
     private int alertCount = 0;
 
@@ -59,6 +61,7 @@ public class BerryCatchGame implements Screen {
 
         layout = new GlyphLayout();
 
+        backgroundTexture = new Texture("imgs/berry/back.png");
         berryTexture = new Texture("imgs/berry/berry.png");
         basketTexture = new Texture("imgs/berry/basket.png");
         backTexture = new Texture("btns/back.png");
@@ -98,7 +101,7 @@ public class BerryCatchGame implements Screen {
         stage.addActor(backButton);
 
         basket = new Image(basketTexture);
-        basket.setSize(150, 100);
+        basket.setSize(200, 120);
         basket.setPosition((Gdx.graphics.getWidth() - basket.getWidth()) / 2f, 20);
         stage.addActor(basket);
 
@@ -131,8 +134,13 @@ public class BerryCatchGame implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(0.2f, 0.6f, 1f, 1);
+        Gdx.gl.glClearColor(0.45f, 0.45f, 0.45f, 1f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        batch.begin();
+        batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        batch.end();
+
         if (!isGameOver && (Gdx.input.isTouched() || Gdx.input.isButtonPressed(0))) {
             float inputX = Gdx.input.getX();
             float basketX = inputX - basket.getWidth() / 2f;
@@ -204,7 +212,6 @@ public class BerryCatchGame implements Screen {
                     berries.removeIndex(i);
                 }
             }
-
         }
 
         stage.act(delta);
@@ -230,6 +237,7 @@ public class BerryCatchGame implements Screen {
 
         batch.end();
     }
+
 
     private static TextureRegionDrawable createOverlayDrawable() {
         Pixmap pixmap = new Pixmap(1, 1, Pixmap.Format.RGBA8888);
@@ -260,5 +268,7 @@ public class BerryCatchGame implements Screen {
 
         badBerryTexture.dispose();
         batch.dispose();
+        backgroundTexture.dispose();
+
     }
 }

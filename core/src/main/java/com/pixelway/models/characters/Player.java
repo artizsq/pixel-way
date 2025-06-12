@@ -1,5 +1,6 @@
 package com.pixelway.models.characters;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -17,8 +18,7 @@ public class Player extends Actor {
     private int playerSpeed = 80000000;
     private float width, height;
     private Vector2 lastDirection = new Vector2(0, -1);
-
-
+    private int activeZones = 0;
     private Vector2 direction = new Vector2();
 
     private Animation<TextureRegion> walkRightAnimation, walkLeftAnimation, walkDownAnimation, walkUpAnimation;
@@ -73,6 +73,22 @@ public class Player extends Actor {
         return new Animation<>(frameDuration, frames);
     }
 
+    public void incrementZoneContact() {
+        activeZones++;
+        setInZone(true);
+    }
+
+    public void decrementZoneContact() {
+        activeZones = Math.max(0, activeZones - 1);
+        if (activeZones == 0) {
+            setInZone(false);
+        }
+    }
+
+    public int getActiveZoneCount() {
+        return activeZones;
+    }
+
     private void createBody(World world) {
         BodyDef bd = new BodyDef();
         bd.type = BodyDef.BodyType.DynamicBody;
@@ -104,7 +120,7 @@ public class Player extends Actor {
             body.getPosition().y - height / 2);
 
         stateTime += delta;
-        System.out.println("X: " + body.getPosition().x + "Y: " + body.getPosition().y);
+//        System.out.println("X: " + body.getPosition().x + "Y: " + body.getPosition().y);
 
         if (dir.len() > 0) {
             walkSoundTimer += delta;

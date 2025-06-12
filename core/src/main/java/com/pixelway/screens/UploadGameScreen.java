@@ -47,7 +47,7 @@ public class UploadGameScreen implements Screen {
                 game.setScreen(new TPWinterLocationScreen(game, player, loadedPlayerData, false, false));
                 break;
             default:
-                game.setScreen(new StartIslandScreen(game, player, loadedPlayerData, false));
+                game.setScreen(new IntroScreen(game));
                 break;
         }
 

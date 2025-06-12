@@ -264,7 +264,7 @@ public class BossBattleScreen implements Screen {
             attackTimer = 0f;
         }
 
-        debugRenderer.render(bossWorldManager.getWorld(), gameCamera.combined);
+//        debugRenderer.render(bossWorldManager.getWorld(), gameCamera.combined);
     }
 
     private void spawnBossAttacksBasedOnHealth() {

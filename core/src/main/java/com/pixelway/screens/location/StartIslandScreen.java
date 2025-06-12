@@ -285,7 +285,7 @@ public class StartIslandScreen implements Screen {
             player.update(delta, baseUIManager.getJoystick().getDirection());
         }
 
-        debugRenderer.render(worldManager.getWorld(), gameCamera.combined);
+//        debugRenderer.render(worldManager.getWorld(), gameCamera.combined);
     }
 
     private void updateCameraPosition() {
