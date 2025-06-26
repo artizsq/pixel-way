@@ -279,7 +279,7 @@ public class GameDialogs {
         dialogData2.name = "Голем";
         dialogData2.imagePath = "golem.png";
         dialogData2.text = "Ха-ха-ха, мне нравится твоя самоуверенность. Покажи мне, на что способен.";
-        dialogData2.option1 = "Базару 0";
+        dialogData2.option1 = "Нет проблем.";
         dialogData2.option2 = "Я не хочу";
         dialogData2.dialogAction = new DialogAction() {
             @Override
