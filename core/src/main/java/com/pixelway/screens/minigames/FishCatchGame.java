@@ -20,8 +20,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.pixelway.MainClass;
-import com.pixelway.screens.location.StartIslandScreen;
 import com.pixelway.models.characters.Player;
+import com.pixelway.screens.location.StartIslandScreen;
 import com.pixelway.windows.AlertWindow;
 
 public class FishCatchGame implements Screen {
@@ -41,7 +41,7 @@ public class FishCatchGame implements Screen {
     private TextButton returnButton;
     private GlyphLayout layout;
     private int alertCount = 0;
-
+    private boolean isPausedForAlert = false;
 
     public FishCatchGame(MainClass game, Player player) {
         this.game = game;
@@ -56,7 +56,6 @@ public class FishCatchGame implements Screen {
 
         layout = new GlyphLayout();
 
-
         fishTexture = new Texture("texture/fish.png");
         backTexture = new Texture("btns/back.png");
         gameOverFont = new BitmapFont(Gdx.files.internal("fonts/defBold.fnt"));
@@ -64,7 +63,6 @@ public class FishCatchGame implements Screen {
 
         font = new BitmapFont(Gdx.files.internal("fonts/defBold.fnt"));
         font.getData().setScale(1.5f);
-
 
         fishList = new Array<>();
 
@@ -75,13 +73,16 @@ public class FishCatchGame implements Screen {
         backButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if(fishCaught > 0){
-                    if(alertCount == 1){
+                if (fishCaught > 0) {
+                    if (alertCount == 1) {
                         dispose();
                         fishCaught = 0;
                         game.setScreen(new StartIslandScreen(game, player, game.getPlayerData(), false));
                     } else {
-                        new AlertWindow(stage, "Нажмите еще раз для выхода!\nВы потеряте весь прогресс");
+                        isPausedForAlert = true;
+                        stage.addActor(new AlertWindow(stage, "Нажмите еще раз для выхода!\nВы потеряете весь прогресс", () -> {
+                            isPausedForAlert = false;
+                        }));
                         alertCount++;
                     }
                 } else {
@@ -95,7 +96,7 @@ public class FishCatchGame implements Screen {
     }
 
     private void spawnFish() {
-        if (isGameOver) return;
+        if (isGameOver || isPausedForAlert) return;
 
         Image fish = new Image(fishTexture);
         fish.setSize(fishTexture.getWidth() * 1.5f, fishTexture.getHeight() * 1.5f);
@@ -106,7 +107,7 @@ public class FishCatchGame implements Screen {
         fish.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                if (!isGameOver) {
+                if (!isGameOver && !isPausedForAlert) {
                     fishCaught++;
                     fish.remove();
                     fishList.removeValue(fish, true);
@@ -123,7 +124,7 @@ public class FishCatchGame implements Screen {
         Gdx.gl.glClearColor(0.2f, 0.6f, 1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        if (!isGameOver) {
+        if (!isGameOver && !isPausedForAlert) {
             timer -= delta;
 
             if (timer <= 0) {
@@ -175,8 +176,6 @@ public class FishCatchGame implements Screen {
         String scoreText = "Счёт: " + fishCaught;
         font.draw(batch, scoreText, (Gdx.graphics.getWidth() - 200) / 2f, Gdx.graphics.getHeight() - 50);
 
-
-
         if (isGameOver) {
             game.getPlayerData().fishCount = fishCaught;
             String gameOverMsg = "ИГРА ОКОНЧЕНА!\nСЧЕТ: " + fishCaught;
@@ -188,8 +187,6 @@ public class FishCatchGame implements Screen {
 
             gameOverFont.draw(batch, layout, x, y);
         }
-
-
 
         batch.end();
     }
@@ -208,10 +205,14 @@ public class FishCatchGame implements Screen {
         return new TextureRegionDrawable(new TextureRegion(texture));
     }
 
-    @Override public void pause() {}
-    @Override public void resume() {}
-    @Override public void hide() {}
-    @Override public void dispose() {
+    @Override
+    public void pause() {}
+    @Override
+    public void resume() {}
+    @Override
+    public void hide() {}
+    @Override
+    public void dispose() {
         stage.dispose();
         fishTexture.dispose();
         backTexture.dispose();
