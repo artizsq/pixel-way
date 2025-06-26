@@ -182,11 +182,17 @@ public class TeleportWindow extends Window {
     }
 
     private void teleportTo(String location) {
+
+        if (location.equals("winter") && !game.getPlayerData().reqTP_items.contains("winterKey")) {
+            return;
+        }
+
         darkOverlay.remove();
         this.remove();
         VirtualJoystick.inputBlocked = false;
         game.getScreen().dispose();
-        switch (location){
+
+        switch (location) {
             case "start":
                 game.setScreen(new ShipLocationScreen(game, player, game.getPlayerData(), true));
                 break;
@@ -194,12 +200,12 @@ public class TeleportWindow extends Window {
                 game.setScreen(new TradeLocationScreen(game, player, game.getPlayerData(), true));
                 break;
             case "winter":
-                if(game.getPlayerData().reqTP_items.contains("winterKey")){
-                    game.setScreen(new TPWinterLocationScreen(game, player, game.getPlayerData(), false, true));
-                }
+                game.setScreen(new TPWinterLocationScreen(game, player, game.getPlayerData(), false, true));
                 break;
         }
-
-
     }
+
+
+
 }
+
