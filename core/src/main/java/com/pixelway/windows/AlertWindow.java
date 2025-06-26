@@ -13,15 +13,22 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.pixelway.utils.VirtualJoystick;
 
-
 public class AlertWindow extends Window {
 
     private final Image darkOverlay;
+    private final Runnable onCloseCallback;
 
+    // ✅ Конструктор БЕЗ callback (стандартный)
     public AlertWindow(Stage stage, String messageText) {
+        this(stage, messageText, null);
+    }
+
+    // ✅ Конструктор С callback
+    public AlertWindow(Stage stage, String messageText, Runnable onCloseCallback) {
         super("", createWindowStyle());
         VirtualJoystick.inputBlocked = true;
 
+        this.onCloseCallback = onCloseCallback;
 
         setModal(true);
         this.setSize(600, 400);
@@ -31,14 +38,12 @@ public class AlertWindow extends Window {
         );
         this.setMovable(false);
 
-
         TextureRegionDrawable overlayDrawable = createOverlayDrawable();
         darkOverlay = new Image(overlayDrawable);
         darkOverlay.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         darkOverlay.addListener(new ClickListener() {});
 
         BitmapFont font = new BitmapFont(Gdx.files.internal("fonts/def.fnt"));
-
 
         Label.LabelStyle labelStyle = new Label.LabelStyle();
         labelStyle.font = font;
@@ -52,13 +57,11 @@ public class AlertWindow extends Window {
         TextButton okButton = createOkButton(font);
         okButton.setSize(120, 50);
 
-
         this.row();
         this.add(okButton)
             .expandY()
             .bottom()
             .padBottom(50f);
-
 
         stage.addActor(darkOverlay);
         stage.addActor(this);
@@ -102,10 +105,11 @@ public class AlertWindow extends Window {
                 darkOverlay.remove();
                 AlertWindow.this.remove();
                 VirtualJoystick.inputBlocked = false;
+                if (onCloseCallback != null) {
+                    onCloseCallback.run(); // Вызываем только если передан
+                }
             }
         });
         return button;
     }
-
-
 }
