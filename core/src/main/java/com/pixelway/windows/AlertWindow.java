@@ -18,12 +18,10 @@ public class AlertWindow extends Window {
     private final Image darkOverlay;
     private final Runnable onCloseCallback;
 
-    // ✅ Конструктор БЕЗ callback (стандартный)
     public AlertWindow(Stage stage, String messageText) {
         this(stage, messageText, null);
     }
 
-    // ✅ Конструктор С callback
     public AlertWindow(Stage stage, String messageText, Runnable onCloseCallback) {
         super("", createWindowStyle());
         VirtualJoystick.inputBlocked = true;
@@ -106,7 +104,7 @@ public class AlertWindow extends Window {
                 AlertWindow.this.remove();
                 VirtualJoystick.inputBlocked = false;
                 if (onCloseCallback != null) {
-                    onCloseCallback.run(); // Вызываем только если передан
+                    onCloseCallback.run();
                 }
             }
         });

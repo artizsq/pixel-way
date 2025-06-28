@@ -47,6 +47,8 @@ public class BerryCatchGame implements Screen {
 
     private TextButton returnButton;
     private int alertCount = 0;
+    private boolean isPausedForAlert = false;
+
 
     public BerryCatchGame(MainClass game, Player player) {
         this.game = game;
@@ -88,7 +90,10 @@ public class BerryCatchGame implements Screen {
                         game.setScreen(new StartIslandScreen(game, player, game.getPlayerData(), false));
 
                     } else {
-                        new AlertWindow(stage, "Нажмите еще раз для выхода!\nВы потеряете весь прогресс");
+                        isPausedForAlert = true;
+                        new AlertWindow(stage, "Нажмите еще раз для выхода!\nВы потеряете весь прогресс", () -> {
+                            isPausedForAlert = false;
+                        });
                         alertCount++;
                     }
                 } else {
@@ -120,7 +125,7 @@ public class BerryCatchGame implements Screen {
     }
 
     private void spawnBadBerry() {
-        if (isGameOver) return;
+        if (isGameOver || isPausedForAlert) return;
         Image badBerry = new Image(badBerryTexture);
         badBerry.setSize(64, 64);
         float x = MathUtils.random(0, Gdx.graphics.getWidth() - badBerry.getWidth());
@@ -147,7 +152,7 @@ public class BerryCatchGame implements Screen {
             basket.setX(MathUtils.clamp(basketX, 0, Gdx.graphics.getWidth() - basket.getWidth()));
         }
 
-        if (!isGameOver) {
+        if (!isGameOver && !isPausedForAlert) {
             timer -= delta;
 
             if (timer <= 0) {
