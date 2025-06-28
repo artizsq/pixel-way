@@ -77,11 +77,11 @@ public class ShipLocationScreen implements Screen {
 
         gameCamera = new OrthographicCamera();
         gameCamera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        gameCamera.viewportWidth = 640 / 1.5f;  // Apply zoom level
-        gameCamera.viewportHeight = 360 / 1.5f; // Apply zoom level
+        gameCamera.viewportWidth = 640 / 1.5f;
+        gameCamera.viewportHeight = 360 / 1.5f;
         gameCamera.position.set(gameCamera.viewportWidth / 2f, gameCamera.viewportHeight / 2f, 0);
         gameCamera.update();
-        gameStage = new Stage(new ExtendViewport(640, 360, gameCamera)); // Use the initial viewport dimensions
+        gameStage = new Stage(new ExtendViewport(640, 360, gameCamera));
 
         uiCamera = new OrthographicCamera();
         uiCamera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -89,9 +89,9 @@ public class ShipLocationScreen implements Screen {
         uiStage = new Stage(new ScreenViewport(uiCamera));
 
         InputMultiplexer multiplexer = new InputMultiplexer();
-//        multiplexer.addProcessor(gameStage); // Add if you need input on the game stage
         multiplexer.addProcessor(uiStage);
         Gdx.input.setInputProcessor(multiplexer);
+
         if (isTeleport){
             player = new Player(new Vector2(772, 483), 52f, 100f, worldManager.getWorld());
             SoundController soundController = player.getSoundController();

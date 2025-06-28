@@ -60,14 +60,14 @@ public class TradeLocationScreen implements Screen {
     private PlayerData playerData;
     private Stage gameStage;
     private Stage uiStage;
-    private boolean isTeleport = false;
+    private String teleportType;
     private BaseUIManager baseUIManager;
     private GameDialogs gameDialogs;
     private ChestLootGenerator chestLootGenerator;
 
-    public TradeLocationScreen(MainClass game, Player player, PlayerData playerData, boolean isTeleport) {
+    public TradeLocationScreen(MainClass game, Player player, PlayerData playerData, String teleportType) {
         this.game = game;
-        this.isTeleport = isTeleport;
+        this.teleportType = teleportType;
         this.worldManager = new WorldManager();
         this.player = player;
         this.playerData = playerData;
@@ -87,11 +87,11 @@ public class TradeLocationScreen implements Screen {
 
         gameCamera = new OrthographicCamera();
         gameCamera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        gameCamera.viewportWidth = 640 / 1.5f;  // Apply zoom level
-        gameCamera.viewportHeight = 360 / 1.5f; // Apply zoom level
+        gameCamera.viewportWidth = 640 / 1.5f;
+        gameCamera.viewportHeight = 360 / 1.5f;
         gameCamera.position.set(gameCamera.viewportWidth / 2f, gameCamera.viewportHeight / 2f, 0);
         gameCamera.update();
-        gameStage = new Stage(new ExtendViewport(640, 360, gameCamera)); // Use the initial viewport dimensions
+        gameStage = new Stage(new ExtendViewport(640, 360, gameCamera));
 
         uiCamera = new OrthographicCamera();
         uiCamera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -99,33 +99,17 @@ public class TradeLocationScreen implements Screen {
         uiStage = new Stage(new ScreenViewport(uiCamera));
 
         InputMultiplexer multiplexer = new InputMultiplexer();
-//        multiplexer.addProcessor(gameStage); // Add if you need input on the game stage
+//        multiplexer.addProcessor(gameStage);
         multiplexer.addProcessor(uiStage);
         Gdx.input.setInputProcessor(multiplexer);
-
-        if(isTeleport){
-            player = new Player(new Vector2(93, 698), 52f, 100f, worldManager.getWorld());
-            SoundController soundController = player.getSoundController();
-            soundController.setWalkSound("sounds/wooden.mp3");
-        } else {
-            player = new Player(new Vector2(playerData.x, playerData.y), 52f, 100f, worldManager.getWorld());
-        }
-
-
-
-        worldManager.getWorld().setContactListener(new WorldContactListener(game, player));
-        fixtures = TiledObjectsConverter.importObjects(tiledMap, worldManager, 1 / 1f);
-        debugRenderer = new Box2DDebugRenderer();
 
         baseUIManager = new BaseUIManager(uiStage, playerData, game);
         baseUIManager.init();
 
-        // Create save button
         buttonTexture = new Texture(Gdx.files.internal("btns/mainBtn.png"));
         TextureRegionDrawable buttonDrawable = new TextureRegionDrawable(new TextureRegion(buttonTexture));
         saveButton = new ImageButton(buttonDrawable);
 
-        // Position and size the save button
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
         float buttonWidth = 240 * 2f;
@@ -164,7 +148,7 @@ public class TradeLocationScreen implements Screen {
                             if(playerData.dialogIDS.contains("trade2")){
                                 new DialogueWindow(uiStage, game, gameDialogs.failtrade2Dialog());
                             } else {
-                                new DialogueWindow(uiStage, game, gameDialogs.trade2Dialog());
+                                new DialogueWindow(uiStage, game, gameDialogs.trade2Dialog(player));
                             }
                             break;
 
@@ -187,6 +171,30 @@ public class TradeLocationScreen implements Screen {
             }
         });
         uiStage.addActor(saveButton);
+
+        switch (teleportType){
+            case "load":
+                player = new Player(new Vector2(playerData.x, playerData.y), 52f, 100f, worldManager.getWorld());
+                break;
+
+            case "tp":
+                player = new Player(new Vector2(93, 698), 52f, 100f, worldManager.getWorld());
+                SoundController soundController = player.getSoundController();
+                soundController.setWalkSound("sounds/wooden.mp3");
+                break;
+
+            case "bossFight":
+                player = new Player(new Vector2(playerData.x, playerData.y), 52f, 100f, worldManager.getWorld());
+                new DialogueWindow(uiStage, game, gameDialogs.traderWinDialog());
+                break;
+        }
+
+
+        worldManager.getWorld().setContactListener(new WorldContactListener(game, player));
+        fixtures = TiledObjectsConverter.importObjects(tiledMap, worldManager, 1 / 1f);
+        debugRenderer = new Box2DDebugRenderer();
+
+
 
 
         new ImportantZone(worldManager.getWorld(), new Vector2(97, 755), 64, 20 , ImportantZone.ZoneType.TELEPORT_WINDOW);

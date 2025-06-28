@@ -14,21 +14,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Boss extends Actor {
-    private Vector2 position;
-    private Body body;
-    private float width, height;
-    private Texture bossTexture;
-    private int health = 1000;
-    private MainClass game;
-    private transient List<HPChangeListener> hpChangeListeners = new ArrayList<>();
+    protected Vector2 position;
+    protected Body body;
+    protected float width, height;
+    protected Texture bossTexture;
+    protected int health;
+    protected MainClass game;
+    protected transient List<HPChangeListener> hpChangeListeners = new ArrayList<>();
 
-    public Boss(Vector2 position, float width, float height, World world, MainClass game) {
+    public Boss(Vector2 position, float width, float height, World world, MainClass game, int health, String texturePath) {
         this.position = new Vector2(position.x, position.y);
         this.width = width;
         this.height = height;
         this.game = game;
+        this.health = health;
 
-        bossTexture = new Texture("texture/boss/boss.png");
+        bossTexture = new Texture(texturePath);
 
         createBody(world);
         body.setUserData(this);
@@ -75,8 +76,14 @@ public class Boss extends Actor {
         this.health -= amount;
         notifyHPListener();
         if (health <= 0) {
-            game.setScreen(new GameEndScreen(game));
+            onBossDefeated();
         }
+    }
+
+    // Метод, который будет переопределяться в наследниках
+    protected void onBossDefeated() {
+        dispose();
+        game.setScreen(new GameEndScreen(game));
     }
 
     public void dispose() {
@@ -87,15 +94,15 @@ public class Boss extends Actor {
         return body;
     }
 
-
-    public void addHPListener(HPChangeListener listener){
+    public void addHPListener(HPChangeListener listener) {
         hpChangeListeners.add(listener);
     }
 
-    public void removeHPListener(HPChangeListener listener){
+    public void removeHPListener(HPChangeListener listener) {
         hpChangeListeners.remove(listener);
     }
-    public void notifyHPListener(){
+
+    public void notifyHPListener() {
         for (HPChangeListener listener : hpChangeListeners) {
             listener.onHPchanged(this.health);
         }

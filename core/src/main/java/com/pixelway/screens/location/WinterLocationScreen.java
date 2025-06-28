@@ -41,8 +41,8 @@ import java.util.List;
 public class WinterLocationScreen implements Screen {
 
     private final MainClass game;
-    private OrthographicCamera gameCamera;   // Game world camera
-    private OrthographicCamera uiCamera;     // UI camera
+    private OrthographicCamera gameCamera;
+    private OrthographicCamera uiCamera;
     private ChestData chestData;
     private TiledMap tiledMap;
     private OrthogonalTiledMapRenderer renderer;
@@ -54,9 +54,9 @@ public class WinterLocationScreen implements Screen {
     private ImageButton saveButton;
     private Texture buttonTexture;
     private PlayerData playerData;
-    private Stage gameStage;   // Stage for the game world
-    private Stage uiStage;     // Stage for the UI
-    private boolean isTeleport = false;
+    private Stage gameStage;
+    private Stage uiStage;
+    private boolean isTeleport;
     private BaseUIManager baseUIManager;
     private ChestLootGenerator chestLootGenerator;
 

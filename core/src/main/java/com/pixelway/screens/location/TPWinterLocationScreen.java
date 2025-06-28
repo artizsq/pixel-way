@@ -84,7 +84,7 @@ public class TPWinterLocationScreen implements Screen {
         gameCamera.viewportHeight = 360 / 1.5f;
         gameCamera.position.set(gameCamera.viewportWidth / 2f, gameCamera.viewportHeight / 2f, 0);
         gameCamera.update();
-        gameStage = new Stage(new ExtendViewport(640, 360, gameCamera)); // Use the initial viewport dimensions
+        gameStage = new Stage(new ExtendViewport(640, 360, gameCamera));
 
         uiCamera = new OrthographicCamera();
         uiCamera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());

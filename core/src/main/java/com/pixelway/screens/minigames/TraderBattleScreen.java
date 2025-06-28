@@ -16,11 +16,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.ContactImpulse;
-import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Fixture;
-import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -35,11 +31,12 @@ import com.pixelway.map.BossFightContactListener;
 import com.pixelway.map.BossWorldManager;
 import com.pixelway.map.TiledObjectsConverter;
 import com.pixelway.models.characters.Boss;
-import com.pixelway.models.projectiles.BossAttack;
-import com.pixelway.models.projectiles.Boulder;
 import com.pixelway.models.characters.MiniPlayer;
+import com.pixelway.models.characters.Player;
+import com.pixelway.models.characters.TraderBoss;
+import com.pixelway.models.projectiles.ArrowAttack;
+import com.pixelway.models.projectiles.BossAttack;
 import com.pixelway.models.projectiles.PlayerBullet;
-import com.pixelway.models.projectiles.Shard;
 import com.pixelway.screens.GameEndScreen;
 import com.pixelway.utils.HPChangeListener;
 import com.pixelway.utils.SoundController;
@@ -49,8 +46,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class BossBattleScreen implements Screen {
-
+public class TraderBattleScreen implements Screen {
     private final MainClass game;
     private OrthographicCamera gameCamera;
     private OrthographicCamera uiCamera;
@@ -62,7 +58,7 @@ public class BossBattleScreen implements Screen {
     private Box2DDebugRenderer debugRenderer;
     private SpriteBatch batch;
 
-    private Boss boss;
+    private TraderBoss boss;
     private MiniPlayer miniPlayer;
     private VirtualJoystick joystick;
     private Stage uiStage;
@@ -71,14 +67,11 @@ public class BossBattleScreen implements Screen {
     private List<BossAttack> bossAttacks = new ArrayList<>();
     private float attackTimer = 0f;
     private float attackInterval = 2f;
-    private Texture shardTexture;
-    private Texture boulderTexture;
+    private Texture arrowTexture;
     private Label playerHP;
     private Image hpPng;
     private Label bossHP;
     private BitmapFont font;
-
-
     private HPChangeListener playerHPListener = new HPChangeListener() {
         @Override
         public void onHPchanged(int HP) {
@@ -95,35 +88,19 @@ public class BossBattleScreen implements Screen {
     private static final float PLAYER_AREA_MIN_X = 495;
 
     private static final float PLAYER_AREA_MAX_X = 783;
-
+    private static final float ARROW_SPAWN_TOP_Y = 398;
     private SoundController soundController;
-
-    private static final float SHARD_SPAWN_Y = 398;
-
-    private static final float BOULDER_SPAWN_LEFT_X = 495;
-
-    private static final float BOULDER_SPAWN_RIGHT_X = 760;
-
-    private static final float BOULDER_SPAWN_Y_RANGE_MIN = 150;
-
-    private static final float BOULDER_SPAWN_Y_RANGE_MAX = 350;
-
-
-    private static final int PHASE_ONE_THRESHOLD = 3000;
-    private static final int PHASE_TWO_THRESHOLD = 1500;
-
+    private Player player;
 
     private List<com.badlogic.gdx.physics.box2d.Body> bodiesToDestroy = new ArrayList<>();
 
-    public BossBattleScreen(MainClass game) {
+
+    public TraderBattleScreen(MainClass game, Player player){
         this.game = game;
+        this.player = player;
         this.bossWorldManager = new BossWorldManager();
         this.soundController = new SoundController("sounds/hit.mp3");
-
-
-
     }
-
     @Override
     public void show() {
         tiledMap = new TmxMapLoader().load("maps/bossFight.tmx");
@@ -137,7 +114,7 @@ public class BossBattleScreen implements Screen {
 
         game.setBgMusic("songs/boss.mp3");
 
-        boss = new Boss(new Vector2(535, 450), 200f, 200f, bossWorldManager.getWorld(), game, 5000, "texture/boss/boss.png");
+        boss = new TraderBoss(new Vector2(600, 450), 80, 160f, bossWorldManager.getWorld(), game, 1000, "texture/boss/traderboss.png", player);
         miniPlayer = new MiniPlayer(new Vector2(645, 235), 32f, 32f, bossWorldManager.getWorld(), game);
 
         bossWorldManager.getWorld().setContactListener(new BossFightContactListener());
@@ -145,8 +122,7 @@ public class BossBattleScreen implements Screen {
         fixtures = TiledObjectsConverter.bossImportObjects(tiledMap, bossWorldManager, 1);
         debugRenderer = new Box2DDebugRenderer();
 
-        shardTexture = new Texture(Gdx.files.internal("texture/boss/attack2.png"));
-        boulderTexture = new Texture(Gdx.files.internal("texture/boss/attack1.png"));
+        arrowTexture = new Texture(Gdx.files.internal("texture/boss/arrow.png"));
 
         uiCamera = new OrthographicCamera();
         uiCamera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -254,94 +230,66 @@ public class BossBattleScreen implements Screen {
 
         attackTimer += delta;
         if (attackTimer >= attackInterval) {
-            spawnBossAttacksBasedOnHealth();
+            spawnBossAttack();
             attackTimer = 0f;
         }
 
 //        debugRenderer.render(bossWorldManager.getWorld(), gameCamera.combined);
     }
 
-    private void spawnBossAttacksBasedOnHealth() {
-        int currentBossHP = boss.getHealth();
-
-        int numberOfShards = 0;
-        int numberOfBoulders = 0;
-        float currentAttackInterval = 0;
-
-        if (currentBossHP > PHASE_ONE_THRESHOLD) {
-            numberOfShards = MathUtils.random(3, 4);
-            numberOfBoulders = 0;
-            currentAttackInterval = MathUtils.random(1.0f, 2.0f);
-        } else if (currentBossHP > PHASE_TWO_THRESHOLD) {
-            numberOfShards = 0;
-            numberOfBoulders = MathUtils.random(2, 3);
-            currentAttackInterval = MathUtils.random(0.8f, 1.5f);
-        } else if (currentBossHP > 0){
-            numberOfShards = MathUtils.random(2, 3);
-            numberOfBoulders = MathUtils.random(1, 2);
-            currentAttackInterval = MathUtils.random(0.5f, 1.0f);
-        } else {
-            soundController.playWalk();
-            game.setScreen(new GameEndScreen(game));
-        }
-
-        this.attackInterval = currentAttackInterval;
-
-        for (int i = 0; i < numberOfShards; i++) {
-            float spawnX = MathUtils.random(PLAYER_AREA_MIN_X, PLAYER_AREA_MAX_X);
-            Vector2 spawnPosition = new Vector2(spawnX, SHARD_SPAWN_Y);
-            BossAttack newAttack = new Shard(bossWorldManager.getWorld(), spawnPosition, shardTexture);
-            bossAttacks.add(newAttack);
-
-        }
-
-        for (int i = 0; i < numberOfBoulders; i++) {
-            float spawnY = MathUtils.random(BOULDER_SPAWN_Y_RANGE_MIN, BOULDER_SPAWN_Y_RANGE_MAX);
-            boolean spawnFromLeft = MathUtils.randomBoolean();
-            float spawnX = spawnFromLeft ? BOULDER_SPAWN_LEFT_X : BOULDER_SPAWN_RIGHT_X;
-
-            Vector2 spawnPosition = new Vector2(spawnX, spawnY);
-            BossAttack newAttack = new Boulder(bossWorldManager.getWorld(), spawnPosition, boulderTexture);
-            bossAttacks.add(newAttack);
-        }
-    }
-
-
     @Override
     public void resize(int width, int height) {
-        uiStage.getViewport().update(width, height, true);
-        gameCamera.update();
-        uiCamera.update();
+
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
+    public void hide() {
+
     }
 
     @Override
     public void dispose() {
-        batch.dispose();
-        debugRenderer.dispose();
-        renderer.dispose();
-        uiStage.dispose();
-        joystick.dispose();
-        shardTexture.dispose();
-        boulderTexture.dispose();
 
+    }
 
-        Array<com.badlogic.gdx.physics.box2d.Body> bodies = new Array<>();
-        bossWorldManager.getWorld().getBodies(bodies);
-        for (com.badlogic.gdx.physics.box2d.Body body : bodies) {
-            bossWorldManager.getWorld().destroyBody(body);
+    private void spawnBossAttack() {
+        int currentBossHP = boss.getHealth();
+
+        int numberOfArrows = 0;
+        float currentAttackInterval = 0;
+
+        if (currentBossHP > 500) {
+            numberOfArrows = MathUtils.random(5, 7);
+            currentAttackInterval = MathUtils.random(0.8f, 1.2f);
+        } else if (currentBossHP > 0) {
+            numberOfArrows = MathUtils.random(6, 7);
+            currentAttackInterval = MathUtils.random(0.5f, 1.0f);
+        } else {
+            soundController.playWalk();
+            game.setScreen(new GameEndScreen(game));
+            return;
         }
-        bossWorldManager.dispose();
-        boss.removeHPListener(bossHPListener);
-        game.getPlayerData().removeHPListener(bossHPListener);
 
+        this.attackInterval = currentAttackInterval;
+
+        for (int i = 0; i < numberOfArrows; i++) {
+            float spawnX = MathUtils.random(PLAYER_AREA_MIN_X, PLAYER_AREA_MAX_X);
+            float spawnY = ARROW_SPAWN_TOP_Y;
+
+            Vector2 spawnPosition = new Vector2(spawnX, spawnY);
+            ArrowAttack newAttack = new ArrowAttack(bossWorldManager.getWorld(), spawnPosition, arrowTexture);
+            bossAttacks.add(newAttack);
+        }
     }
 
-    public void pause() {
-    }
-
-    public void resume() {
-    }
-
-    public void hide() {
-    }
 }

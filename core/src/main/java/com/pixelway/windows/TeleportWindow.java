@@ -197,7 +197,7 @@ public class TeleportWindow extends Window {
                 game.setScreen(new ShipLocationScreen(game, player, game.getPlayerData(), true));
                 break;
             case "trade":
-                game.setScreen(new TradeLocationScreen(game, player, game.getPlayerData(), true));
+                game.setScreen(new TradeLocationScreen(game, player, game.getPlayerData(), "tp"));
                 break;
             case "winter":
                 game.setScreen(new TPWinterLocationScreen(game, player, game.getPlayerData(), false, true));

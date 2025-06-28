@@ -41,7 +41,7 @@ public class UploadGameScreen implements Screen {
                 game.setScreen(new StartIslandScreen(game, player, loadedPlayerData, false));
                 break;
             case "trade":
-                game.setScreen(new TradeLocationScreen(game, player, loadedPlayerData, false));
+                game.setScreen(new TradeLocationScreen(game, player, loadedPlayerData, "load"));
                 break;
             case "winter":
                 game.setScreen(new TPWinterLocationScreen(game, player, loadedPlayerData, false, false));

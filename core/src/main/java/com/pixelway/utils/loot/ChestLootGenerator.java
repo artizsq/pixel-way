@@ -10,26 +10,21 @@ import java.util.Random;
 public class ChestLootGenerator {
 
     private static final Random random = new Random();
-
     private List<LootEntry> allPossibleLoot;
+    private List<String> globalDroppedItems = new ArrayList<>();
 
     public ChestLootGenerator() {
         initializeAllPossibleLoot();
     }
 
-
     private void initializeAllPossibleLoot() {
         allPossibleLoot = new ArrayList<>();
-
 
         allPossibleLoot.add(new LootEntry("Медаль рыцаря", PlayerData.ItemType.POWER, 3, "Медаль XVI века, судя по всему\nиспользовалась рыцарями.", "imgs/items/strmedal.png", 0.3f, 1, 1));
         allPossibleLoot.add(new LootEntry("Зелье здоровья", PlayerData.ItemType.HP, 10, "Сладкое и очень полезное", "imgs/items/HPpoi.png", 0.5f, 1, 1));
         allPossibleLoot.add(new LootEntry("Зелье силы", PlayerData.ItemType.POWER, 10, "Странновато выглядит...", "imgs/items/strpoi.png", 0.5f, 1, 1));
-        allPossibleLoot.add(new LootEntry("Меч короля Артура", PlayerData.ItemType.SHIELD, 10, "Меч того самого?", "imgs/items/sword.png", 0.2f, 1, 1));
-
-
+        allPossibleLoot.add(new LootEntry("Меч короля Артура", PlayerData.ItemType.POWER, 10, "Меч того самого?", "imgs/items/sword.png", 0.2f, 1, 1));
     }
-
 
     public List<PlayerData.InventorySlot> generateLootForChest() {
         List<PlayerData.InventorySlot> droppedItems = new ArrayList<>();
@@ -41,6 +36,12 @@ public class ChestLootGenerator {
         }
 
         List<LootEntry> availableLoot = new ArrayList<>(allPossibleLoot);
+
+        availableLoot.removeIf(entry -> globalDroppedItems.contains(entry.name));
+
+        if (availableLoot.isEmpty()) {
+            return droppedItems;
+        }
 
         for (int i = 0; i < numItemsToDrop; i++) {
             if (availableLoot.isEmpty()) break;
@@ -61,12 +62,12 @@ public class ChestLootGenerator {
 
                 droppedItems.add(slot);
                 availableLoot.remove(chosenEntry);
+                globalDroppedItems.add(chosenEntry.name);
             }
         }
 
         return droppedItems;
     }
-
 
     private int determineNumberOfItems() {
         float roll = random.nextFloat();
@@ -74,14 +75,13 @@ public class ChestLootGenerator {
         if (roll < 0.05f) {
             return 0;
         } else if (roll < 0.10f) {
-            return 3; //
+            return 3;
         } else if (roll < 0.25f) {
             return 2;
         } else {
             return 1;
         }
     }
-
 
     private LootEntry chooseRandomLootEntry(List<LootEntry> lootTable) {
         float totalWeight = 0;

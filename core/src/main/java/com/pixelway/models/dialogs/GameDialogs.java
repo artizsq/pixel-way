@@ -6,6 +6,7 @@ import com.pixelway.database.PlayerData;
 import com.pixelway.models.characters.Player;
 import com.pixelway.screens.location.StartIslandScreen;
 import com.pixelway.screens.minigames.BossBattleScreen;
+import com.pixelway.screens.minigames.TraderBattleScreen;
 import com.pixelway.utils.DialogAction;
 import com.pixelway.windows.TeleportWindow;
 
@@ -196,44 +197,46 @@ public class GameDialogs {
         return dialog1;
     }
 
-    public DialogData trade2Dialog(){
-        DialogData dialog3fail = new DialogData();
-        dialog3fail.name = "Торговец По";
-        dialog3fail.imagePath = "trade2.png";
-        dialog3fail.text = "У тебя не хватает денег, вернись как накопишь.";
-        dialog3fail.option1 = "...";
-
-
-
-
-        DialogData dialog3 = new DialogData();
-        dialog3.name = "Торговец По";
-        dialog3.imagePath = "trade2.png";
-        dialog3.text = "Вот твой товар. Говорят, он позволяет попасть на остров клана \"Тонель\", тебе стоит проверить!";
-        dialog3.option1 = "Хорошо";
-        dialog3.dialogAction = new DialogAction() {
-            @Override
-            public void execute() {
-                playerData.subtractMoney(100);
-                playerData.reqTP_items.add("winterKey");
-                playerData.dialogIDS.add("trade2");
-            }
-        };
+    public DialogData trade2Dialog(Player player){
+//        DialogData dialog3fail = new DialogData();
+//        dialog3fail.name = "Торговец По";
+//        dialog3fail.imagePath = "trade2.png";
+//        dialog3fail.text = "У тебя не хватает денег, вернись как накопишь.";
+//        dialog3fail.option1 = "...";
+//
+//
+//
+//
+//        DialogData dialog3 = new DialogData();
+//        dialog3.name = "Торговец По";
+//        dialog3.imagePath = "trade2.png";
+//        dialog3.text = "Вот твой товар. Говорят, он позволяет попасть на остров клана \"Тонель\", тебе стоит проверить!";
+//        dialog3.option1 = "Хорошо";
+//        dialog3.dialogAction = new DialogAction() {
+//            @Override
+//            public void execute() {
+//                playerData.subtractMoney(100);
+//                playerData.reqTP_items.add("winterKey");
+//                playerData.dialogIDS.add("trade2");
+//            }
+//        };
 
 
 
         DialogData dialog2 = new DialogData();
         dialog2.name = "Торговец По";
         dialog2.imagePath = "trade2.png";
-        dialog2.text = "Отлично, у меня есть Winter Key, для тебя он обойдется в 100 монет, по рукам?";
-        dialog2.option1 = "По рукам";
+        dialog2.text = "Отлично, у меня есть Winter Key, чтобы получить его, победи меня в сражении!";
+        dialog2.option1 = "Хорошо.";
         dialog2.option2 = "Нет.";
-        if(playerData.money >= 100){
-            dialog2.newDialogData = dialog3;
-        } else {
-            dialog2.newDialogData = dialog3fail;
-
-        }
+        dialog2.dialogAction = new DialogAction() {
+            @Override
+            public void execute() {
+                playerData.x = player.getPosition().x + 26;
+                playerData.y = player.getPosition().y + 50;
+                game.setScreen(new TraderBattleScreen(game, player));
+            }
+        };
 
 
         DialogData dialog1 = new DialogData();
@@ -254,6 +257,24 @@ public class GameDialogs {
         dialogData.name = "Торговец По";
         dialogData.text = "Тебе что-то нужно?";
         dialogData.option1 = "Нет.";
+
+        return dialogData;
+    }
+
+
+    public DialogData traderWinDialog(){
+        DialogData dialogData = new DialogData();
+        dialogData.imagePath = "trade2.png";
+        dialogData.name = "Торговец По";
+        dialogData.text = "Ты победил... Теперь я вижу! Ты достоин Winter Key.";
+        dialogData.option1 = "Продолжить";
+        dialogData.dialogAction = new DialogAction() {
+            @Override
+            public void execute() {
+                game.getPlayerData().reqTP_items.add("winterKey");
+                game.getPlayerData().dialogIDS.add("trade2");
+            }
+        };
 
         return dialogData;
     }
