@@ -80,6 +80,7 @@ public class Player extends Actor {
 
     public void decrementZoneContact() {
         activeZones = Math.max(0, activeZones - 1);
+//        System.out.println(activeZones);
         if (activeZones == 0) {
             setInZone(false);
         }

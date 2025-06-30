@@ -100,7 +100,6 @@ public class StartIslandScreen implements Screen {
         gameCamera.update();
         gameStage = new Stage(new ExtendViewport(640, 360, gameCamera));
 
-        System.out.println(game.getPlayerData().fishCount);
 
         uiCamera = new OrthographicCamera();
         uiCamera.setToOrtho(false, screenWidth, screenHeight);
@@ -133,9 +132,9 @@ public class StartIslandScreen implements Screen {
         new ImportantZone(worldManager.getWorld(), new Vector2(1237, 566), 40, 20, ImportantZone.ZoneType.CHEST);
         new ImportantZone(worldManager.getWorld(), new Vector2(737, 610),80, 80, ImportantZone.ZoneType.SAVE);
         new ImportantZone(worldManager.getWorld(), new Vector2(950, 110), 64, 64, ImportantZone.ZoneType.FISH_GAME);
-        new ImportantZone(worldManager.getWorld(), new Vector2(1450, 580), 80, 25, ImportantZone.ZoneType.BERRY_GAME);
+        new ImportantZone(worldManager.getWorld(), new Vector2(1520, 580), 80, 20, ImportantZone.ZoneType.BERRY_GAME);
 
-        new ImportantZone(worldManager.getWorld(), new Vector2(1325, 563), 80, 20, ImportantZone.ZoneType.BERRY_DIALOG);
+        new ImportantZone(worldManager.getWorld(), new Vector2(1400, 563), 80, 20, ImportantZone.ZoneType.BERRY_DIALOG);
         new ImportantZone(worldManager.getWorld(), new Vector2(1237, 140), 70, 70, ImportantZone.ZoneType.FISHMAN_DIALOG);
 
 

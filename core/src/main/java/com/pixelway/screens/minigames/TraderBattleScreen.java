@@ -25,6 +25,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.pixelway.MainClass;
 import com.pixelway.map.BossFightContactListener;
@@ -61,7 +62,7 @@ public class TraderBattleScreen implements Screen {
     private TraderBoss boss;
     private MiniPlayer miniPlayer;
     private VirtualJoystick joystick;
-    private Stage uiStage;
+    private Stage uiStage, gameStage;
     private ImageButton mainButton;
 
     private List<BossAttack> bossAttacks = new ArrayList<>();
@@ -112,9 +113,15 @@ public class TraderBattleScreen implements Screen {
         gameCamera.position.set(640, 360, 0);
         gameCamera.update();
 
+        gameStage = new Stage(new ExtendViewport(1280, 720));
+
         game.setBgMusic("songs/boss.mp3");
 
         boss = new TraderBoss(new Vector2(600, 450), 80, 160f, bossWorldManager.getWorld(), game, 1000, "texture/boss/traderboss.png", player);
+        boss.setSize(300, 300); // Размер в мировых единицах
+        boss.setPosition(640 - boss.getWidth() / 2, 360 - boss.getHeight() / 2); // Центр мира
+        gameStage.addActor(boss);
+
         miniPlayer = new MiniPlayer(new Vector2(645, 235), 32f, 32f, bossWorldManager.getWorld(), game);
 
         bossWorldManager.getWorld().setContactListener(new BossFightContactListener());
@@ -133,7 +140,7 @@ public class TraderBattleScreen implements Screen {
         multiplexer.addProcessor(uiStage);
         Gdx.input.setInputProcessor(multiplexer);
 
-
+        gameStage.addActor(boss);
 
 
         TextureRegionDrawable buttonDrawable = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("texture/boss/shoot.png"))));
@@ -206,7 +213,6 @@ public class TraderBattleScreen implements Screen {
         uiStage.draw();
 
         miniPlayer.update(delta, joystick.getDirection());
-        boss.update(delta);
 
         Iterator<PlayerBullet> playerBulletIterator = miniPlayer.getBullets().iterator();
         while (playerBulletIterator.hasNext()) {
@@ -234,7 +240,7 @@ public class TraderBattleScreen implements Screen {
             attackTimer = 0f;
         }
 
-//        debugRenderer.render(bossWorldManager.getWorld(), gameCamera.combined);
+        debugRenderer.render(bossWorldManager.getWorld(), gameCamera.combined);
     }
 
     @Override
@@ -266,14 +272,12 @@ public class TraderBattleScreen implements Screen {
         int currentBossHP = boss.getHealth();
 
         int numberOfArrows = 0;
-        float currentAttackInterval = 0;
+        float currentAttackInterval = 1.5f;
 
         if (currentBossHP > 500) {
-            numberOfArrows = MathUtils.random(5, 7);
-            currentAttackInterval = MathUtils.random(0.8f, 1.2f);
+            numberOfArrows = 5;
         } else if (currentBossHP > 0) {
-            numberOfArrows = MathUtils.random(6, 7);
-            currentAttackInterval = MathUtils.random(0.5f, 1.0f);
+            numberOfArrows = 6;
         } else {
             soundController.playWalk();
             game.setScreen(new GameEndScreen(game));
@@ -282,14 +286,41 @@ public class TraderBattleScreen implements Screen {
 
         this.attackInterval = currentAttackInterval;
 
-        for (int i = 0; i < numberOfArrows; i++) {
-            float spawnX = MathUtils.random(PLAYER_AREA_MIN_X, PLAYER_AREA_MAX_X);
-            float spawnY = ARROW_SPAWN_TOP_Y;
+        float minDistance = 35f;
 
-            Vector2 spawnPosition = new Vector2(spawnX, spawnY);
-            ArrowAttack newAttack = new ArrowAttack(bossWorldManager.getWorld(), spawnPosition, arrowTexture);
-            bossAttacks.add(newAttack);
+        Array<Vector2> spawnPositions = new Array<>();
+
+        for (int i = 0; i < numberOfArrows; i++) {
+            boolean positionValid = false;
+            Vector2 spawnPosition = null;
+
+            int maxAttempts = 20;
+            int attempts = 0;
+
+            while (!positionValid && attempts < maxAttempts) {
+                float spawnX = MathUtils.random(PLAYER_AREA_MIN_X, PLAYER_AREA_MAX_X);
+                float spawnY = ARROW_SPAWN_TOP_Y;
+
+                spawnPosition = new Vector2(spawnX, spawnY);
+                positionValid = true;
+
+                for (Vector2 existingPosition : spawnPositions) {
+                    if (spawnPosition.dst(existingPosition) < minDistance) {
+                        positionValid = false;
+                        break;
+                    }
+                }
+
+                attempts++;
+            }
+
+            if (positionValid) {
+                spawnPositions.add(spawnPosition);
+                ArrowAttack newAttack = new ArrowAttack(bossWorldManager.getWorld(), spawnPosition, arrowTexture);
+                bossAttacks.add(newAttack);
+            }
         }
     }
+
 
 }

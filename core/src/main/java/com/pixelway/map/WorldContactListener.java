@@ -60,7 +60,8 @@ public class WorldContactListener implements ContactListener {
     }
 
     private void handleZone(ImportantZone zone) {
-
+//        System.out.println(zone.getZoneType());
+//        System.out.println(player.getActiveZoneCount());
         player.incrementZoneContact();
         player.setZone(zone.getZoneType());
         switch (zone.getZoneType()) {
@@ -114,7 +115,11 @@ public class WorldContactListener implements ContactListener {
     }
 
     private void handleZoneExit(ImportantZone zone){
+//        System.out.println(zone.getZoneType());
+
         player.decrementZoneContact();
+
+
     }
 
     private void handleSoundChange(ImportantZone zone) {
