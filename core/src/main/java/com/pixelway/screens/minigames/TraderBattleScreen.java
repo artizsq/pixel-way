@@ -240,7 +240,7 @@ public class TraderBattleScreen implements Screen {
             attackTimer = 0f;
         }
 
-        debugRenderer.render(bossWorldManager.getWorld(), gameCamera.combined);
+//        debugRenderer.render(bossWorldManager.getWorld(), gameCamera.combined);
     }
 
     @Override
