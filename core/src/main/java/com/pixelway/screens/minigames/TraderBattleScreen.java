@@ -86,7 +86,7 @@ public class TraderBattleScreen implements Screen {
         }
     };
 
-    private static final float PLAYER_AREA_MIN_X = 495;
+    private static final float PLAYER_AREA_MIN_X = 470;
 
     private static final float PLAYER_AREA_MAX_X = 783;
     private static final float ARROW_SPAWN_TOP_Y = 398;
@@ -117,9 +117,9 @@ public class TraderBattleScreen implements Screen {
 
         game.setBgMusic("songs/boss.mp3");
 
-        boss = new TraderBoss(new Vector2(600, 450), 80, 160f, bossWorldManager.getWorld(), game, 1000, "texture/boss/traderboss.png", player);
-        boss.setSize(300, 300); // Размер в мировых единицах
-        boss.setPosition(640 - boss.getWidth() / 2, 360 - boss.getHeight() / 2); // Центр мира
+        boss = new TraderBoss(new Vector2(600, 450), 80, 200f, bossWorldManager.getWorld(), game, 1000, "texture/boss/traderboss.png", player);
+        boss.setSize(80, 160);
+        boss.setPosition(640 - boss.getWidth() / 2, 360 - boss.getHeight() / 2);
         gameStage.addActor(boss);
 
         miniPlayer = new MiniPlayer(new Vector2(645, 235), 32f, 32f, bossWorldManager.getWorld(), game);
@@ -272,12 +272,12 @@ public class TraderBattleScreen implements Screen {
         int currentBossHP = boss.getHealth();
 
         int numberOfArrows = 0;
-        float currentAttackInterval = 1.5f;
+        float currentAttackInterval = 2.7f;
 
         if (currentBossHP > 500) {
-            numberOfArrows = 5;
+            numberOfArrows = 4;
         } else if (currentBossHP > 0) {
-            numberOfArrows = 6;
+            numberOfArrows = 5;
         } else {
             soundController.playWalk();
             game.setScreen(new GameEndScreen(game));
@@ -286,7 +286,7 @@ public class TraderBattleScreen implements Screen {
 
         this.attackInterval = currentAttackInterval;
 
-        float minDistance = 35f;
+        float minDistance = 40f;
 
         Array<Vector2> spawnPositions = new Array<>();
 
