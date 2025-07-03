@@ -109,8 +109,8 @@ public class BossBattleScreen implements Screen {
     private static final float BOULDER_SPAWN_Y_RANGE_MAX = 350;
 
 
-    private static final int PHASE_ONE_THRESHOLD = 3000;
-    private static final int PHASE_TWO_THRESHOLD = 1500;
+    private static final int PHASE_ONE_THRESHOLD = 2000;
+    private static final int PHASE_TWO_THRESHOLD = 1000;
 
 
     private List<com.badlogic.gdx.physics.box2d.Body> bodiesToDestroy = new ArrayList<>();
@@ -137,7 +137,7 @@ public class BossBattleScreen implements Screen {
 
         game.setBgMusic("songs/boss.mp3");
 
-        boss = new Boss(new Vector2(535, 450), 200f, 200f, bossWorldManager.getWorld(), game, 5000, "texture/boss/boss.png");
+        boss = new Boss(new Vector2(535, 450), 200f, 200f, bossWorldManager.getWorld(), game, 3000, "texture/boss/boss.png");
         miniPlayer = new MiniPlayer(new Vector2(645, 235), 32f, 32f, bossWorldManager.getWorld(), game);
 
         bossWorldManager.getWorld().setContactListener(new BossFightContactListener());
